@@ -9,9 +9,6 @@
             $rootScope.model.standard.push({ cmd: "Item A" + i });
             $rootScope.model.group.push({ cmd: "Item B" + i });
         }*/
-        var checkListLimit = function(list) {
-            
-        }
 
         $scope.$watch('model', function (model) {
             console.log(model);
