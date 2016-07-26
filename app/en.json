@@ -1,6 +1,6 @@
 {
   "by": "Drop",
-  "version": 1.3,
+  "version": 2.0,
   "sidebar": {
     "menu": {
       "title": "Menu",
@@ -25,7 +25,8 @@
     "standard": "Standard",
     "group": "Group",
     "report": "Report",
-    "desc": "Drop Here"
+    "desc": "Drop Here",
+    "tooltip_edit": "Edit"
   },
   "footer": {
     "by": "Made by",

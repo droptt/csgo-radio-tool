@@ -3,7 +3,7 @@
  * @Creation: 7/25/2016 2:19 PM (Tomorrow never dies)
  */
 
-var app = angular.module("csgo-radio", ['pascalprecht.translate', 'dndLists']);
+var app = angular.module("csgo-radio", ['pascalprecht.translate', 'dndLists', 'ui.bootstrap']);
 
 app.config(function ($translateProvider) {
     $translateProvider.useStaticFilesLoader({

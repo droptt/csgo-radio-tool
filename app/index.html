@@ -47,7 +47,8 @@
         <span class="sidebar-radio-header" translate="sidebar.messages_title"></span>
       </div>
       <ul class="sidebar-nav nav-pills nav-stacked sidebar-secondary" id="messages" dnd-list="model.messages" dnd-allowed-types="settings.allowed_types">
-        <li ng-repeat="message in model.messages" dnd-draggable="message" dnd-effect-allowed="copy" dnd-type="settings.msg_type" dnd-copied="message.disabled = true" ng-class="{disabled: message.disabled === true}" dnd-disable-if="message.disabled === true">
+        <li ng-repeat="message in model.messages" dnd-draggable="message" dnd-effect-allowed="copy" dnd-type="settings.msg_type"
+          dnd-copied="message.disabled = true" ng-class="{disabled: message.disabled === true}" dnd-disable-if="message.disabled === true">
           {{"messages." + message.cmd | translate}}
         </li>
       </ul>
@@ -94,6 +95,9 @@
                 <li ng-repeat="item in model.standard" dnd-draggable="item" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move"
                   dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
                   {{($index+1)}}. {{"messages." + item.cmd | translate}}
+                  <div class="pull-right">
+                    <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter"><span class="glyphicon glyphicon-remove"></span></a>
+                  </div>
                 </li>
               </ul>
             </div>
