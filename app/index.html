@@ -91,11 +91,11 @@
                 <div class="pull-right"><a id="StandardRadio-btn" style="cursor: pointer;"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;"></i></a></div>
               </div>
               <p class="text-center box-desc" translate="boxes.desc"></p>
-              <ul data-list-name="standard" id="StandardRadio" dnd-list="model.standard" dnd-drop="logDrop(event, index, item)">
+              <ul data-list-name="standard" id="StandardRadio" dnd-list="model.standard" dnd-drop="checkLimit(event, index, item)">
                 <li ng-repeat="message in model.standard" dnd-draggable="message" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move">
                   {{($index+1)}}. {{"messages." + message.cmd | translate}}
                   <div class="pull-right">
-                    <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('standard', item)"><span class="glyphicon glyphicon-remove"></span></a>
+                    <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('standard', message, $index)"><span class="glyphicon glyphicon-remove"></span></a>
                   </div>
                 </li>
               </ul>

@@ -5,11 +5,14 @@
 (function () {
     var app = angular.module("csgo-radio");
 
-    var messageController = function ($scope, $rootScope) {
-        $scope.removeMessage = function (list, message) {
-            console.log(arguments);
+    var messageController = function ($scope, $rootScope, $filter) {
+        $scope.removeMessage = function (list, message, index) {
+            if (message.type === "message") {
+                $rootScope.model.messages[message.id -1].disabled = false;
+                $rootScope.model[list].splice(index, 1);
+            }
         };
-        $scope.logDrop = function (event, index, item) {
+        $scope.checkLimit = function (event, index, item) {
             if (event.target.attributes[0].nodeName === "data-list-name") { //Checks if target is the list
                 var targetName = event.target.attributes[0].nodeValue;
                 console.log("Target is the List");

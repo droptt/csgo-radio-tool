@@ -15,7 +15,7 @@
             }
         };
         var onMessagesLoad = function (data) {
-            $rootScope.model.messages = []; // array which you have
+            $rootScope.model.messages = [];
             for (var item in data) {
                 data[item].disabled = false;
                 data[item].type = "message";
