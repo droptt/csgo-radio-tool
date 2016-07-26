@@ -18,6 +18,7 @@
             $rootScope.model.messages = []; // array which you have
             for (var item in data) {
                 data[item].disabled = false;
+                data[item].type = "message";
                 $rootScope.model.messages.push(data[item]);
             }
             $rootScope.init.messages = data;

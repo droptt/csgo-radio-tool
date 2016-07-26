@@ -9,7 +9,6 @@
         var getMessages = function () {
             return $http.get("radio.json")
                 .then(function (response) {
-                    console.log(response);
                     return response.data;
                 });
         };

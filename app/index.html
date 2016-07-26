@@ -46,8 +46,8 @@
       <div class="sidebar-brand">
         <span class="sidebar-radio-header" translate="sidebar.messages_title"></span>
       </div>
-      <ul class="sidebar-nav nav-pills nav-stacked sidebar-secondary" id="messages" dnd-list="model.messages" dnd-allowed-types="settings.allowed_types">
-        <li ng-repeat="message in model.messages" dnd-draggable="message" dnd-effect-allowed="copy" dnd-type="settings.msg_type"
+      <ul class="sidebar-nav nav-pills nav-stacked sidebar-secondary" id="messages">
+        <li ng-repeat="message in model.messages" dnd-draggable="message" dnd-effect-allowed="copy"
           dnd-copied="message.disabled = true" ng-class="{disabled: message.disabled === true}" dnd-disable-if="message.disabled === true">
           {{"messages." + message.cmd | translate}}
         </li>
@@ -84,19 +84,18 @@
     <div class="stuff">
       <div class="box-container">
         <div class="row">
-          <div class="menus">
+          <div class="menus" ng-controller="messageController">
             <div class="box">
               <div class="title text-center">
                 <span id="StandardRadio-title" style="padding-left: 3%;" translate="boxes.standard"></span> (Z)
                 <div class="pull-right"><a id="StandardRadio-btn" style="cursor: pointer;"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;"></i></a></div>
               </div>
               <p class="text-center box-desc" translate="boxes.desc"></p>
-              <ul id="StandardRadio" dnd-list="model.standard">
-                <li ng-repeat="item in model.standard" dnd-draggable="item" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move"
-                  dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
-                  {{($index+1)}}. {{"messages." + item.cmd | translate}}
+              <ul data-list-name="standard" id="StandardRadio" dnd-list="model.standard" dnd-drop="logDrop(event, index, item)">
+                <li ng-repeat="message in model.standard" dnd-draggable="message" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move">
+                  {{($index+1)}}. {{"messages." + message.cmd | translate}}
                   <div class="pull-right">
-                    <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter"><span class="glyphicon glyphicon-remove"></span></a>
+                    <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('standard', item)"><span class="glyphicon glyphicon-remove"></span></a>
                   </div>
                 </li>
               </ul>
@@ -107,7 +106,7 @@
                 <div class="pull-right"><a id="GroupRadio-btn" style="cursor: pointer;"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;" ></i></a></div>
               </div>
               <p class="text-center box-desc" translate="boxes.desc"></p>
-              <ul id="GroupRadio" dnd-list="model.group">
+              <ul data-list-name="group" id="GroupRadio" dnd-list="model.group">
                 <li ng-repeat="item in model.group" dnd-draggable="item" dnd-moved="model.group.splice($index, 1)" dnd-effect-allowed="move"
                   dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
                   {{($index+1)}}. {{"messages." + item.cmd | translate}}
