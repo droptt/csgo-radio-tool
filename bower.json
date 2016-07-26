@@ -3,7 +3,11 @@
   "private": true,
   "dependencies": {
     "angular": "^1.5.8",
-    "bootstrap-css-only": "^3.3.6"
+    "bootstrap-css-only": "^3.3.6",
+    "angular-translate": "^2.11.1",
+    "angular-bootstrap": "^2.0.0",
+    "angular-translate-loader-static-files": "^2.11.1",
+    "angular-drag-and-drop-lists": "^1.4.0"
   },
   "overrides": {
     "bootstrap": {

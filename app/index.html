@@ -1,94 +1,406 @@
 <!doctype html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>csgo radio tool</title>
+<html lang="en" ng-app="csgo-radio">
 
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- Place favicon.ico in the root directory -->
+<head>
+  <meta charset="utf-8">
+  <title>CS:GO Radio Menu editor</title>
+  <meta name="description" content="Counter-Strike:Global Offensive Radio Menu Organizer/Helper">
+  <meta name="keywords" content="CSGO, Counter Strike, Global Offensive, Radio, Generator, Organizer, Menu, CS:GO, Radiomenu, Radiopanel.txt, Custom Commands, Radio Commands, Radio panel">
+  <meta name="author" content="Drop">
+  <!-- Place favicon.ico in the root directory -->
 
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="/bower_components/bootstrap-css-only/css/bootstrap.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="/bower_components/bootstrap-css-only/css/bootstrap.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
 
-    <!-- build:css styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
-    
-  </head>
-  <body>
-    <!--[if lt IE 10]>
-      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-    
-    <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-        <h3 class="text-muted">csgo radio tool</h3>
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+
+</head>
+
+<body>
+  <div class="loading-wrapper" ng-controller="loadingController" ng-class="{hidden: init.loaded = true}">
+    <div class="loading"><span>{{loading.state}}</span></div>
+    <div class="loading-footer text-inverse-light" style="display:block;"><a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">Steam, </a>
+      <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email, </a><a href="https://twitter.com/rafacavalm"
+        target="_blank" onclick="javascript:notifyclick('twitter');"> Twitter</a></div>
+  </div>
+  <div class="wrapper" ng-controller="mainController" ng-show="init.loaded">
+    <!-- Sidebars-->
+    <div class="sidebar-left">
+      <ul class="sidebar-menu">
+        <div class="sidebar-header" style="padding-left: 0;">
+          <span class="sidebar-header" translate="sidebar.menu.title"></span>
+        </div>
+        <li><a id="menu-submit" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-ok"></i></span> <div translate="sidebar.menu.submit"></div></a></li>
+        <li><a data-target="#import-modal" data-toggle="modal" href="#import-modal"><span class="g-stack pull-left"><i class="glyphicon glyphicon-save"></i></span> <div translate="sidebar.menu.import"></div></a></li>
+        <li><a id="menu-defaults" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-paste"></i></span> <div translate="sidebar.menu.defaults"></div></a></li>
+        <li><a id="menu-reset" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-trash"></i></span> <div translate="sidebar.menu.reset"></div></a></li>
+        <li>
+          <a data-target="#console-help-modal" data-toggle="modal" href="#console-help-modal"><span class="g-stack pull-left"><i class="glyphicon glyphicon-question-sign"></i></span> <div translate="sidebar.menu.help"></div></a>
+        </li>
+      </ul>
+      <div class="sidebar-brand">
+        <span class="sidebar-radio-header" translate="sidebar.messages_title"></span>
       </div>
-
-      <div class="jumbotron">
-        <h1>'Allo, 'Allo!</h1>
-        <p class="lead">Always a pleasure scaffolding your apps.</p>
-        <p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p>
+      <ul class="sidebar-nav nav-pills nav-stacked sidebar-secondary" id="messages" dnd-list="model.messages" dnd-allowed-types="settings.allowed_types">
+        <li ng-repeat="message in model.messages" dnd-draggable="message" dnd-effect-allowed="copy" dnd-type="settings.msg_type" dnd-copied="message.disabled = true" ng-class="{disabled: message.disabled === true}" dnd-disable-if="message.disabled === true">
+          {{"messages." + message.cmd | translate}}
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-right">
+      <ul class="sidebar-nav nav-pills nav-stacked connectedDraggable" id="custom">
+        <div class="sidebar-brand">
+          <span class="sidebar-header" translate="sidebar.custom_title"></span>
+          <div class="pull-right btn-group">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-message-modal"><i class="glyphicon glyphicon-plus"></i></button>
+            <button type="button" class="btn btn-danger" onclick="javascript:ui.delprompt('creset');"><i class="glyphicon glyphicon-remove"></i></button>
+          </div>
+        </div>
+      </ul>
+      <div class="shared-information" style="display: none;">
+        <span class="sidebar-header" translate="sidebar.shared.title"></span>
+        <div class="sidebar-menu">
+          <li class="shared-load" style="display:none;">
+            <a href="http://dropt.top/csgo/radio" onclick="javascript:misc.tracking.notifyshared('load');"><span class="g-stack pull-left"><i class="glyphicon glyphicon-open"></i></span> <div translate="sidebar.shared.load"></div></a>
+          </li>
+          <li class="shared-copyall" style="display:none;">
+            <a href="javascript:custom.copyAllToCustom(); javascript:misc.tracking.notifyshared('copyAll');"><span class="g-stack pull-left"><i class="glyphicon glyphicon-import"></i></span> <div translate="sidebar.shared.copy"></div></a>
+          </li>
+          <li class="shared-override" style="display:none;">
+            <a href="javascript:app.storage.save(true); javascript:misc.tracking.notifyshared('overwrite');"><span class="g-stack pull-left"><i class="glyphicon glyphicon-hdd"></i></span> <div translate="sidebar.shared.override"></div></a>
+          </li>
+          <li class="shared-save" style="display:none;">
+            <a href="javascript:app.storage.save(true); javascript:misc.tracking.notifyshared('save');"><span class="g-stack pull-left"><i class="glyphicon glyphicon-hdd"></i></span> <div translate="sidebar.shared.save"></div></a>
+          </li>
+        </div>
       </div>
+    </div>
+    <div class="stuff">
+      <div class="box-container">
+        <div class="row">
+          <div class="menus">
+            <div class="box">
+              <div class="title text-center">
+                <span id="StandardRadio-title" style="padding-left: 3%;" translate="boxes.standard"></span> (Z)
+                <div class="pull-right"><a id="StandardRadio-btn" style="cursor: pointer;"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;"></i></a></div>
+              </div>
+              <p class="text-center box-desc" translate="boxes.desc"></p>
+              <ul id="StandardRadio" dnd-list="model.standard">
+                <li ng-repeat="item in model.standard" dnd-draggable="item" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move"
+                  dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
+                  {{($index+1)}}. {{"messages." + item.cmd | translate}}
+                </li>
+              </ul>
+            </div>
+            <div class="box">
+              <div class="title text-center">
+                <span id="GroupRadio-title" style="padding-left: 3%;" translate="boxes.group"></span> (X)
+                <div class="pull-right"><a id="GroupRadio-btn" style="cursor: pointer;"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;" ></i></a></div>
+              </div>
+              <p class="text-center box-desc" translate="boxes.desc"></p>
+              <ul id="GroupRadio" dnd-list="model.group">
+                <li ng-repeat="item in model.group" dnd-draggable="item" dnd-moved="model.group.splice($index, 1)" dnd-effect-allowed="move"
+                  dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
+                  {{($index+1)}}. {{"messages." + item.cmd | translate}}
+                </li>
+              </ul>
+            </div>
+            <div class="box">
+              <div class="title text-center">
+                <span id="ReportRadio-title" style="padding-left: 3%;" translate="boxes.report"></span> (C)
+                <div class="pull-right"><a id="ReportRadio-btn" style="cursor: pointer;"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;"></i></a></div>
+              </div>
+              <p class="text-center box-desc" translate="boxes.desc"></p>
+              <ul id="ReportRadio" dnd-list="model.report">
+                <li ng-repeat="item in model.report" dnd-draggable="item" dnd-moved="model.report.splice($index, 1)" dnd-effect-allowed="move"
+                  dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
+                  {{($index+1)}}. {{"messages." + item.cmd | translate}}
+                </li>
+              </ul>
+            </div>
 
-      <div class="row marketing">
-        <div class="col-lg-6">
-          <h4>HTML5 Boilerplate</h4>
-          <p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>
-          
-          <h4>Bootstrap</h4>
-          <p>Sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.</p>
+          </div>
+        </div>
+        <div id="version-alert" class="alert alert-info alert-dismissible" role="alert" style="display:none;">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>New on this version:</strong> Changed Confirmation style, added Portugese translation, bug fixes (check
+          changelog).
+        </div>
+        <div class="footer">
+          <div class="pull-right text-inverse-light">
+            <span translate="footer.by"></span> <a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:notifyclick('steam');">Drop</a></br>
+            <a id="changelog-btn" href="#" translate="footer.changelog"></a>
+            <br><span id="translation" translate="footer.Tby" class="hidden"></span>
+          </div>
+          <div class="pull-left text-inverse-light">
+            <a href="mailto:rafael@dropt.top" onclick="javascript:notifyclick('email');">Email</a> <span translate="footer.or"></span>
+            <a href="https://twitter.com/rafacavalm" target="_blank" onclick="javascript:misc.tracking.notifyclick('twitter');" translate="footer.tweet"></a> <span translate="footer.text"></span>
+          </div>
         </div>
       </div>
 
-      <div class="footer">
-        <p>♥ from the Yeoman team</p>
+    </div>
+  </div>
+
+  <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="successModalLabel" translate="modal.success.title"></h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="message-text" class="control-label">RadioPanel.txt:</label>
+            <textarea class="form-control" rows="5" id="result"></textarea>
+          </div>
+          <li>
+            <a data-target="#help-modal" data-toggle="modal" href="#help-modal" onclick="javascript:misc.tracking.notifyclick('helpModalToggle');"
+              translate="modal.success.help"></a>
+          </li>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
+        </div>
       </div>
     </div>
-    
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
-      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-      e.src='https://www.google-analytics.com/analytics.js';
-      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-      ga('create','UA-XXXXX-X');ga('send','pageview');
-    </script>
+  </div>
 
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/angular/angular.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-    
-    <!-- build:js scripts/plugins.js -->
-    <script src="/bower_components/bootstrap/js/affix.js"></script>
-    <script src="/bower_components/bootstrap/js/alert.js"></script>
-    <script src="/bower_components/bootstrap/js/dropdown.js"></script>
-    <script src="/bower_components/bootstrap/js/tooltip.js"></script>
-    <script src="/bower_components/bootstrap/js/modal.js"></script>
-    <script src="/bower_components/bootstrap/js/transition.js"></script>
-    <script src="/bower_components/bootstrap/js/button.js"></script>
-    <script src="/bower_components/bootstrap/js/popover.js"></script>
-    <script src="/bower_components/bootstrap/js/carousel.js"></script>
-    <script src="/bower_components/bootstrap/js/scrollspy.js"></script>
-    <script src="/bower_components/bootstrap/js/collapse.js"></script>
-    <script src="/bower_components/bootstrap/js/tab.js"></script>
-    <!-- endbuild -->
-    
-    <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
-    <!-- endbuild -->
-  </body>
+  <div class="modal fade" id="import-modal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="importModalLabel" translate="modal.import.title"></h4>
+        </div>
+        <form id="import-file" action="#">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="message-text" class="control-label"></label>
+              <textarea class="form-control" rows="5" id="importfile" required></textarea>
+              <input type="checkbox" name="customList" checked><label for="customList" class="control-label" translate="modal.import.copy"></label>
+            </div>
+            <li>
+              <a data-target="#help-modal" data-toggle="modal" href="#help-modal" onclick="javascript:misc.tracking.notifyclick('helpModalToggle');"
+                translate="modal.import.help"></a>
+            </li>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
+            <button id="import-submit" data-loading-text="Working..." type="submit" class="btn btn-primary" translate="modal.import.submit"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="new-message-modal" tabindex="-1" role="dialog" aria-labelledby="newmessagewModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="newmessageModalLabel" translate="modal.new.title"></h4>
+        </div>
+        <div class="modal-body">
+          <form id="new-message" action="#">
+            <div class="form-group">
+              <label for="new-message-title" translate="modal.form.label"></label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="new-message-title" translate-attr-placeholder="modal.form.label_placeholder"
+                  required>
+                <span class="input-group-btn" data-toggle="buttons">
+									<button type="button" class="btn btn-default"><input type="checkbox" name="new-message-italic" autocomplete="off"><i class="glyphicon glyphicon-italic"></i></button>
+									<button type="button" class="btn btn-default"><input type="checkbox" name="new-message-bold" autocomplete="off"><i class="glyphicon glyphicon-bold"></i></button>
+									<button id="new-message-color" data-Ttooltip="modal.form.tooltip" translate="tooltip" type="button" class="btn btn-default" data-toggle="tooltip"><span class="comp" style="background-color: rgb(0, 0, 0);"><i></i></span>
+                <input id="new-message-colorval" data-color-format="hex" type="text" hidden name="new-message-colorval" value="#00AABB"></button>
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="new-message-cmd" translate="modal.form.cmd"></label>
+              <input type="text" class="form-control" name="new-message-cmd" translate-attr-placeholder="modal.form.cmd_placeholder" required>
+              <span class="help-block" translate="modal.form.cmd_help"></span>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
+          <button type="submit" class="btn btn-success" translate="modal.new.submit"></button></form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="console-help-modal" tabindex="-1" role="dialog" aria-labelledby="consolehelpModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="consolehelpModalLabel" translate="modal.chelp.title"></h4>
+        </div>
+        <div class="modal-body">
+          <p translate="modal.chelp.p1"></p>
+          </br>
+          <p translate="modal.chelp.p2"></p>
+          </br>
+          <p translate="modal.chelp.p3"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" translate="modal.close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="helpModalLabel" translate="modal.help.title">Help</h4>
+        </div>
+        <div class="modal-body">
+          <p translate="modal.help.p1">
+          </p>
+          <h3>#1</h3>
+          <p>
+            <ol>
+              <li translate="modal.help.m1_1"></li>
+              <li translate="modal.help.m1_2"></li>
+              <li><span translate="modal.help.m1_3"></span> <code>csgo/resource/ui</code></li>
+              <li> <span translate="modal.help.m1_4"></span> <code>radiopanel.txt</code>.</li>
+            </ol>
+            <span translate="modal.help.bkp"></span>
+          </p>
+          <h3>
+            #2             </h3>
+          <p>
+            <b translate="modal.help.m2_MSWIN"></b></br>
+            <ol>
+              <li> <span translate="modal.help.m2_1"></span> <code>[your steam library]/SteamApps/common/</code></li>
+              <li> <span translate="modal.help.m2_2"></span> <code>Counter Strike: Global Offensive</code></li>
+              <li> <span translate="modal.help.m2_3"></span> <code>csgo/resource/ui</code>.</li>
+              <li> <span translate="modal.help.m2_4"></span> <code>radiopanel.txt</code> and replace the contents with the result
+                </span>.</li>
+            </ol>
+            <span translate="modal.help.lib"></span> <code>C:\Program Files (x86)</code>.
+            </ol>
+            </br><b translate="modal.help.m2_osx">OS X:</b></br>
+            <ol>
+              <li> <span translate="modal.help.m2o_1"></span> <code>~/Library/Application Support/Steam/SteamApps/common/</code></li>
+              <li> <span translate="modal.help.m2o_2"></span> <code>Counter Strike: Global Offensive</code> </li>
+              <li> <span translate="modal.help.m2o_3"></span> <code>csgo/resource/ui</code>.</li>
+              <li> <span translate="modal.help.m2o_4"></span> <code>radiopanel.txt</code> (I hope it's the same path/name) and
+                replace the contents with the result.</span>
+              </li>
+            </ol>
+          </p>
+          </br>
+          <p>
+            Please <a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">drop</a>            me an <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email</a> or
+            <a href="https://twitter.com/rafacavalm" target="_blank" onclick="javascript:misc.tracking.notifyclick('twitter');">tweet</a>            if the OS X Methods are wrong.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" translate="modal.close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="edit-message-modal" tabindex="-1" role="dialog" aria-labelledby="editmessageModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="editmessageModalLabel">Edit <span></span></h4>
+        </div>
+        <div class="modal-body">
+          <form id="edit-message" class="form-bordered" action="#">
+            <div class="form-group">
+              <label for="edit-message-title" translate="modal.form.label"></label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="edit-message-title" translate-attr-placeholder="modal.form.label_placeholder">
+                <span class="input-group-btn" data-toggle="buttons">
+									<button type="button" class="btn btn-default"><input type="checkbox" name="edit-message-italic" autocomplete="off"><i class="glyphicon glyphicon-italic"></i></button>
+									<button type="button" class="btn btn-default"><input type="checkbox" name="edit-message-bold" autocomplete="off"><i class="glyphicon glyphicon-bold"></i></button>
+									<button id="edit-message-color" data-Ttooltip="modal.form.tooltip" translate="tooltip" type="button" class="btn btn-default" data-toggle="tooltip"><span class="comp" style="background-color: rgb(0, 0, 0);"><i></i></span>
+                <input id="edit-message-colorval" type="text" hidden name="edit-message-colorval" value="#00AABB"></button>
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="edit-message-cmd">Command</label>
+              <input type="text" class="form-control" name="edit-message-cmd" translate-attr-placeholder="modal.form.cmd_placeholder">
+              <span class="help-block" translate="modal.form.cmd_help"></span>
+            </div>
+            <div class="form-group copy-btn" style="display:none;">
+              <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="popover" placement="top" data-Tpopover="modal.edit.popover_"
+                translate="modal.edit.copy"></button>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
+          <button type="submit" class="btn btn-success" translate="modal.edit.submit"></button></form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="prompt-modal" tabindex="-1" role="dialog" aria-labelledby="promptModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <b><h4 class="modal-title" id="promptModalLabel"><b translate="modal.prompt.title"></b> <span></span>?</h4>
+          </b>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.prompt.no">o</button>
+          <button id="prompt-yes" type="submit" class="btn btn-danger"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="popup hidden">
+    <div class="popup-box">
+      <div class="popup-box-header">
+        <b><span translate="modal.prompt.title"></span></b>
+      </div>
+      <div class="popup-box-message">
+        <div translate="modal.prompt.body"></div> <span></span>?</h4>
+        </b>
+      </div>
+      <div class="popup-box-options">
+        <a>#Close</a>
+        <a onclick="javascript:ui.dimissPrompt();" translate="modal.prompt.no"></a>
+      </div>
+    </div>
+  </div>
+  <div id="changelog">
+  </div>
+
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="/bower_components/angular/angular.js"></script>
+  <script src="/bower_components/angular-translate/angular-translate.js"></script>
+  <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:js scripts/plugins.js -->
+  <!-- endbuild -->
+
+  <!-- build:js scripts/main.js -->
+  <script src="scripts/main.js"></script>
+  <!-- endbuild -->
+</body>
+
 </html>
