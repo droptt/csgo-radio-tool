@@ -102,9 +102,11 @@ li .pull-right .btn,
 	height: 25%;
 	background-color: #222222;
 }
-.shared-information-box {
-
-
+.box .title input {
+	width: 60%; height: 90%; color: #555555;
+}
+.message-name {
+	display: inline-block;
 }
 .comp {
 	display: inline-block;

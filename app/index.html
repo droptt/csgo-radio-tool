@@ -12,6 +12,8 @@
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="/bower_components/bootstrap-css-only/css/bootstrap.css" />
+  <link rel="stylesheet" href="/bower_components/ng-inline-edit/dist/ng-inline-edit.css" />
+  <link rel="stylesheet" href="/bower_components/angular-growl-v2/build/angular-growl.css" />
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -22,6 +24,7 @@
 </head>
 
 <body>
+  <div growl></div>
   <div class="loading-wrapper" ng-controller="loadingController" ng-class="{hidden: init.loaded = true}">
     <div class="loading"><span>{{loading.state}}</span></div>
     <div class="loading-footer text-inverse-light" style="display:block;"><a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">Steam, </a>
@@ -35,20 +38,20 @@
         <div class="sidebar-header" style="padding-left: 0;">
           <span class="sidebar-header" translate="sidebar.menu.title"></span>
         </div>
-        <li><a id="menu-submit" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-ok"></i></span> <div translate="sidebar.menu.submit"></div></a></li>
-        <li><a data-target="#import-modal" data-toggle="modal" href="#import-modal"><span class="g-stack pull-left"><i class="glyphicon glyphicon-save"></i></span> <div translate="sidebar.menu.import"></div></a></li>
+        <li><a ng-click="generate()" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-ok"></i></span> <div translate="sidebar.menu.submit"></div></a></li>
+        <li><a ng-click="openModal('import-modal')" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-save"></i></span> <div translate="sidebar.menu.import"></div></a></li>
         <li><a id="menu-defaults" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-paste"></i></span> <div translate="sidebar.menu.defaults"></div></a></li>
-        <li><a id="menu-reset" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-trash"></i></span> <div translate="sidebar.menu.reset"></div></a></li>
+        <li><a ng-click="resetMessages()" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-trash"></i></span> <div translate="sidebar.menu.reset"></div></a></li>
         <li>
-          <a data-target="#console-help-modal" data-toggle="modal" href="#console-help-modal"><span class="g-stack pull-left"><i class="glyphicon glyphicon-question-sign"></i></span> <div translate="sidebar.menu.help"></div></a>
+          <a ng-click="openModal('console-help-modal')" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-question-sign"></i></span> <div translate="sidebar.menu.help"></div></a>
         </li>
       </ul>
       <div class="sidebar-brand">
         <span class="sidebar-radio-header" translate="sidebar.messages_title"></span>
       </div>
       <ul class="sidebar-nav nav-pills nav-stacked sidebar-secondary" id="messages">
-        <li ng-repeat="message in model.messages" dnd-draggable="message" dnd-effect-allowed="copy"
-          dnd-copied="message.disabled = true" ng-class="{disabled: message.disabled === true}" dnd-disable-if="message.disabled === true">
+        <li ng-repeat="message in model.messages" dnd-draggable="message.cmd" dnd-effect-allowed="copy" dnd-copied="message.disabled = true"
+          ng-class="{disabled: message.disabled === true}" dnd-disable-if="message.disabled === true">
           {{"messages." + message.cmd | translate}}
         </li>
       </ul>
@@ -58,10 +61,17 @@
         <div class="sidebar-brand">
           <span class="sidebar-header" translate="sidebar.custom_title"></span>
           <div class="pull-right btn-group">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-message-modal"><i class="glyphicon glyphicon-plus"></i></button>
+            <button type="button" class="btn btn-primary" ng-click="openModal('new-message-modal')"><i class="glyphicon glyphicon-plus"></i></button>
             <button type="button" class="btn btn-danger" onclick="javascript:ui.delprompt('creset');"><i class="glyphicon glyphicon-remove"></i></button>
           </div>
         </div>
+        <li ng-repeat="custom in model.custom" dnd-draggable="custom" dnd-effect-allowed="copy" dnd-copied="custom.disabled = true"
+          ng-class="{disabled: custom.disabled === true}" dnd-disable-if="custom.disabled === true">
+          {{custom.text}}
+          <div class="pull-right">
+            <a class="btn btn-primary" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="editMessage('standard', message, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
+          </div>
+        </li>
       </ul>
       <div class="shared-information" style="display: none;">
         <span class="sidebar-header" translate="sidebar.shared.title"></span>
@@ -86,15 +96,18 @@
         <div class="row">
           <div class="menus" ng-controller="messageController">
             <div class="box">
-              <div class="title text-center">
-                <span id="StandardRadio-title" style="padding-left: 3%;" translate="boxes.standard"></span> (Z)
-                <div class="pull-right"><a id="StandardRadio-btn" style="cursor: pointer;"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;"></i></a></div>
+              <div class="title text-center" inline-edit="standardTitle" inline-edit-btn-edit='<div class="pull-right"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;"></i></div>'
+                inline-edit-btn-save='<div class="pull-right"><i class="glyphicon glyphicon-ok" style="font-size: 0.65em; padding-right: 7px; color: #999999;"></i></div>'
+                inline-edit-on-blur="cancel">
               </div>
               <p class="text-center box-desc" translate="boxes.desc"></p>
               <ul data-list-name="standard" id="StandardRadio" dnd-list="model.standard" dnd-drop="checkLimit(event, index, item)">
-                <li ng-repeat="message in model.standard" dnd-draggable="message" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move">
-                  {{($index+1)}}. {{"messages." + message.cmd | translate}}
-                  <div class="pull-right">
+                <li ng-repeat="message in model.standard" dnd-draggable="message" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
+                  <div ng-show="isMessage(message)" class="message-name">{{"messages." + message | translate}}</div>
+                  <div ng-hide="isMessage(message)" class="message-name">{{message.text}}</div>
+                  <div class="pull-right" ng-class="{'btn-group': message.type === 'custom'}">
+                    <a class="btn btn-primary" ng-hide="isMessage(message)" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter"
+                      ng-click="editMessage('standard', message, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
                     <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('standard', message, $index)"><span class="glyphicon glyphicon-remove"></span></a>
                   </div>
                 </li>
@@ -150,9 +163,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+  <script type="text/ng-template" id="success-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="successModalLabel" translate="modal.success.title"></h4>
@@ -170,13 +181,8 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="import-modal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+  </script>
+  <script type="text/ng-template" id="import-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="importModalLabel" translate="modal.import.title"></h4>
@@ -198,13 +204,8 @@
             <button id="import-submit" data-loading-text="Working..." type="submit" class="btn btn-primary" translate="modal.import.submit"></button>
           </div>
         </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="new-message-modal" tabindex="-1" role="dialog" aria-labelledby="newmessagewModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+  </script>
+  <script type="text/ng-template" id="new-message-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="newmessageModalLabel" translate="modal.new.title"></h4>
@@ -235,13 +236,8 @@
           <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
           <button type="submit" class="btn btn-success" translate="modal.new.submit"></button></form>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="console-help-modal" tabindex="-1" role="dialog" aria-labelledby="consolehelpModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+  </script>
+  <script type="text/ng-template" id="console-help-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="consolehelpModalLabel" translate="modal.chelp.title"></h4>
@@ -256,13 +252,8 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal" translate="modal.close">Close</button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+  </script>
+  <script type="text/ng-template" id="help-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="helpModalLabel" translate="modal.help.title">Help</h4>
@@ -312,13 +303,8 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal" translate="modal.close"></button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="edit-message-modal" tabindex="-1" role="dialog" aria-labelledby="editmessageModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+  </script>
+  <script type="text/ng-template" id="edit-message-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="editmessageModalLabel">Edit <span></span></h4>
@@ -351,11 +337,9 @@
           <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
           <button type="submit" class="btn btn-success" translate="modal.edit.submit"></button></form>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="prompt-modal" tabindex="-1" role="dialog" aria-labelledby="promptModalLabel">
+  </script>
+  <script type="text/ng-template" id="prompt-modal.html">
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="promptModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -370,6 +354,8 @@
       </div>
     </div>
   </div>
+  </script>
+  <script type="text/ng-template" id="popup.html">
   <div class="popup hidden">
     <div class="popup-box">
       <div class="popup-box-header">
@@ -385,6 +371,7 @@
       </div>
     </div>
   </div>
+  </script>
   <div id="changelog">
   </div>
 
@@ -395,6 +382,12 @@
   <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
   <script src="/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+  <script src="/bower_components/ng-inline-edit/dist/ng-inline-edit.js"></script>
+  <script src="/bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+  <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+  <script src="/bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+  <script src="/bower_components/angular-growl-v2/build/angular-growl.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 

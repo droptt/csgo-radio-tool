@@ -1,1 +1,1 @@
-{}
+{"noclip": {"label":"noclip","text":"Noclip","cmd":"sv_cheats 1; noclip", "type": "custom", "disabled": false}}

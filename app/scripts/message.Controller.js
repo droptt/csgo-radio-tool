@@ -3,33 +3,31 @@
  * @Creation: 7/26/2016 2:46 PM (Polyjuice Potion)
  */
 (function () {
-    var app = angular.module("csgo-radio");
+    var app = angular.module('csgo-radio');
 
     var messageController = function ($scope, $rootScope, $filter) {
+        $scope.isMessage = function (message) {
+            return typeof message === 'string' ? true : false;
+        };
         $scope.removeMessage = function (list, message, index) {
-            if (message.type === "message") {
-                $rootScope.model.messages[message.id -1].disabled = false;
+            if ($scope.isMessage(message) === true) {
+                $rootScope.model.messages[message].disabled = false;
                 $rootScope.model[list].splice(index, 1);
             }
         };
         $scope.checkLimit = function (event, index, item) {
-            if (event.target.attributes[0].nodeName === "data-list-name") { //Checks if target is the list
+            if (event.target.attributes[0].nodeName === 'data-list-name') { //Checks if target is the list
                 var targetName = event.target.attributes[0].nodeValue;
-                console.log("Target is the List");
-            } else if (event.target.parentNode.attributes[0].nodeName === "data-list-name") { //In case element wasn't dropped on the list
+            } else if (event.target.parentNode.attributes[0].nodeName === 'data-list-name') { //In case element wasn't dropped on the list
                 var targetName = event.target.parentNode.attributes[0].nodeValue;
-                console.log("Target is a child element");
-            } else if (event.target.parentNode.parentNode.attributes[0].nodeName === "data-list-name") { //Never trust the user, they said.
+            } else if (event.target.parentNode.parentNode.attributes[0].nodeName === 'data-list-name') { //Never trust the user, they said.
                 var targetName = event.target.parentNode.parentNode.attributes[0].nodeValue;
-                console.log("Target is second child element");
             }
             if ($rootScope.model[targetName].length > 8) {
-                console.log("Target is full");
                 return false;
             }
-            console.log("k then");
             return item;
         };
     }
-    app.controller("messageController", messageController);
+    app.controller('messageController', messageController);
 } ());

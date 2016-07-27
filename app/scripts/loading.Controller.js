@@ -3,25 +3,44 @@
  * @Creation: 7/25/2016 2:17 PM (The living daylights)
  */
 (function () {
-    var app = angular.module("csgo-radio");
+    var app = angular.module('csgo-radio');
 
-    var loadingController = function ($scope, $rootScope, messagesService) {
+    var loadingController = function ($scope, $rootScope, messagesService, localStorageService, growl) {
+        var init = function () {
+            growl.info("INIT", {title: 'Random Information'});
+            if (localStorageService.isSupported) { //TODO: Verify if localstorage operations were successfuly executed
+                growl.info("LOCALSTORAGE IS SUPPORTED", {title: 'Random Information'});
+                if (typeof localStorageService.get('customVersion') !== null || typeof localStorageService.get('version') !== null) {
+                    $rootScope.settings.newUser = false;
+
+                    if ($rootScope.settings.version === localStorageService.get('version')) {//Don't show new version notification
+                        $rootScope.settings.versionNotification = false;
+                    } else {
+                        $rootScope.settings.versionNotification = true;
+                        localStorageService.set('version', $rootScope.settings.version);
+                    }
+                } else {
+                    $rootScope.settings.newUser = true;
+                    $rootScope.settings.versionNotification = true;
+                    localStorageService.set('version', $rootScope.settings.version).set('customVersion', 2); //TODO: customVersion is not supposed to be hardcoded.
+                }
+                if (typeof localStorageService.get('saved') !== null) {
+                    var saved = angular.fromJson(localStorageService.get('saved'));
+                    messagesService.importMessages(saved, false, false);
+                }
+            }
+        };
         var messagesLoaded = false;
         var customLoaded = false;
         var isLoaded = function () {
             if (messagesLoaded === true && customLoaded === true) {
                 $rootScope.init.loaded = true;
-                angular.element(document).find(".wrapper").removeClass("hidden"); //It's necessary because the class is hardcoded into the html. Otherwise it would break the loader
+                angular.element(document).find('.wrapper').removeClass('hidden'); //It's necessary because the class is hardcoded into the html. Otherwise it would break the loader
+                init();
             }
         };
         var onMessagesLoad = function (data) {
-            $rootScope.model.messages = [];
-            for (var item in data) {
-                data[item].disabled = false;
-                data[item].type = "message";
-                $rootScope.model.messages.push(data[item]);
-            }
-            $rootScope.init.messages = data;
+            $rootScope.model.messages = data;
             messagesLoaded = true;
             isLoaded();
         };
@@ -37,5 +56,5 @@
         messagesService.getMessages().then(onMessagesLoad, onFail);
         messagesService.getCustom().then(onCustomLoad, onFail);
     }
-    app.controller("loadingController", loadingController);
+    app.controller('loadingController', loadingController);
 } ());
