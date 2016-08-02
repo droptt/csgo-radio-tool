@@ -19,7 +19,19 @@
                 });
         };
 
-        var importMessages = function (save, imported, shared) {
+        var customExists = function (custom) {
+            for (var message in $rootScope.model.custom) {
+                if ($rootScope.model.custom.hasOwnProperty(message)) {
+                    console.log($rootScope.model.custom[message]);
+                    console.log(custom);
+                    if ($rootScope.model.custom[message].cmd === custom.cmd && $rootScope.model.custom[message].text === custom.text)
+                        return message;
+                }
+            }
+            return false;
+        };
+
+        var importMessages = function (save, imported, shared) { //TODO: Add sanity checks
             $rootScope.model.standard = save.StandardRadio;
             $rootScope.model.group = save.GroupRadio;
             $rootScope.model.report = save.ReportRadio;
@@ -37,6 +49,12 @@
                 if (typeof save.StandardRadio[message] === 'string') {
                     $rootScope.model.messages[save.StandardRadio[message]].disabled = true;
                 }
+                else {
+                    var check = customExists(message);
+                    if (check !== false) {
+                        $rootScope.model.custom[check].disabled = true;
+                    }
+                }
             }
 
             for (var message in save.GroupRadio) {
@@ -48,6 +66,12 @@
             for (var message in save.ReportRadio) {
                 if (typeof save.ReportRadio[message] === 'string') {
                     $rootScope.model.messages[save.ReportRadio[message]].disabled = true;
+                }
+                else {
+                    var check = customExists(save.ReportRadio[message]);
+                    if (check !== false) {
+                        $rootScope.model.custom[check].disabled = true;
+                    }
                 }
             }
         }

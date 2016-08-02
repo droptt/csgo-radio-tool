@@ -19,32 +19,38 @@ app.config(function ($translateProvider) {
         localStorageServiceProvider
             .setPrefix('');
     })
+	.config(['growlProvider', function (growlProvider) {
+		growlProvider.globalTimeToLive(5000);
+		growlProvider.globalEnableHtml(true);
+	}])
     .run(function ($rootScope) {
-        $rootScope.init = { 'loaded': false };
-        $rootScope.settings = { 'allowed_types': ['none', 'and'], 'msg_type': 'message', 'radioMenu': {
-			'RadioPanel.txt': {
-				'Groups': {
-					'standard': {
-						'hotkey': '1',
-						'title': '#SFUI_CommandRadio',
-						'timeout': '5',
-						'Commands': {},
-					},
-					'group': {
-						'hotkey': '2',
-						'title': '#SFUI_StandardRadio',
-						'timeout': '5',
-						'Commands': {},
-					},
-					'report': {
-						'hotkey': '3',
-						'title': '#SFUI_ReportRadio',
-						'timeout': '5',
-						'Commands': {}
+		$rootScope.init = { 'loaded': false };
+		$rootScope.settings = {
+			'allowed_types': ['none', 'and'], 'msg_type': 'message', 'radioMenu': {
+				'RadioPanel.txt': {
+					'Groups': {
+						'standard': {
+							'hotkey': '1',
+							'title': '#SFUI_CommandRadio',
+							'timeout': '5',
+							'Commands': {},
+						},
+						'group': {
+							'hotkey': '2',
+							'title': '#SFUI_StandardRadio',
+							'timeout': '5',
+							'Commands': {},
+						},
+						'report': {
+							'hotkey': '3',
+							'title': '#SFUI_ReportRadio',
+							'timeout': '5',
+							'Commands': {}
+						}
 					}
 				}
-			}
-		},"boxes": Array("StandardRadio", "GroupRadio", "ReportRadio")};
-        $rootScope.settings.version = 2.0;
-        $rootScope.model = { 'standard': [], 'group': [], 'report': [], 'Titles': [null, null, null] };
-    });
+			}, "boxes": Array("StandardRadio", "GroupRadio", "ReportRadio")
+		};
+		$rootScope.settings.version = 2.0;
+		$rootScope.model = { 'standard': [], 'group': [], 'report': [], 'Titles': [null, null, null] };
+	});

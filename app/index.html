@@ -13,7 +13,6 @@
   <!-- bower:css -->
   <link rel="stylesheet" href="/bower_components/bootstrap-css-only/css/bootstrap.css" />
   <link rel="stylesheet" href="/bower_components/ng-inline-edit/dist/ng-inline-edit.css" />
-  <link rel="stylesheet" href="/bower_components/angular-growl-v2/build/angular-growl.css" />
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -24,7 +23,7 @@
 </head>
 
 <body>
-  <div growl></div>
+<div growl></div>
   <div class="loading-wrapper" ng-controller="loadingController" ng-class="{hidden: init.loaded = true}">
     <div class="loading"><span>{{loading.state}}</span></div>
     <div class="loading-footer text-inverse-light" style="display:block;"><a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">Steam, </a>
@@ -66,7 +65,7 @@
           </div>
         </div>
         <li ng-repeat="custom in model.custom" dnd-draggable="custom" dnd-effect-allowed="copy" dnd-copied="custom.disabled = true"
-          ng-class="{disabled: custom.disabled === true}" dnd-disable-if="custom.disabled === true">
+          ng-class="{disabled: custom.disabled === true}" dnd-disable-if="custom.disabled === true" uib-tooltip="{{custom.cmd}}" tooltip-trigger="mouseenter">
           {{custom.text}}
           <div class="pull-right">
             <a class="btn btn-primary" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="editMessage('standard', message, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -120,9 +119,14 @@
               </div>
               <p class="text-center box-desc" translate="boxes.desc"></p>
               <ul data-list-name="group" id="GroupRadio" dnd-list="model.group">
-                <li ng-repeat="item in model.group" dnd-draggable="item" dnd-moved="model.group.splice($index, 1)" dnd-effect-allowed="move"
-                  dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
-                  {{($index+1)}}. {{"messages." + item.cmd | translate}}
+               <li ng-repeat="message in model.group" dnd-draggable="message" dnd-moved="model.group.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
+                  <div ng-show="isMessage(message)" class="message-name">{{"messages." + message | translate}}</div>
+                  <div ng-hide="isMessage(message)" class="message-name">{{message.text}}</div>
+                  <div class="pull-right" ng-class="{'btn-group': message.type === 'custom'}">
+                    <a class="btn btn-primary" ng-hide="isMessage(message)" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter"
+                      ng-click="editMessage('group', message, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('group', message, $index)"><span class="glyphicon glyphicon-remove"></span></a>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -133,9 +137,14 @@
               </div>
               <p class="text-center box-desc" translate="boxes.desc"></p>
               <ul id="ReportRadio" dnd-list="model.report">
-                <li ng-repeat="item in model.report" dnd-draggable="item" dnd-moved="model.report.splice($index, 1)" dnd-effect-allowed="move"
-                  dnd-selected="models.selected = item" ng-class="{'selected': models.selected === item}">
-                  {{($index+1)}}. {{"messages." + item.cmd | translate}}
+                <li ng-repeat="message in model.report" dnd-draggable="message" dnd-moved="model.report.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
+                  <div ng-show="isMessage(message) === true" class="message-name">{{"messages." + message | translate}}</div>
+                  <div ng-show="isMessage(message) === false" class="message-name">{{message.text}}</div>
+                  <div class="pull-right" ng-class="{'btn-group': message.type === 'custom'}">
+                    <a class="btn btn-primary" ng-show="isMessage(message) === false" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter"
+                      ng-click="editMessage('report', message, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('report', message, $index)"><span class="glyphicon glyphicon-remove"></span></a>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -166,12 +175,12 @@
   <script type="text/ng-template" id="success-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="successModalLabel" translate="modal.success.title"></h4>
+          <h4 class="modal-title" translate="modal.success.title"></h4>
         </div>
         <div class="modal-body">
           <div class="form-group">
             <label for="message-text" class="control-label">RadioPanel.txt:</label>
-            <textarea class="form-control" rows="5" id="result">{{result}}</textarea>
+            <textarea class="form-control" rows="5">{{extra}}</textarea>
           </div>
           <li>
             <a data-target="#help-modal" data-toggle="modal" href="#help-modal" onclick="javascript:misc.tracking.notifyclick('helpModalToggle');"
@@ -179,7 +188,7 @@
           </li>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
+          <button type="button" class="btn btn-default" ng-click="ok()" translate="modal.close"></button>
         </div>
   </script>
   <script type="text/ng-template" id="import-modal.html">
@@ -314,28 +323,28 @@
             <div class="form-group">
               <label for="edit-message-title" translate="modal.form.label"></label>
               <div class="input-group">
-                <input type="text" class="form-control" name="edit-message-title" translate-attr-placeholder="modal.form.label_placeholder">
-                <span class="input-group-btn" data-toggle="buttons">
-									<button type="button" class="btn btn-default"><input type="checkbox" name="edit-message-italic" autocomplete="off"><i class="glyphicon glyphicon-italic"></i></button>
-									<button type="button" class="btn btn-default"><input type="checkbox" name="edit-message-bold" autocomplete="off"><i class="glyphicon glyphicon-bold"></i></button>
-									<button id="edit-message-color" data-Ttooltip="modal.form.tooltip" translate="tooltip" type="button" class="btn btn-default" data-toggle="tooltip"><span class="comp" style="background-color: rgb(0, 0, 0);"><i></i></span>
+                <input type="text" class="form-control" ng-model="edit.label" translate-attr-placeholder="modal.form.label_placeholder">
+                <span class="input-group-btn">
+									<label type="button" class="btn btn-default" ng-model="edit.italic" uib-btn-checkbox><i class="glyphicon glyphicon-italic"></i></label>
+									<label type="button" class="btn btn-default" ng-model="edit.bold" uib-btn-checkbox><i class="glyphicon glyphicon-bold"></i></label>
+									<button id="edit-message-color" translate-attr-uib-tooltip="modal.form.tooltip" tooltip-trigger="'mouseenter'" type="button" class="btn btn-default" data-toggle="tooltip"><span class="comp" style="background-color: rgb(0, 0, 0);"><i></i></span>
                 <input id="edit-message-colorval" type="text" hidden name="edit-message-colorval" value="#00AABB"></button>
                 </span>
               </div>
             </div>
             <div class="form-group">
               <label for="edit-message-cmd">Command</label>
-              <input type="text" class="form-control" name="edit-message-cmd" translate-attr-placeholder="modal.form.cmd_placeholder">
+              <input type="text" class="form-control" name="edit-message-cmd" ng-model="edit.command" translate-attr-placeholder="modal.form.cmd_placeholder">
               <span class="help-block" translate="modal.form.cmd_help"></span>
             </div>
             <div class="form-group copy-btn" style="display:none;">
-              <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="popover" placement="top" data-Tpopover="modal.edit.popover_"
+              <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="popover" placement="top" translate-attr-uib-popover="modal.edit.title" translate-attr-popover-title="modal.edit.popover_content"
                 translate="modal.edit.copy"></button>
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
-          <button type="submit" class="btn btn-success" translate="modal.edit.submit"></button></form>
+          <button type="button" class="btn btn-default" ng-click="cancel()" translate="modal.close"></button>
+          <button type="submit" class="btn btn-success" ng-click="save()" translate="modal.edit.submit"></button></form>
         </div>
   </script>
   <script type="text/ng-template" id="prompt-modal.html">
@@ -387,7 +396,7 @@
   <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
   <script src="/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
   <script src="/bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
-  <script src="/bower_components/angular-growl-v2/build/angular-growl.js"></script>
+  <script src="/bower_components/angular-growl/build/angular-growl.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 

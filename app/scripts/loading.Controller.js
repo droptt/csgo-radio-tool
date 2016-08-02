@@ -7,9 +7,9 @@
 
     var loadingController = function ($scope, $rootScope, messagesService, localStorageService, growl) {
         var init = function () {
-            growl.info("INIT", {title: 'Random Information'});
+            //growl.addInfoMessage("<b>INIT</b>");
             if (localStorageService.isSupported) { //TODO: Verify if localstorage operations were successfuly executed
-                growl.info("LOCALSTORAGE IS SUPPORTED", {title: 'Random Information'});
+                //growl.addInfoMessage("<h4><i class='glyphicon glyphicon-info-sign'></i> Random Information </h4> <span>LOCALSTORAGE IS SUPPORTED</span>");
                 if (typeof localStorageService.get('customVersion') !== null || typeof localStorageService.get('version') !== null) {
                     $rootScope.settings.newUser = false;
 

@@ -108,6 +108,16 @@ li .pull-right .btn,
 .message-name {
 	display: inline-block;
 }
+/* growl fixes */
+.growl {
+  position: fixed;
+  margin: 0;
+  right: 20px;
+  width: 90%;
+  max-width: 250px;
+  z-index: 9999;
+  top: 20px;
+}
 .comp {
 	display: inline-block;
 	cursor: pointer;

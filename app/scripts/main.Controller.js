@@ -27,6 +27,7 @@
         };
 
         $scope.generate = function () {
+            console.log($rootScope.model);
             if ($rootScope.model.standard.length > 0 || $rootScope.model.group.length > 0 || $rootScope.model.report.length > 0) {
                 var buildList = angular.extend({}, $rootScope.settings.radioMenu);
                 buildList["RadioPanel.txt"].Groups.standard.title = ($rootScope.model.Titles[0] === null) ? "#SFUI_CommandRadio" : $rootScope.model.Titles[0];
@@ -63,11 +64,15 @@
                         C_I++;
                     }
                 }
-                $rootScope.result = VDFService.stringify(buildList, true);
-                $uibModal.open({
+                var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'success-modal.html',
-                    controller: 'mainController',
+                    controller: 'genericModalController',
+                    resolve: {
+                        extra: function (VDFService) {
+                            return VDFService.stringify(buildList, true);
+                        }
+                    }
                 });
             }
         };
