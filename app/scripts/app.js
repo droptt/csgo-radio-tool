@@ -49,7 +49,7 @@ app.config(function ($translateProvider) {
 						}
 					}
 				}
-			}, "boxes": Array("StandardRadio", "GroupRadio", "ReportRadio")
+			}, 'boxes': Array('StandardRadio', 'GroupRadio', 'ReportRadio')
 		};
 		$rootScope.settings.version = 2.0;
 		$rootScope.model = { 'standard': [], 'group': [], 'report': [], 'Titles': [null, null, null] };

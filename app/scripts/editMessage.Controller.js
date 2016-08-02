@@ -5,8 +5,8 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var editMessageModalController = function ($scope, $rootScope, $uibModalInstance, list, message, index) {
-        if (message.type === "custom") {
+    var editMessageModalController = ['$scope', '$rootScope', '$uibModalInstance', 'list', 'message', 'index', function ($scope, $rootScope, $uibModalInstance, list, message, index) {
+        if (message.type === 'custom') {
             $scope.edit = {};
             $scope.edit.command = $rootScope.model.custom[message.UID].cmd;
             $scope.edit.label = $rootScope.model.custom[message.UID].text;
@@ -23,10 +23,28 @@
                 var messageCopy = $rootScope.model[list].filter(function (messageCopy) {
                     return messageCopy.UID === message.UID;
                 })[0];
+                if (typeof messageCopy == 'undefined') { //That's not supposed to happen.
+                    return false; //TODO: tell the user
+                }
                 messageCopy.cmd = $scope.edit.command;
                 messageCopy.text = $scope.edit.label;
                 messageCopy.italic = $scope.edit.italic;
                 messageCopy.bold = $scope.edit.bold;
+            } else if ($rootScope.model.custom[message.UID].disabled === true) {
+                var lists = ['standard', 'group', 'report'];
+                for (var msgGroup in lists) {
+                    var messageCopy = $rootScope.model[msgGroup].filter(function (messageCopy) {
+                        return messageCopy.UID === message.UID;
+                    })[0];
+                    if (typeof messageCopy == 'undefined') { //That's not supposed to happen.
+                        continue;
+                    } else {
+                        messageCopy.cmd = $scope.edit.command;
+                        messageCopy.text = $scope.edit.label;
+                        messageCopy.italic = $scope.edit.italic;
+                        messageCopy.bold = $scope.edit.bold;
+                    }
+                }
             }
             $scope.edit = false;
         }
@@ -40,7 +58,7 @@
             saveChanges();
             $uibModalInstance.close('ok');
         };
-    };
+    }];
 
     app.controller('editMessageModalController', editMessageModalController);
 } ());

@@ -22,9 +22,9 @@
     }
   },
   "boxes": {
-    "standard": "Standard",
-    "group": "Group",
-    "report": "Report",
+    "title_0": "Standard",
+    "title_1": "Group",
+    "title_2": "Report",
     "desc": "Drop Here",
     "tooltip_edit": "Edit"
   },

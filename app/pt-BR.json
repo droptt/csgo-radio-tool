@@ -22,9 +22,9 @@
     }
   },
   "boxes": {
-    "standard": "Padrão",
-    "group": "Grupo",
-    "report": "Aviso",
+    "title_0": "Padrão",
+    "title_1": "Grupo",
+    "title_2": "Aviso",
     "desc": "Largue Aqui"
   },
   "footer": {

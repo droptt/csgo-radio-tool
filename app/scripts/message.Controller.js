@@ -5,12 +5,12 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var messageController = function ($scope, $rootScope, $uibModal, $filter) {
+    var messageController = ['$scope', '$rootScope', '$uibModal', '$filter', function ($scope, $rootScope, $uibModal, $filter) {
         $scope.isMessage = function (message) {
             if (typeof message === 'string') {
                 return true;
             } else {
-                if(message.type === "imported") {
+                if(message.type === 'imported') {
                     return message.type;
                 } else {
                     return false;
@@ -59,6 +59,6 @@
             }
             return item;
         };
-    }
+    }];
     app.controller('messageController', messageController);
 } ());

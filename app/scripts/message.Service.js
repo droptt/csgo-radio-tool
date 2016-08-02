@@ -4,7 +4,7 @@
  */
 (function () {
 
-    var messagesService = function ($http, $rootScope, localStorageService) {
+    var messagesService = ['$http', '$rootScope', 'localStorageService', '$filter', function ($http, $rootScope, localStorageService, $filter) {
 
         var getMessages = function () {
             return $http.get('radio.json')
@@ -45,6 +45,12 @@
                 }, true);
             }
 
+            for (var i = 0; i <= 2; ++i) {
+                if ($rootScope.model.Titles[i] === null) {
+                    $rootScope.model.Titles[i] = $filter('translate')('boxes.title_' + i);
+                }
+            }
+
             for (var message in save.StandardRadio) { //TODO: Redo this
                 if (typeof save.StandardRadio[message] === 'string') {
                     $rootScope.model.messages[save.StandardRadio[message]].disabled = true;
@@ -82,7 +88,7 @@
             importMessages: importMessages
         };
 
-    },
+    }],
         module = angular.module('csgo-radio');
     module.factory('messagesService', messagesService);
 } ());

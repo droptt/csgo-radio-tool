@@ -5,7 +5,7 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var loadingController = function ($scope, $rootScope, messagesService, localStorageService, growl) {
+    var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', 'growl', function ($scope, $rootScope, messagesService, localStorageService, growl) {
         var init = function () {
             //growl.addInfoMessage("<b>INIT</b>");
             if (localStorageService.isSupported) { //TODO: Verify if localstorage operations were successfuly executed
@@ -55,6 +55,6 @@
         };
         messagesService.getMessages().then(onMessagesLoad, onFail);
         messagesService.getCustom().then(onCustomLoad, onFail);
-    }
+    }];
     app.controller('loadingController', loadingController);
 } ());

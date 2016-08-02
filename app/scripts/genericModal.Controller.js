@@ -5,13 +5,13 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var genericModalController = function ($scope, $uibModalInstance, extra) {
+    var genericModalController = ['$scope', '$uibModalInstance', 'extra', function ($scope, $uibModalInstance, extra) {
         $scope.extra = extra;
 
         $scope.ok = function () {
             $uibModalInstance.close('ok');
         };
-    };
+    }];
 
     app.controller('genericModalController', genericModalController);
 } ());
