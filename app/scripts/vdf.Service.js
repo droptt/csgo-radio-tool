@@ -39,7 +39,7 @@
                     return false;
                 }
 
-                lines = text.split('\n');
+                var lines = text.split('\n'), line, m;
 
                 var obj = {};
                 var stack = [obj];

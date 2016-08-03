@@ -4,25 +4,17 @@
  */
 (function () {
     var app = angular.module('csgo-radio');
-    var mainController = ['$scope', '$rootScope', '$translate', '$uibModal', 'localStorageService', 'VDFService', '$filter', function ($scope, $rootScope, $translate, $uibModal, localStorageService, VDFService, $filter) {
+    var mainController = ['$scope', '$rootScope', '$translate', '$uibModal', 'localStorageService', 'VDFService', '$filter', 'messagesService', function ($scope, $rootScope, $translate, $uibModal, localStorageService, VDFService, $filter, messagesService) {
         /** for (var i = 1; i <= 3; ++i) {
             $rootScope.model.standard.push({ cmd: "Item A" + i });
             $rootScope.model.group.push({ cmd: "Item B" + i });
         }*/
 
-        $scope.resetMessages = function () { //TODO: Redo this
-            $rootScope.model.standard = [];
-            $rootScope.model.group = [];
-            $rootScope.model.report = [];
-            $rootScope.model.Titles = [null, null, null];
-
-            for (var message in $rootScope.model.messages) {
-                $rootScope.model.messages[message].disabled = false;
-            }
+        $scope.resetMessages = function () {
+            messagesService.resetMessages();
         };
 
         $scope.generate = function () {
-            console.log($rootScope.model);
             if ($rootScope.model.standard.length > 0 || $rootScope.model.group.length > 0 || $rootScope.model.report.length > 0) {
                 var buildList = angular.extend({}, $rootScope.settings.radioMenu);
                 buildList['RadioPanel.txt'].Groups.standard.title = ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? '#SFUI_CommandRadio' : $rootScope.model.Titles[0];
@@ -76,7 +68,41 @@
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: modal + '.html',
-                controller: 'messageController',
+                controller: 'genericModalController',
+                resolve: {
+                    extra: function () {
+                        return null;
+                    }
+                }
+            });
+        };
+        $scope.newMessage = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'new-message-modal.html',
+                controller: 'newMessageModalController',
+            });
+        };
+        $scope.importFile = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'import-modal.html',
+                controller: 'importController',
+            });
+        };
+        $scope.confirm = function (action, extra) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'prompt-modal.html',
+                controller: 'promptController',
+                resolve: {
+                    action: function (action) {
+                        return action;
+                    },
+                    extra: function (extra) {
+                        return extra;
+                    }
+                }
             });
         };
     }];

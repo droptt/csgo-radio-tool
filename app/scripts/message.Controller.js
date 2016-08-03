@@ -10,7 +10,7 @@
             if (typeof message === 'string') {
                 return true;
             } else {
-                if(message.type === 'imported') {
+                if (message.type === 'imported') {
                     return message.type;
                 } else {
                     return false;
@@ -53,6 +53,10 @@
                 var targetName = event.target.parentNode.attributes[0].nodeValue;
             } else if (event.target.parentNode.parentNode.attributes[0].nodeName === 'data-list-name') { //Never trust the user, they said.
                 var targetName = event.target.parentNode.parentNode.attributes[0].nodeValue;
+            } else if (event.target.parentNode.parentNode.parentNode.attributes[0].nodeName === 'data-list-name') { //In case somebody drops into the pull left
+                var targetName = event.target.parentNode.parentNode.parentNode.attributes[0].nodeValue;
+            } else if (event.target.parentNode.parentNode.parentNode.parentNode.attributes[0].nodeName === 'data-list-name') { //Or the button
+                var targetName = event.target.parentNode.parentNode.parentNode.parentNode.attributes[0].nodeValue;
             }
             if ($rootScope.model[targetName].length > 8) {
                 return false;

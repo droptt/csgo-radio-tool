@@ -5,12 +5,13 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', 'growl', function ($scope, $rootScope, messagesService, localStorageService, growl) {
+    var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', 'growl', '$filter', '$location', function ($scope, $rootScope, messagesService, localStorageService, growl, $filter, $location) {
         var init = function () {
-            //growl.addInfoMessage("<b>INIT</b>");
+            console.log($location.hash())
+            growl.info('<h4><i class=\'glyphicon glyphicon-info-sign\'></i> WORD </h4> <b>INIT</b>');
             if (localStorageService.isSupported) { //TODO: Verify if localstorage operations were successfuly executed
-                //growl.addInfoMessage("<h4><i class='glyphicon glyphicon-info-sign'></i> Random Information </h4> <span>LOCALSTORAGE IS SUPPORTED</span>");
-                if (typeof localStorageService.get('customVersion') !== null || typeof localStorageService.get('version') !== null) {
+                growl.info('<h4><i class=\'glyphicon glyphicon-info-sign\'></i> WORD </h4> <div>LOCALSTORAGE IS SUPPORTED</div>');
+                if (localStorageService.get('customVersion') !== null || localStorageService.get('version') !== null) {
                     $rootScope.settings.newUser = false;
 
                     if ($rootScope.settings.version === localStorageService.get('version')) {//Don't show new version notification
@@ -22,11 +23,35 @@
                 } else {
                     $rootScope.settings.newUser = true;
                     $rootScope.settings.versionNotification = true;
-                    localStorageService.set('version', $rootScope.settings.version).set('customVersion', 2); //TODO: customVersion is not supposed to be hardcoded.
+                    localStorageService.set('version', $rootScope.settings.version);
+                    localStorageService.set('customVersion', 2); //TODO: customVersion is not supposed to be hardcoded.
                 }
-                if (typeof localStorageService.get('saved') !== null) {
+                if (localStorageService.get('saved') !== null) {
                     var saved = angular.fromJson(localStorageService.get('saved'));
                     messagesService.importMessages(saved, false, false);
+                } else {
+                    $rootScope.$watch('model', function (model) { //Auto save
+                        if (localStorageService.isSupported) {
+                            localStorageService.set('saved', {
+                                'StandardRadio': $rootScope.model.standard, 'GroupRadio': $rootScope.model.group, 'ReportRadio': $rootScope.model.report, 'Titles': [
+                                    ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
+                                    ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
+                                    ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
+                                ]
+                            });
+                        }
+                    }, true);
+                    $rootScope.model.Titles = [$filter('translate')('boxes.title_0'), $filter('translate')('boxes.title_1'), $filter('translate')('boxes.title_2')];
+                }
+                if (localStorageService.get('custom') !== null) {
+                    var custom = angular.fromJson(localStorageService.get('custom'));
+                    messagesService.importCustom(custom);
+                } else {
+                    $rootScope.$watch('model.custom', function () { //Auto save custom
+                        if (localStorageService.isSupported) {
+                            localStorageService.set('custom', $rootScope.model.custom);
+                        }
+                    }, true);
                 }
             }
         };

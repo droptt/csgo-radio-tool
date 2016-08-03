@@ -13,6 +13,7 @@
   <!-- bower:css -->
   <link rel="stylesheet" href="/bower_components/bootstrap-css-only/css/bootstrap.css" />
   <link rel="stylesheet" href="/bower_components/ng-inline-edit/dist/ng-inline-edit.css" />
+  <link rel="stylesheet" href="/bower_components/angular-growl-v2/build/angular-growl.css" />
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -32,13 +33,14 @@
   </div>
   <div class="wrapper" ng-controller="mainController" ng-show="init.loaded">
     <!-- Sidebars-->
+    <!-- LEFT SIDEBAR -->
     <div class="sidebar-left">
       <ul class="sidebar-menu">
         <div class="sidebar-header" style="padding-left: 0;">
           <span class="sidebar-header" translate="sidebar.menu.title"></span>
         </div>
         <li><a ng-click="generate()" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-ok"></i></span> <div translate="sidebar.menu.submit"></div></a></li>
-        <li><a ng-click="openModal('import-modal')" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-save"></i></span> <div translate="sidebar.menu.import"></div></a></li>
+        <li><a ng-click="importFile()" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-save"></i></span> <div translate="sidebar.menu.import"></div></a></li>
         <li><a id="menu-defaults" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-paste"></i></span> <div translate="sidebar.menu.defaults"></div></a></li>
         <li><a ng-click="resetMessages()" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-trash"></i></span> <div translate="sidebar.menu.reset"></div></a></li>
         <li>
@@ -55,12 +57,13 @@
         </li>
       </ul>
     </div>
+    <!-- RIGHT SIDEBAR -->
     <div class="sidebar-right">
       <ul class="sidebar-nav nav-pills nav-stacked connectedDraggable" id="custom">
         <div class="sidebar-brand">
           <span class="sidebar-header" translate="sidebar.custom_title"></span>
           <div class="pull-right btn-group">
-            <button type="button" class="btn btn-primary" ng-click="openModal('new-message-modal')"><i class="glyphicon glyphicon-plus"></i></button>
+            <button type="button" class="btn btn-primary" ng-click="newMessage()"><i class="glyphicon glyphicon-plus"></i></button>
             <button type="button" class="btn btn-danger" onclick="javascript:ui.delprompt('creset');"><i class="glyphicon glyphicon-remove"></i></button>
           </div>
         </div>
@@ -94,6 +97,7 @@
     <div class="stuff">
       <div class="box-container">
         <div class="row">
+          <!-- MENUS START -->
           <div class="menus" ng-controller="messageController">
             <div class="box">
               <div class="title text-center" inline-edit="model.Titles[0]" inline-edit-btn-edit='<div class="pull-right"><i class="glyphicon glyphicon-pencil" style="font-size: 0.65em; padding-right: 7px; color: #999999;"></i></div>'
@@ -105,7 +109,7 @@
                 <li ng-repeat="message in model.standard" dnd-draggable="message" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
                   <div ng-show="isMessage(message) === true" class="message-name">{{"messages." + message | translate}}</div>
                   <div ng-show="isMessage(message) === false" class="message-name">{{message.text}}</div>
-                  <div class="pull-right" ng-class="{'btn-group': message.type !== 'message'}">
+                  <div class="pull-right" ng-class="{'btn-group': message.type === 'custom' || message.type === 'imported'}">
                     <a class="btn btn-primary" ng-hide="isMessage(message)" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter"
                       ng-click="editMessage('standard', message, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
                     <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('standard', message, $index)"><span class="glyphicon glyphicon-remove"></span></a>
@@ -119,11 +123,11 @@
                 inline-edit-on-blur="cancel">
               </div>
               <p class="text-center box-desc" translate="boxes.desc"></p>
-              <ul data-list-name="group" id="GroupRadio" dnd-list="model.group">
+              <ul data-list-name="group" id="GroupRadio" dnd-list="model.group" dnd-drop="checkLimit(event, index, item)">
                 <li ng-repeat="message in model.group" dnd-draggable="message" dnd-moved="model.group.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
                   <div ng-show="isMessage(message) === true" class="message-name">{{"messages." + message | translate}}</div>
                   <div ng-show="isMessage(message) === false" class="message-name">{{message.text}}</div>
-                  <div class="pull-right" ng-class="{'btn-group': message.type !== 'message'}">
+                  <div class="pull-right" ng-class="{'btn-group': message.type === 'custom' || message.type === 'imported'}">
                     <a class="btn btn-primary" ng-hide="isMessage(message)" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter"
                       ng-click="editMessage('group', message, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
                     <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('group', message, $index)"><span class="glyphicon glyphicon-remove"></span></a>
@@ -137,11 +141,11 @@
                 inline-edit-on-blur="cancel">
               </div>
               <p class="text-center box-desc" translate="boxes.desc"></p>
-              <ul id="ReportRadio" dnd-list="model.report">
+              <ul data-list-name="report" id="ReportRadio" dnd-list="model.report" dnd-drop="checkLimit(event, index, item)">
                 <li ng-repeat="message in model.report" dnd-draggable="message" dnd-moved="model.report.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
                   <div ng-show="isMessage(message) === true" class="message-name">{{"messages." + message | translate}}</div>
                   <div ng-show="isMessage(message) === false" class="message-name">{{message.text}}</div>
-                  <div class="pull-right" ng-class="{'btn-group': message.type !== 'message'}">
+                  <div class="pull-right" ng-class="{'btn-group': message.type === 'custom' || message.type === 'imported'}">
                     <a class="btn btn-primary" ng-show="isMessage(message) === false" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter"
                       ng-click="editMessage('report', message, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
                     <a class="btn btn-danger" uib-tooltip="{{boxes.tooltip_edit | translate}}" tooltip-trigger="mouseenter" ng-click="removeMessage('report', message, $index)"><span class="glyphicon glyphicon-remove"></span></a>
@@ -157,6 +161,7 @@
           <strong>New on this version:</strong> Changed Confirmation style, added Portugese translation, bug fixes (check
           changelog).
         </div>
+        <!-- FOOTER -->
         <div class="footer">
           <div class="pull-right text-inverse-light">
             <span translate="footer.by"></span> <a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:notifyclick('steam');">Drop</a></br>
@@ -172,7 +177,7 @@
 
     </div>
   </div>
-
+<!-- MODAL TEMPLATES -->
   <script type="text/ng-template" id="success-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -201,8 +206,8 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="message-text" class="control-label"></label>
-              <textarea class="form-control" rows="5" id="importfile" required></textarea>
-              <input type="checkbox" name="customList" checked><label for="customList" class="control-label" translate="modal.import.copy"></label>
+              <textarea class="form-control" rows="5" ng-model="import.file" required></textarea>
+              <input type="checkbox" name="customList" ng-model="import.copy"><label for="customList" class="control-label" translate="modal.import.copy"></label>
             </div>
             <li>
               <a data-target="#help-modal" data-toggle="modal" href="#help-modal" onclick="javascript:misc.tracking.notifyclick('helpModalToggle');"
@@ -210,8 +215,8 @@
             </li>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
-            <button id="import-submit" data-loading-text="Working..." type="submit" class="btn btn-primary" translate="modal.import.submit"></button>
+            <label class="btn btn-default" translate="modal.close" ng-click="cancel()"></label>
+            <label class="btn btn-primary" translate="modal.import.submit" ng-click="ok()"></label>
           </div>
         </form>
   </script>
@@ -225,26 +230,26 @@
             <div class="form-group">
               <label for="new-message-title" translate="modal.form.label"></label>
               <div class="input-group">
-                <input type="text" class="form-control" name="new-message-title" translate-attr-placeholder="modal.form.label_placeholder"
+                <input type="text" class="form-control" name="new-message-title" ng-model="newMsg.text" translate-attr-placeholder="modal.form.label_placeholder"
                   required>
                 <span class="input-group-btn" data-toggle="buttons">
-									<button type="button" class="btn btn-default"><input type="checkbox" name="new-message-italic" autocomplete="off"><i class="glyphicon glyphicon-italic"></i></button>
-									<button type="button" class="btn btn-default"><input type="checkbox" name="new-message-bold" autocomplete="off"><i class="glyphicon glyphicon-bold"></i></button>
-									<button id="new-message-color" data-Ttooltip="modal.form.tooltip" translate="tooltip" type="button" class="btn btn-default" data-toggle="tooltip"><span class="comp" style="background-color: rgb(0, 0, 0);"><i></i></span>
+									<label type="button" class="btn btn-default" ng-model="newMsg.italic" uib-btn-checkbox><i class="glyphicon glyphicon-italic"></i></label>
+									<label type="button" class="btn btn-default" ng-model="newMsg.bold" uib-btn-checkbox><i class="glyphicon glyphicon-bold"></i></label>
+									<button id="new-message-color" translate-attr-uib-tooltip="modal.form.tooltip" type="button" class="btn btn-default" data-toggle="tooltip"><span class="comp" style="background-color: rgb(0, 0, 0);"><i></i></span>
                 <input id="new-message-colorval" data-color-format="hex" type="text" hidden name="new-message-colorval" value="#00AABB"></button>
                 </span>
               </div>
             </div>
             <div class="form-group">
               <label for="new-message-cmd" translate="modal.form.cmd"></label>
-              <input type="text" class="form-control" name="new-message-cmd" translate-attr-placeholder="modal.form.cmd_placeholder" required>
+              <input type="text" class="form-control" name="new-message-cmd" ng-model="newMsg.cmd" translate-attr-placeholder="modal.form.cmd_placeholder" required>
               <span class="help-block" translate="modal.form.cmd_help"></span>
             </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.close"></button>
-          <button type="submit" class="btn btn-success" translate="modal.new.submit"></button></form>
+          <button type="button" class="btn btn-default" ng-click="cancel()" translate="modal.close"></button>
+          <button type="submit" class="btn btn-success" ng-click="save()" translate="modal.new.submit"></button></form>
         </div>
   </script>
   <script type="text/ng-template" id="console-help-modal.html">
@@ -260,7 +265,7 @@
           <p translate="modal.chelp.p3"></p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" translate="modal.close">Close</button>
+          <button type="button" class="btn btn-primary" ng-click="ok()" translate="modal.close">Close</button>
         </div>
   </script>
   <script type="text/ng-template" id="help-modal.html">
@@ -349,21 +354,15 @@
         </div>
   </script>
   <script type="text/ng-template" id="prompt-modal.html">
-  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="promptModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <b><h4 class="modal-title" id="promptModalLabel"><b translate="modal.prompt.title"></b> <span></span>?</h4>
+          <b><h4 class="modal-title"><b translate="modal.prompt.title"></b> <span>{{prompt.message}}</span>?</h4>
           </b>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" translate="modal.prompt.no">o</button>
-          <button id="prompt-yes" type="submit" class="btn btn-danger"></button>
+          <label class="btn btn-default" ng-click="cancel()" translate="modal.prompt.no">No</label>
+          <label class="btn btn-danger" ng-click="yes()">{{prompt.yes}}</label>
         </div>
-      </div>
-    </div>
-  </div>
   </script>
   <script type="text/ng-template" id="popup.html">
   <div class="popup hidden">
@@ -397,7 +396,7 @@
   <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
   <script src="/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
   <script src="/bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
-  <script src="/bower_components/angular-growl/build/angular-growl.js"></script>
+  <script src="/bower_components/angular-growl-v2/build/angular-growl.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 

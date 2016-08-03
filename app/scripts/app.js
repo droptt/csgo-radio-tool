@@ -16,12 +16,12 @@ app.config(function ($translateProvider) {
         .useLocalStorage();
 })
     .config(function (localStorageServiceProvider) {
-        localStorageServiceProvider
-            .setPrefix('');
+        localStorageServiceProvider.setPrefix('');
     })
 	.config(['growlProvider', function (growlProvider) {
+		growlProvider.globalDisableCountDown(true);
 		growlProvider.globalTimeToLive(5000);
-		growlProvider.globalEnableHtml(true);
+		growlProvider.globalDisableIcons(true);
 	}])
     .run(function ($rootScope) {
 		$rootScope.init = { 'loaded': false };
@@ -51,6 +51,6 @@ app.config(function ($translateProvider) {
 				}
 			}, 'boxes': Array('StandardRadio', 'GroupRadio', 'ReportRadio')
 		};
-		$rootScope.settings.version = 2.0;
+		$rootScope.settings.version = 20;
 		$rootScope.model = { 'standard': [], 'group': [], 'report': [], 'Titles': [null, null, null] };
 	});

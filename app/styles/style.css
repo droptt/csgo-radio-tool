@@ -109,14 +109,22 @@ li .pull-right .btn,
 	display: inline-block;
 }
 /* growl fixes */
-.growl {
+.growl-container.growl-fixed {
   position: fixed;
   margin: 0;
-  right: 20px;
   width: 90%;
   max-width: 250px;
   z-index: 9999;
-  top: 20px;
+}
+.growl-container.growl-fixed.top-right {
+	top: 20px;
+	right: 20px;
+}
+.growl-container > .growl-item {
+    padding: 15px;
+}
+.alert-dismissable .close, .alert-dismissible .close {
+	right: 0;
 }
 .comp {
 	display: inline-block;
