@@ -6,7 +6,18 @@
     var app = angular.module('csgo-radio');
 
     var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', 'growl', '$filter', '$location', function ($scope, $rootScope, messagesService, localStorageService, growl, $filter, $location) {
+
+        var isJson = function (str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
+        };
+
         var init = function () {
+            var loaded = false, shared = false;
             console.log($location.hash())
             growl.info('<h4><i class=\'glyphicon glyphicon-info-sign\'></i> WORD </h4> <b>INIT</b>');
             if (localStorageService.isSupported) { //TODO: Verify if localstorage operations were successfuly executed
@@ -26,22 +37,33 @@
                     localStorageService.set('version', $rootScope.settings.version);
                     localStorageService.set('customVersion', 2); //TODO: customVersion is not supposed to be hardcoded.
                 }
-                if (localStorageService.get('saved') !== null) {
+                if (isJson(decodeURIComponent(window.location.hash.replace("#/", ""))) === true) {
+                    messagesService.importMessages(JSON.parse(decodeURIComponent(window.location.hash.replace("#/", ""))), false, true, false);
+                    loaded = true;
+                    shared = true;
+                    $rootScope.settings.shared = true;
+                    $rootScope.settings.hasSaved = (localStorageService.get('saved') === null) ? false : true;
+                }
+                if (localStorageService.get('saved') !== null && loaded === false) {
                     var saved = angular.fromJson(localStorageService.get('saved'));
                     messagesService.importMessages(saved, false, false);
+                    loaded = true;
                 } else {
-                    $rootScope.$watch('model', function (model) { //Auto save
-                        if (localStorageService.isSupported) {
-                            localStorageService.set('saved', {
-                                'StandardRadio': $rootScope.model.standard, 'GroupRadio': $rootScope.model.group, 'ReportRadio': $rootScope.model.report, 'Titles': [
-                                    ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
-                                    ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
-                                    ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
-                                ]
-                            });
-                        }
-                    }, true);
-                    $rootScope.model.Titles = [$filter('translate')('boxes.title_0'), $filter('translate')('boxes.title_1'), $filter('translate')('boxes.title_2')];
+                    if (shared === false && loaded === false) {
+                        $rootScope.$watch('model', function (model) { //Auto save
+                            if (localStorageService.isSupported) {
+                                localStorageService.set('saved', {
+                                    'StandardRadio': $rootScope.model.standard, 'GroupRadio': $rootScope.model.group, 'ReportRadio': $rootScope.model.report, 'Titles': [
+                                        ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
+                                        ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
+                                        ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
+                                    ]
+                                });
+                            }
+                        }, true);
+                        $rootScope.model.Titles = [$filter('translate')('boxes.title_0'), $filter('translate')('boxes.title_1'), $filter('translate')('boxes.title_2')];
+                        loaded = true;
+                    }
                 }
                 if (localStorageService.get('custom') !== null) {
                     var custom = angular.fromJson(localStorageService.get('custom'));

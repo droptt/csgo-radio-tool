@@ -22,8 +22,24 @@
                 $rootScope.model.messages[message].disabled = false;
                 $rootScope.model[list].splice(index, 1);
             } else {
-                $rootScope.model.custom[message.UID].disabled = false;
-                $rootScope.model[list].splice(index, 1);
+                if (message.type === 'custom') {
+                    $rootScope.model.custom[message.UID].disabled = false;
+                    $rootScope.model[list].splice(index, 1);
+                } else {
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        templateUrl: 'prompt-modal.html',
+                        controller: 'promptController',
+                        resolve: {
+                            action: function () {
+                                return "deleteImportedCommand";
+                            },
+                            extra: function () {
+                                return { list: list, message: message, index: index };
+                            }
+                        }
+                    });
+                }
             }
         };
         $scope.editMessage = function (list, message, index) {
@@ -58,6 +74,7 @@
             } else if (event.target.parentNode.parentNode.parentNode.parentNode.attributes[0].nodeName === 'data-list-name') { //Or the button
                 var targetName = event.target.parentNode.parentNode.parentNode.parentNode.attributes[0].nodeValue;
             }
+            console.log(targetName);
             if ($rootScope.model[targetName].length > 8) {
                 return false;
             }

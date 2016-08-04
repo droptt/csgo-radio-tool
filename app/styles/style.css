@@ -108,6 +108,12 @@ li .pull-right .btn,
 .message-name {
 	display: inline-block;
 }
+.sidebar-menu a {
+	cursor:pointer;
+}
+.custom-shared {
+	height: 70%;
+}
 /* growl fixes */
 .growl-container.growl-fixed {
   position: fixed;

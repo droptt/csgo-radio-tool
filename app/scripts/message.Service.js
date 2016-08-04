@@ -43,8 +43,6 @@
         var customExists = function (custom) {
             for (var message in $rootScope.model.custom) {
                 if ($rootScope.model.custom.hasOwnProperty(message)) {
-                    console.log($rootScope.model.custom[message]);
-                    console.log(custom);
                     if ($rootScope.model.custom[message].cmd === custom.cmd && $rootScope.model.custom[message].text === custom.text)
                         return message;
                 }
@@ -76,6 +74,7 @@
         };
 
         var importMessages = function (save, imported, shared, copy) { //TODO: Add sanity checks
+            console.log("MessageService ImportMessages: Save: " + JSON.stringify(save) + " Imported: " + imported + " Shared: " + shared);
             resetMessages();
             $rootScope.model.standard = save.StandardRadio;
             $rootScope.model.group = save.GroupRadio;
@@ -119,6 +118,11 @@
                         message.disabled = false;
                         message.label = message.text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
                         $rootScope.model.custom[message.UID] = message;
+                    } else if (imported === true || shared === true) {
+                        console.log(message);
+                        message.type = 'imported';
+                        message.disabled = false;
+                        message.label = message.text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
                     }
                 }
             }
@@ -160,7 +164,12 @@
                     }
                 }
             }
+            console.log($rootScope.model);
         }
+
+        var defaults = function () {
+            importMessages(JSON.parse('{"StandardRadio":["go","fallback","sticktog","holdpos","followme"],"GroupRadio":["roger","negative","cheer","compliment","thanks"],"ReportRadio":["enemyspot","needbackup","takepoint","sectorclear","inposition"],"Titles":[null,null,null]}'), false, false, false)
+        };
 
         return {
             getMessages: getMessages,
@@ -168,7 +177,8 @@
             importMessages: importMessages,
             resetMessages: resetMessages,
             importCustom: importCustom,
-            checkHtmlTags: htmlTags
+            checkHtmlTags: htmlTags,
+            default: defaults
         };
 
     }],

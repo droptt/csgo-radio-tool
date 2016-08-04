@@ -5,14 +5,6 @@
 (function () {
     var app = angular.module('csgo-radio');
     var mainController = ['$scope', '$rootScope', '$translate', '$uibModal', 'localStorageService', 'VDFService', '$filter', 'messagesService', function ($scope, $rootScope, $translate, $uibModal, localStorageService, VDFService, $filter, messagesService) {
-        /** for (var i = 1; i <= 3; ++i) {
-            $rootScope.model.standard.push({ cmd: "Item A" + i });
-            $rootScope.model.group.push({ cmd: "Item B" + i });
-        }*/
-
-        $scope.resetMessages = function () {
-            messagesService.resetMessages();
-        };
 
         $scope.generate = function () {
             if ($rootScope.model.standard.length > 0 || $rootScope.model.group.length > 0 || $rootScope.model.report.length > 0) {
@@ -90,20 +82,27 @@
                 controller: 'importController',
             });
         };
-        $scope.confirm = function (action, extra) {
+        var Confirm = function (action, extra) {
+            if (typeof extra == 'undefined') { var extra = null; }
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'prompt-modal.html',
                 controller: 'promptController',
                 resolve: {
-                    action: function (action) {
+                    action: function () {
                         return action;
                     },
-                    extra: function (extra) {
+                    extra: function () {
                         return extra;
                     }
                 }
             });
+        };
+        $scope.resetMessages = function () {
+            Confirm("reset");
+        };
+        $scope.defaults = function () {
+             Confirm("default");
         };
     }];
     app.controller('mainController', mainController);

@@ -39,10 +39,10 @@
         <div class="sidebar-header" style="padding-left: 0;">
           <span class="sidebar-header" translate="sidebar.menu.title"></span>
         </div>
-        <li><a ng-click="generate()" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-ok"></i></span> <div translate="sidebar.menu.submit"></div></a></li>
-        <li><a ng-click="importFile()" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-save"></i></span> <div translate="sidebar.menu.import"></div></a></li>
-        <li><a id="menu-defaults" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-paste"></i></span> <div translate="sidebar.menu.defaults"></div></a></li>
-        <li><a ng-click="resetMessages()" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-trash"></i></span> <div translate="sidebar.menu.reset"></div></a></li>
+        <li><a ng-click="generate()" analytics-on analytics-event="success" analytics-category="submit"><span class="g-stack pull-left"><i class="glyphicon glyphicon-ok"></i></span> <div translate="sidebar.menu.submit"></div></a></li>
+        <li><a ng-click="importFile()"><span class="g-stack pull-left"><i class="glyphicon glyphicon-save"></i></span> <div translate="sidebar.menu.import"></div></a></li>
+        <li><a ng-click="defaults()"><span class="g-stack pull-left"><i class="glyphicon glyphicon-paste"></i></span> <div translate="sidebar.menu.defaults"></div></a></li>
+        <li><a ng-click="resetMessages()"><span class="g-stack pull-left"><i class="glyphicon glyphicon-trash"></i></span> <div translate="sidebar.menu.reset"></div></a></li>
         <li>
           <a ng-click="openModal('console-help-modal')" href="#"><span class="g-stack pull-left"><i class="glyphicon glyphicon-question-sign"></i></span> <div translate="sidebar.menu.help"></div></a>
         </li>
@@ -59,12 +59,12 @@
     </div>
     <!-- RIGHT SIDEBAR -->
     <div class="sidebar-right">
-      <ul class="sidebar-nav nav-pills nav-stacked connectedDraggable" id="custom">
+      <ul class="sidebar-nav nav-pills nav-stacked connectedDraggable" ng-class="{'custom-shared': settings.shared}" id="custom">
         <div class="sidebar-brand">
           <span class="sidebar-header" translate="sidebar.custom_title"></span>
           <div class="pull-right btn-group">
-            <button type="button" class="btn btn-primary" ng-click="newMessage()"><i class="glyphicon glyphicon-plus"></i></button>
-            <button type="button" class="btn btn-danger" onclick="javascript:ui.delprompt('creset');"><i class="glyphicon glyphicon-remove"></i></button>
+            <label class="btn btn-primary" ng-click="newMessage()"><i class="glyphicon glyphicon-plus"></i></label>
+            <label class="btn btn-danger" onclick="javascript:ui.delprompt('creset');"><i class="glyphicon glyphicon-remove"></i></label>
           </div>
         </div>
         <li ng-repeat="custom in model.custom" dnd-draggable="custom" dnd-effect-allowed="copy" dnd-copied="custom.disabled = true"
@@ -76,20 +76,24 @@
           </div>
         </li>
       </ul>
-      <div class="shared-information" style="display: none;">
+      <div class="shared-information" ng-show="settings.shared" ng-controller="sharedController">
         <span class="sidebar-header" translate="sidebar.shared.title"></span>
         <div class="sidebar-menu">
-          <li class="shared-load" style="display:none;">
-            <a href="http://dropt.top/csgo/radio" onclick="javascript:misc.tracking.notifyshared('load');"><span class="g-stack pull-left"><i class="glyphicon glyphicon-open"></i></span> <div translate="sidebar.shared.load"></div></a>
-          </li>
-          <li class="shared-copyall" style="display:none;">
-            <a href="javascript:custom.copyAllToCustom(); javascript:misc.tracking.notifyshared('copyAll');"><span class="g-stack pull-left"><i class="glyphicon glyphicon-import"></i></span> <div translate="sidebar.shared.copy"></div></a>
-          </li>
-          <li class="shared-override" style="display:none;">
-            <a href="javascript:app.storage.save(true); javascript:misc.tracking.notifyshared('overwrite');"><span class="g-stack pull-left"><i class="glyphicon glyphicon-hdd"></i></span> <div translate="sidebar.shared.override"></div></a>
-          </li>
-          <li class="shared-save" style="display:none;">
-            <a href="javascript:app.storage.save(true); javascript:misc.tracking.notifyshared('save');"><span class="g-stack pull-left"><i class="glyphicon glyphicon-hdd"></i></span> <div translate="sidebar.shared.save"></div></a>
+          <div ng-show="settings.hasSaved  === true">
+            <li class="shared-load">
+              <a href="http://dropt.top/csgo/radio" analytics-on analytics-event="load" analytics-category="shared"><span class="g-stack pull-left"><i class="glyphicon glyphicon-open"></i></span> <div translate="sidebar.shared.load"></div></a>
+            </li>
+            <li class="shared-override">
+              <a ng-click="save()" analytics-on analytics-category="shared" analytics-event="overwrite"><span class="g-stack pull-left"><i class="glyphicon glyphicon-hdd"></i></span> <div translate="sidebar.shared.override"></div></a>
+            </li>
+          </div>
+          <div ng-hide="settings.hasSaved === true">
+            <li class="shared-save">
+              <a ng-click="save()" analytics-on analytics-category="shared" analytics-event="save"><span class="g-stack pull-left"><i class="glyphicon glyphicon-hdd"></i></span> <div translate="sidebar.shared.save"></div></a>
+            </li>
+          </div>
+          <li class="shared-copyall">
+            <a ng-click="copyAll()" analytics-on analytics-category="shared" analytics-event="copyAll"><span class="g-stack pull-left"><i class="glyphicon glyphicon-import"></i></span> <div translate="sidebar.shared.copy"></div></a>
           </li>
         </div>
       </div>
@@ -177,7 +181,14 @@
 
     </div>
   </div>
-<!-- MODAL TEMPLATES -->
+  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  	ga('create', 'UA-43605131-6', { 'cookieDomain': 'none' });
+	</script>
+  <!-- MODAL TEMPLATES -->
   <script type="text/ng-template" id="success-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -356,12 +367,12 @@
   <script type="text/ng-template" id="prompt-modal.html">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <b><h4 class="modal-title"><b translate="modal.prompt.title"></b> <span>{{prompt.message}}</span>?</h4>
+          <b><h4 class="modal-title"><b translate="modal.prompt.title"></b> <span>{{message}}</span>?</h4>
           </b>
         </div>
         <div class="modal-footer">
           <label class="btn btn-default" ng-click="cancel()" translate="modal.prompt.no">No</label>
-          <label class="btn btn-danger" ng-click="yes()">{{prompt.yes}}</label>
+          <label class="btn btn-danger" ng-click="confirm()">{{yes}}</label>
         </div>
   </script>
   <script type="text/ng-template" id="popup.html">
@@ -397,6 +408,9 @@
   <script src="/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
   <script src="/bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
   <script src="/bower_components/angular-growl-v2/build/angular-growl.js"></script>
+  <script src="/bower_components/SHA-1/sha1.js"></script>
+  <script src="/bower_components/angulartics/src/angulartics.js"></script>
+  <script src="/bower_components/angulartics-google-analytics/lib/angulartics-ga.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 

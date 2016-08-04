@@ -8,7 +8,7 @@
     var promptController = ['$scope', '$rootScope', '$uibModalInstance', 'action', 'extra', '$filter', 'messagesService', function ($scope, $rootScope, $uibModalInstance, action, extra, $filter, messagesService) {
 
         $scope.prompt = {};
-
+        console.log(action);
         switch (action) {
             case "reset":
                 $scope.message = $filter('translate')('modal.prompt.reset');
@@ -48,7 +48,7 @@
             $uibModalInstance.close('cancel');
         };
 
-        $scope.yes = function () {
+        $scope.confirm = function () {
             executeOrder66();
             $uibModalInstance.close('ok');
         };

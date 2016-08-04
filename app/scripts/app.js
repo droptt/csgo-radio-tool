@@ -3,7 +3,15 @@
  * @Creation: 7/25/2016 2:19 PM (Tomorrow never dies)
  */
 
-var app = angular.module('csgo-radio', ['pascalprecht.translate', 'ngCookies', 'angular-growl', 'dndLists', 'ui.bootstrap', 'angularInlineEdit', 'LocalStorageModule']);
+var app = angular.module('csgo-radio', ['pascalprecht.translate',
+	'ngCookies',
+	'angular-growl',
+	'dndLists',
+    'ui.bootstrap',
+	'angularInlineEdit',
+	//'angulartics',
+	//'angulartics.google.analytics',
+	'LocalStorageModule']);
 
 app.config(function ($translateProvider) {
     $translateProvider.useStaticFilesLoader({
@@ -23,7 +31,10 @@ app.config(function ($translateProvider) {
 		growlProvider.globalTimeToLive(5000);
 		growlProvider.globalDisableIcons(true);
 	}])
-    .run(function ($rootScope) {
+	/*.config(function ($analyticsProvider) {
+		$analyticsProvider.virtualPageviews(false);
+	})*/
+	.run(function ($rootScope) {
 		$rootScope.init = { 'loaded': false };
 		$rootScope.settings = {
 			'allowed_types': ['none', 'and'], 'msg_type': 'message', 'radioMenu': {
