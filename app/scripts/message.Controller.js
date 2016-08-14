@@ -8,7 +8,7 @@
     var messageController = ['$scope', '$rootScope', '$filter', function ($scope, $rootScope, $filter) {
         $scope.removeMessage = function (list, message, index) {
             if (message.type === "message") {
-                $rootScope.model.messages[message].disabled = false;
+                $rootScope.model.messages[message.cmd].disabled = false;
                 $rootScope.model[list].splice(index, 1);
             } else {
                 if (message.type === 'custom') {

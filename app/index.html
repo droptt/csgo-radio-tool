@@ -76,7 +76,7 @@
           </md-tooltip>
           {{custom.text}}
           <div class="pull-right">
-            <md-button class="md-icon-button" aria-label="Edit" ng-click="editMessage('custom', custom, $index)">
+            <md-button class="md-icon-button" aria-label="Edit" ng-click="editMessage($event, 'custom', custom, $index)">
               <md-tooltip md-direction="top">
                 {{::tooltip.edit}}
               </md-tooltip>
@@ -127,7 +127,7 @@
                     </md-tooltip>
                     <md-icon class="material-icons edit">mode_edit</md-icon>
                   </md-button>
-                  <md-button class="md-icon-button md-warn" aria-label="Remove">
+                  <md-button class="md-icon-button md-warn" aria-label="Remove" ng-click="removeMessage('standard', message, $index)">
                     <md-icon class="material-icons">clear</md-icon>
                   </md-button>
                 </div>
@@ -150,7 +150,7 @@
                     </md-tooltip>
                     <md-icon class="material-icons edit">mode_edit</md-icon>
                   </md-button>
-                  <md-button class="md-icon-button md-warn" aria-label="Remove">
+                  <md-button class="md-icon-button md-warn" aria-label="Remove" ng-click="removeMessage('group', message, $index)">
                     <md-icon class="material-icons">clear</md-icon>
                   </md-button>
                 </div>
@@ -173,7 +173,7 @@
                     </md-tooltip>
                     <md-icon class="material-icons edit">mode_edit</md-icon>
                   </md-button>
-                  <md-button class="md-icon-button md-warn" aria-label="Remove">
+                  <md-button class="md-icon-button md-warn" aria-label="Remove" ng-click="removeMessage('report', message, $index)">
                     <md-icon class="material-icons">clear</md-icon>
                   </md-button>
                 </div>
@@ -209,6 +209,17 @@
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   	ga('create', 'UA-43605131-6', { 'cookieDomain': 'none' });
 	</script>
+  <script type="text/ng-template" id="mdColorPicker.tpl.html">
+      <div class="md-color-picker-preview md-color-picker-checkered-bg" ng-click="showColorPicker($event)" ng-if="mdColorPreview">
+        <div class="md-color-picker-result" ng-style="{background: value}"></div>
+      </div>
+      <md-button class="md-icon-button" style="display:inline-block;" ng-if="mdColorClearButton && value" ng-click="clearValue();" aria-label="Clear Color">
+        <md-tooltip md-direction="top">
+          Remove Color
+        </md-tooltip>
+        <md-icon>clear</md-icon>
+      </md-button>
+  </script>
   <script type="text/ng-template" id="import-dialog.html">
     <md-dialog aria-label="List dialog" flex="40">
       <md-dialog-content class="md-dialog-content">
@@ -232,7 +243,7 @@
     </md-dialog>
     </script>
 
-    <script type="text/ng-template" id="new-message-dialog.html">
+  <script type="text/ng-template" id="new-message-dialog.html">
     <md-dialog aria-label="New Message" flex="45">
       <form>
         <md-toolbar>
@@ -251,15 +262,16 @@
                 <div layout="row">
                   <md-input-container class="md-block" flex="70">
                     <label>Name</label>
-                    <input md-maxlength="30" name="label" required ng-model="newMsg.label" />
+                    <input md-maxlength="30" name="label" required ng-model="message.label" />
                     <div class="hint">Name in the Radio menu.</div>
-                    <div ng-messages="{'required': !newMsg.label}">
+                    <div ng-messages="{'required': !message.label}">
                       <div ng-message="required">Name is required.</div>
                     </div>
                   </md-input-container>
                   <md-button-group class="md-raised" flex="15">
-                    <md-button ng-click="togI(newMsg.italic)" ng-class="{'disable': !newMsg.italic, 'active' : newMsg.italic}">I</md-button>
-                    <md-button ng-click="togB(newMsg.bold)" ng-class="{'disable': !newMsg.bold, 'active' : newMsg.bold}">B</md-button>
+                    <md-button ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}">I</md-button>
+                    <md-button ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}">B</md-button>
+                    <div md-color-picker="dialog.colorpickeroptions" ng-model="message.color"></div>
                   </md-button-group>
                 </div>
                 <div flex="5" hide-xs hide-sm></div>
@@ -320,7 +332,7 @@
           <md-button ng-click="cancel()">
             Cancel
           </md-button>
-          <md-button ng-click="create()" class="md-primary" style="margin-right:20px;">
+          <md-button ng-click="confirm()" class="md-primary" style="margin-right:20px;">
             Create
           </md-button>
         </md-dialog-actions>
@@ -329,7 +341,7 @@
     </script>
 
 
-    <script type="text/ng-template" id="help-dialog.html">
+  <script type="text/ng-template" id="help-dialog.html">
     <md-dialog aria-label="Help">
       <form>
         <md-toolbar>
@@ -423,35 +435,35 @@
     </md-dialog>
     </script>
 
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/angular/angular.js"></script>
-    <script src="/bower_components/angular-translate/angular-translate.js"></script>
-    <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
-    <script src="/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
-    <script src="/bower_components/ng-inline-edit/dist/ng-inline-edit.js"></script>
-    <script src="/bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
-    <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
-    <script src="/bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
-    <script src="/bower_components/SHA-1/sha1.js"></script>
-    <script src="/bower_components/angulartics/src/angulartics.js"></script>
-    <script src="/bower_components/angulartics-google-analytics/lib/angulartics-ga.js"></script>
-    <script src="/bower_components/angular-animate/angular-animate.js"></script>
-    <script src="/bower_components/angular-aria/angular-aria.js"></script>
-    <script src="/bower_components/angular-messages/angular-messages.js"></script>
-    <script src="/bower_components/angular-material/angular-material.js"></script>
-    <script src="/bower_components/tinycolor/tinycolor.js"></script>
-    <script src="/bower_components/md-color-picker/dist/mdColorPicker.min.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="/bower_components/angular/angular.js"></script>
+  <script src="/bower_components/angular-translate/angular-translate.js"></script>
+  <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+  <script src="/bower_components/ng-inline-edit/dist/ng-inline-edit.js"></script>
+  <script src="/bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+  <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+  <script src="/bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+  <script src="/bower_components/SHA-1/sha1.js"></script>
+  <script src="/bower_components/angulartics/src/angulartics.js"></script>
+  <script src="/bower_components/angulartics-google-analytics/lib/angulartics-ga.js"></script>
+  <script src="/bower_components/angular-animate/angular-animate.js"></script>
+  <script src="/bower_components/angular-aria/angular-aria.js"></script>
+  <script src="/bower_components/angular-messages/angular-messages.js"></script>
+  <script src="/bower_components/angular-material/angular-material.js"></script>
+  <script src="/bower_components/tinycolor/tinycolor.js"></script>
+  <script src="/bower_components/md-color-picker/dist/mdColorPicker.min.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
 
-    <!-- build:js scripts/plugins.js -->
-    <!-- endbuild -->
+  <!-- build:js scripts/plugins.js -->
+  <!-- endbuild -->
 
-    <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
-    <!-- endbuild -->
+  <!-- build:js scripts/main.js -->
+  <script src="scripts/main.js"></script>
+  <!-- endbuild -->
 </body>
 
 </html>

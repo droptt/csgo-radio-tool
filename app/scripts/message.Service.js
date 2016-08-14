@@ -1,184 +1,164 @@
 /**
  * @Author: Drop
- * @Creation: 7/25/2016 4:05 PM (Welcome to Jurassic Park)
+ * @Creation: 8/14/2016 6:50 PM (A Whirl Through Academe)
  */
 (function () {
 
-    var messagesService = ['$http', '$rootScope', 'localStorageService', '$filter', '$location', function ($http, $rootScope, localStorageService, $filter, $location) {
+    var messageService = ['$rootScope', 'messagesService', function ($rootScope, messagesService) {
 
-        var getMessages = function () {
-            return $http.get('radio.json')
-                .then(function (response) {
-                    return response.data;
-                });
-        };
-        var getCustom = function () {
-            return $http.get('custom.json')
-                .then(function (response) {
-                    return response.data;
-                });
-        };
-        var getCommand = function () {
-            return $http.get('command.json')
-                .then(function (response) {
-                    return response.data;
-                });
+        var querySearch = function (query) {
+            var results = query ? $rootScope.init.commands.filter(this.newFilter(query)) : $rootScope.init.commands;
+            return results;
         };
 
-        var htmlTags = function (msg, imported) { //actually, imported should be false
-            var label = msg.text || msg.label;
-            msg.italic = (this.strContains(label, '<i>') === true) ? true : false;
-            msg.bold = (this.strContains(label, '<b>') === true) ? true : false;
-            if (this.strContains(label, '<font') === true) {
-                var RG = label.match(/color='(.*?)'/);
-                msg.color = RG[1];
-                if (imported === true) {
-                    label = label.replace('<font ' + RG[0] + '>', '').replace('</font>', '');
-                } else {
-                    label = label.replace('<font ' + RG[0] + '>', '').replace('</font>', '');
+        var renderCommand = function (commandArray) {
+            var output = "";
+            for (var command in commandArray) {
+                if (commandArray[command].searchText.length === 0) {
+                    continue;
+                }
+                var args = (commandArray[command].args.length > 0) ? " " + commandArray[command].args : "";
+                output = output + commandArray[command].searchText + args + "; ";
+            }
+            return output;
+        };
+
+        var saveChanges = function (message, origMessage, commandArray) {
+            if (origMessage.type === 'custom') {
+                console.log(this.renderCommand(commandArray))
+                $rootScope.model.custom[origMessage.UID].cmd = this.renderCommand(commandArray);
+                $rootScope.model.custom[origMessage.UID].text = message.label;
+                $rootScope.model.custom[origMessage.UID].italic = message.italic;
+                $rootScope.model.custom[origMessage.UID].bold = message.bold;
+                $rootScope.model.custom[origMessage.UID].color = message.color;
+                if ($rootScope.model.custom[origMessage.UID].disabled === true && list !== 'custom') { //copy of it somewhere, must find the precious!
+                    var messageCopy = $rootScope.model[list].filter(function (messageCopy) {
+                        return messageCopy.UID === origMessage.UID;
+                    })[0];
+                    if (typeof messageCopy == 'undefined') { //That's not supposed to happen.
+                        $mdToast.show(
+                            $mdToast.simple()
+                                .textContent('Could not find the copy of the message.')
+                                .position("top right")
+                                .hideDelay(7000)
+                        );
+                        return false; //TODO: tell the user
+                    }
+                    messageCopy.cmd = this.renderCommand(commandArray);
+                    messageCopy.text = message.label;
+                    messageCopy.italic = message.italic;
+                    messageCopy.bold = message.bold;
+                    messageCopy.color = message.color;
+                } else if ($rootScope.model.custom[origMessage.UID].disabled === true) {
+                    var lists = ['standard', 'group', 'report'];
+                    for (var msgGroup in lists) {
+                        var messageCopy = $rootScope.model[msgGroup].filter(function (messageCopy) {
+                            return messageCopy.UID === origMessage.UID;
+                        })[0];
+                        if (typeof messageCopy == 'undefined') { //That's not supposed to happen.
+                            continue;
+                        } else {
+                            messageCopy.cmd = this.renderCommand(commandArray);
+                            messageCopy.text = message.label;
+                            messageCopy.italic = message.italic;
+                            messageCopy.bold = message.bold;
+                            messageCopy.color = message.color;
+                        }
+                    }
                 }
             }
-            if (imported === true) {
-                msg.text = label.replace('<i>', '').replace('</i>', '').replace('<b>', '').replace('</b>', '');
-            } else {
-                msg.label = label.replace('<i>', '').replace('</i>', '').replace('<b>', '').replace('</b>', '');
+            if (origMessage.type === 'imported') {
+                origMessage.cmd = this.renderCommand(commandArray);
+                origMessage.text = message.label;
+                origMessage.italic = message.italic;
+                origMessage.bold = message.bold;
+                origMessage.color = message.color;
             }
-            return msg;
-        }
+            if ($rootScope.settings.shared === true) {
+                messagesService.saveHash();
+            } else {
+                messagesService.save();
+            }
+        };
 
-        var customExists = function (custom) {
-            for (var message in $rootScope.model.custom) {
-                if ($rootScope.model.custom.hasOwnProperty(message)) {
-                    if ($rootScope.model.custom[message].cmd === custom.cmd && $rootScope.model.custom[message].text === custom.text) {
-                        return message;
+        var createFilterFor = function (query) {
+            var lowercaseQuery = angular.lowercase(query);
+            return function filterFn(item) {
+                return (item.Name.indexOf(lowercaseQuery) === 0);
+            };
+        };
+
+        var renderCommand = function (commandArray) {
+            var output = "";
+            for (var command in commandArray) {
+                if (commandArray[command].searchText.length === 0) {
+                    continue;
+                }
+                var args = (commandArray[command].args.length > 0) ? " " + commandArray[command].args : "";
+                output = output + commandArray[command].searchText + args + "; ";
+            }
+            return output;
+        };
+
+        var findCommand = function (command) {
+            var query = this.querySearch(command);
+            if (query.length > 0 && query.length < 6) {
+                for (var item in query) {
+                    if (query[item].Name === command) {
+                        return query[item];
                     }
                 }
             }
             return false;
         };
 
-        var resetMessages = function () {
-            $rootScope.model.standard = [];
-            $rootScope.model.group = [];
-            $rootScope.model.report = [];
-            $rootScope.model.Titles = [$filter('translate')('boxes.title_0'), $filter('translate')('boxes.title_1'), $filter('translate')('boxes.title_2')];
-
-            for (var message in $rootScope.model.messages) {
-                $rootScope.model.messages[message].disabled = false;
-            }
-            for (var custom in $rootScope.model.custom) {
-                $rootScope.model.custom[custom].disabled = false;
-            }
-        };
-
-        var importCustom = function (custom) {
-            $rootScope.model.custom = custom;
-            $rootScope.$watch('model.custom', function () { //Auto save custom
-                if (localStorageService.isSupported) {
-                    localStorageService.set('custom', $rootScope.model.custom);
-                }
-            }, true);
-        };
-
-        var importMessages = function (save, imported, shared, copy) { //TODO: Add sanity checks
-            console.log('MessageService ImportMessages: Save: ' + JSON.stringify(save) + ' Imported: ' + imported + ' Shared: ' + shared);
-            resetMessages();
-            $rootScope.model.standard = save.StandardRadio;
-            $rootScope.model.group = save.GroupRadio;
-            $rootScope.model.report = save.ReportRadio;
-            $rootScope.model.Titles = save.Titles;
-
-            if (shared === false && imported === false) {
-                $rootScope.$watch('model', messagesService.save);
-            }
-
-            for (var i = 0; i <= 2; ++i) {
-                if ($rootScope.model.Titles[i] === null) {
-                    $rootScope.model.Titles[i] = $filter('translate')('boxes.title_' + i);
-                }
-            }
-            var groups = ['StandardRadio', 'GroupRadio', 'ReportRadio'];
-
-            for (var group in groups) {
-                var group = groups[group];
-                for (var message in save[group]) {
-                    if (typeof save[group][message] === 'string') {
-                        $rootScope.model.messages[save[group][message]].disabled = true;
-                        save[group][message] = {"type": "message", "cmd": save[group][message]};
-                    }
-                    else {
-                        var check = customExists(save[group][message]);
-                        console.log(check);
-                        if (typeof check === 'string') {
-                            $rootScope.model.custom[check].disabled = true;
-                            save[group][message].type = 'custom';
-                            save[group][message].UID = $rootScope.model.custom[check].UID;
-                            continue;
-                        } else {
-                            if (copy === true) {
-                                save[group][message].UID = message.text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1);
-                                save[group][message].type = 'custom';
-                                save[group][message].disabled = false;
-                                save[group][message].label = save[group][message].text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
-                                $rootScope.model.custom[save[group][message].UID] = save[group][message];
-                            }
-                            if (imported === true || shared === true) {
-                                save[group][message].type = 'imported';
-                                save[group][message].disabled = false;
-                                save[group][message].label = save[group][message].text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
-                            }
+        var parseCommandLine = function (commandLine) {
+            var commands = commandLine.split(";"), cmdArray = [];
+            for (var cmd in commands) {
+                if (commands[cmd].length > 0) {//TODO: REDO
+                    var split = commands[cmd].split(" ");
+                    if (split.length === 1 && split[0].length > 0) {//single command
+                        var cmdInfo = this.findCommand(((skipfirst === true) ? split[1] : split[0]));
+                        cmdArray.push({ "cmd": cmdInfo, "args": (cmdInfo.Value.length > 0) ? cmdInfo.Value : "", "searchText": split[0] })
+                    } else {
+                        var skipfirst = (split[0] === " " || split[0] === "  " || split[0] === "") ? true : false;
+                        var args = (skipfirst === true) ? commands[cmd].replace(split[0] + split[1], "") : commands[cmd].replace(split[0], "");
+                        if (args.charAt(0) === " ") {
+                            args = args.substring(1);
                         }
+                        var cmdInfo = this.findCommand(((skipfirst === true) ? split[1] : split[0]));
+                        cmdArray.push({ "cmd": cmdInfo, "args": args, "searchText": (skipfirst === true) ? split[1] : split[0] })
                     }
                 }
-            }
-            //console.log($rootScope.model)
-        }
 
-        var defaults = function () {
-            importMessages(JSON.parse('{"StandardRadio":["go","fallback","sticktog","holdpos","followme"],"GroupRadio":["roger","negative","cheer","compliment","thanks"],"ReportRadio":["enemyspot","needbackup","takepoint","sectorclear","inposition"],"Titles":[null,null,null]}'), false, false, false)
+            }
+            return cmdArray;
         };
 
-        var saveHash = function (save) {
-            if (typeof save === 'undefined') {
-                var save = {
-                    'StandardRadio': $rootScope.model.standard, 'GroupRadio': $rootScope.model.group, 'ReportRadio': $rootScope.model.report, 'Titles': [
-                        ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
-                        ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
-                        ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
-                    ]
-                };
-            }
-            $location.hash(JSON.stringify(save));
-        }
-
-        var save = function () {
-            var save = {
-                'StandardRadio': $rootScope.model.standard, 'GroupRadio': $rootScope.model.group, 'ReportRadio': $rootScope.model.report, 'Titles': [
-                    ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
-                    ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
-                    ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
-                ]
+        var create = function (message, commandArray) {
+            $rootScope.model.custom[msg.UID] = {
+                "UID": $scope.message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1),
+                "type": "custom",
+                "disabled": false,
+                "cmd": this.renderCommand(commandArray),
+                "label": $scope.message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''),
+                "text": $scope.message.label,
+                "italic": $scope.message.bold,
+                "bold": $scope.message.bold,
+                "color": $scope.message.color,
             };
-            if (localStorageService.isSupported) {
-                localStorageService.set('saved', save);
-            }
-            saveHash(save);
         };
-
         return {
-            getMessages: getMessages,
-            getCustom: getCustom,
-            importMessages: importMessages,
-            resetMessages: resetMessages,
-            importCustom: importCustom,
-            checkHtmlTags: htmlTags,
-            default: defaults,
-            save: save,
-            saveHash: saveHash,
-            getCommand: getCommand
+            saveEdit: saveChanges,
+            newFilter: createFilterFor,
+            renderCommand: renderCommand,
+            parseCommandLine: parseCommandLine,
+            newMessage: create,
+            findCommand: findCommand,
+            querySearch: querySearch
         };
 
     }],
         module = angular.module('csgo-radio');
-    module.factory('messagesService', messagesService);
+    module.factory('messageService', messageService);
 } ());

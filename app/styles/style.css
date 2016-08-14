@@ -109,14 +109,14 @@ md-button-group {
 	padding: 0;
 	margin: 12px 8px;
 	min-height: 36px;
-	min-width: 88px;
+	min-width: 160px;
 }
 
 md-button-group.md-raised:not([disabled]) {
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 }
 
-md-button-group > .md-button {
+md-button-group .md-button {
 	border-radius: 0;
 	border: 0;
 	min-width: 40px;

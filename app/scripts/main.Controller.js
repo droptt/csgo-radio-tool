@@ -79,7 +79,31 @@
                 templateUrl: 'new-message-dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
-                clickOutsideToClose: true
+                clickOutsideToClose: true,
+                locals: {
+                    list: undefined,
+                    message: undefined,
+                    index: undefined
+                }
+            })
+                .then(function () {
+
+                }, function () {
+
+                });
+        };
+        $scope.editMessage = function (ev, list, item, index) {
+            $mdDialog.show({
+                controller: 'newMessageController',
+                templateUrl: 'new-message-dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: false,
+                locals: {
+                    list: list,
+                    message: item,
+                    index: index
+                }
             })
                 .then(function () {
 

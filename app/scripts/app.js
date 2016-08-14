@@ -9,6 +9,7 @@ var app = angular.module('csgo-radio', ['pascalprecht.translate',
 	'angularInlineEdit',
 	'ngMaterial',
 	'ngMessages',
+	'mdColorPicker',
 	//'angulartics',
 	//'angulartics.google.analytics',
 	'LocalStorageModule']);
