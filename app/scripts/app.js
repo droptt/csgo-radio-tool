@@ -5,10 +5,10 @@
 
 var app = angular.module('csgo-radio', ['pascalprecht.translate',
 	'ngCookies',
-	'angular-growl',
 	'dndLists',
-    'ui.bootstrap',
 	'angularInlineEdit',
+	'ngMaterial',
+	'ngMessages',
 	//'angulartics',
 	//'angulartics.google.analytics',
 	'LocalStorageModule']);
@@ -26,11 +26,6 @@ app.config(function ($translateProvider) {
     .config(function (localStorageServiceProvider) {
         localStorageServiceProvider.setPrefix('');
     })
-	.config(['growlProvider', function (growlProvider) {
-		growlProvider.globalDisableCountDown(true);
-		growlProvider.globalTimeToLive(5000);
-		growlProvider.globalDisableIcons(true);
-	}])
 	/*.config(function ($analyticsProvider) {
 		$analyticsProvider.virtualPageviews(false);
 	})*/

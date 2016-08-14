@@ -4,9 +4,10 @@
  */
 (function () {
     var app = angular.module('csgo-radio');
-    var mainController = ['$scope', '$rootScope', '$translate', '$uibModal', 'localStorageService', 'VDFService', '$filter', 'messagesService', function ($scope, $rootScope, $translate, $uibModal, localStorageService, VDFService, $filter, messagesService) {
-
+    var mainController = ['$scope', '$rootScope', '$translate', 'localStorageService', 'VDFService', '$filter', 'messagesService', '$mdDialog', function ($scope, $rootScope, $translate, localStorageService, VDFService, $filter, messagesService, $mdDialog) {
+        $scope.tooltip = { "edit": $filter("translate")("boxes.tooltip_edit") };
         $scope.generate = function () {
+            console.log($rootScope.model);
             if ($rootScope.model.standard.length > 0 || $rootScope.model.group.length > 0 || $rootScope.model.report.length > 0) {
                 var buildList = angular.extend({}, $rootScope.settings.radioMenu);
                 buildList['RadioPanel.txt'].Groups.standard.title = ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? '#SFUI_CommandRadio' : $rootScope.model.Titles[0];
@@ -17,11 +18,11 @@
                         E = $rootScope.settings.boxes[C_box].replace('Radio', '').toLowerCase();
                     for (var C_msg in $rootScope.model[E]) {
                         var msg = $rootScope.model[E][C_msg];
-                        if (typeof msg === 'string') {
-                            buildList['RadioPanel.txt'].Groups[E].Commands[msg] = {};
-                            buildList['RadioPanel.txt'].Groups[E].Commands[msg].hotkey = C_I;
-                            buildList['RadioPanel.txt'].Groups[E].Commands[msg].label = $rootScope.model.messages[msg].label;
-                            buildList['RadioPanel.txt'].Groups[E].Commands[msg].cmd = $rootScope.model.messages[msg].cmd;
+                        if (typeof msg.type === 'message') {
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd] = {};
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd].hotkey = C_I;
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd].label = $rootScope.model.messages[msg.cmd].label;
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd].cmd = $rootScope.model.messages[msg.cmd].cmd;
                         } else if (typeof msg === 'object') {
                             buildList['RadioPanel.txt'].Groups[E].Commands[msg.name] = {};
                             if (msg.italic === true && msg.bold === false) {
@@ -56,54 +57,113 @@
             }
         };
 
-        $scope.openModal = function (modal) {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: modal + '.html',
-                controller: 'genericModalController',
-                resolve: {
-                    extra: function () {
-                        return null;
-                    }
+        $scope.showHelp = function (ev, index) {
+            $mdDialog.show({
+                controller: DialogController,
+                templateUrl: 'help-dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                locals: {
+                    selectedI: index
                 }
-            });
+            })
+                .then(function (answer) {
+                    //TODO: GA tracking
+                }, function () {
+                });
         };
-        $scope.newMessage = function () {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'new-message-modal.html',
-                controller: 'newMessageModalController',
-            });
+        $scope.newMessage = function (ev) {
+            $mdDialog.show({
+                controller: 'newMessageController',
+                templateUrl: 'new-message-dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            })
+                .then(function () {
+
+                }, function () {
+
+                });
         };
-        $scope.importFile = function () {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'import-modal.html',
+        $scope.importFile = function (ev) {
+            $mdDialog.show({
                 controller: 'importController',
+                templateUrl: 'import-dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            })
+                .then(function () {
+
+                }, function () {
+
+                });
+        };
+        var Confirm = function (action, extra, ev) {
+            switch (action) {
+                case 'reset':
+                    var message = $filter('translate')('modal.prompt.reset');
+                    var yes = $filter('translate')('modal.prompt.Reset');
+                    var executeOrder66 = function () {
+                        messagesService.resetMessages();
+                    };
+                    break;
+
+                case 'default':
+                    var message = $filter('translate')('modal.prompt.defaults');
+                    var yes = $filter('translate')('modal.prompt.yes');
+                    var executeOrder66 = function () {
+                        messagesService.default();
+                    };
+                    break;
+
+                case 'customReset': //change this to delteCustomCommand
+                    var message = $filter('translate')('modal.prompt.creset');
+                    var yes = $filter('translate')('modal.prompt.yes');
+                    var executeOrder66 = function () {
+                        messagesService.resetMessages();
+                    };
+                    break;
+
+                case 'deleteImportedCommand':
+                    var message = $filter('translate')('modal.prompt.delcmd') + $rootScope.model[extra.list][extra.index].text;
+                    var yes = $filter('translate')('modal.prompt.delete');
+                    var executeOrder66 = function () {
+                        $rootScope.model[extra.list].splice(extra.index, 1)
+                    };
+                    break;
+            }
+            var confirm = $mdDialog.confirm()
+                .title($filter('translate')('modal.prompt.title'))
+                .textContent($filter('translate')('modal.prompt.body') + " " + message + '? This action cannot be undone (in the near-future it will).')
+                .targetEvent(ev)
+                .ok(yes)
+                .cancel($filter('translate')('modal.prompt.no'));
+            $mdDialog.show(confirm).then(function () {
+                executeOrder66();
+            }, function () {
             });
         };
-        var Confirm = function (action, extra) {
-            if (typeof extra == 'undefined') { var extra = null; }
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'prompt-modal.html',
-                controller: 'promptController',
-                resolve: {
-                    action: function () {
-                        return action;
-                    },
-                    extra: function () {
-                        return extra;
-                    }
-                }
-            });
+        $scope.resetMessages = function ($event) {
+            Confirm('reset', null, $event);
         };
-        $scope.resetMessages = function () {
-            Confirm("reset");
-        };
-        $scope.defaults = function () {
-             Confirm("default");
+        $scope.defaults = function ($event) {
+            Confirm('default', null, $event);
         };
     }];
     app.controller('mainController', mainController);
+    function DialogController($scope, $mdDialog, selectedI) {
+        $scope.selectedI = selectedI;
+        $scope.hide = function () {
+            $mdDialog.hide();
+        };
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+        $scope.answer = function (answer) {
+            $mdDialog.hide(answer);
+        };
+    }
 } ());

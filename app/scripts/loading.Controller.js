@@ -5,7 +5,7 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', 'growl', '$filter', '$location', function ($scope, $rootScope, messagesService, localStorageService, growl, $filter, $location) {
+    var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', '$filter', '$location', function ($scope, $rootScope, messagesService, localStorageService, $filter, $location) {
 
         var isJson = function (str) {
             try {
@@ -18,10 +18,7 @@
 
         var init = function () {
             var loaded = false, shared = false;
-            console.log($location.hash())
-            growl.info('<h4><i class=\'glyphicon glyphicon-info-sign\'></i> WORD </h4> <b>INIT</b>');
             if (localStorageService.isSupported) { //TODO: Verify if localstorage operations were successfuly executed
-                growl.info('<h4><i class=\'glyphicon glyphicon-info-sign\'></i> WORD </h4> <div>LOCALSTORAGE IS SUPPORTED</div>');
                 if (localStorageService.get('customVersion') !== null || localStorageService.get('version') !== null) {
                     $rootScope.settings.newUser = false;
 
@@ -37,8 +34,8 @@
                     localStorageService.set('version', $rootScope.settings.version);
                     localStorageService.set('customVersion', 2); //TODO: customVersion is not supposed to be hardcoded.
                 }
-                if (isJson(decodeURIComponent(window.location.hash.replace("#/", ""))) === true) {
-                    messagesService.importMessages(JSON.parse(decodeURIComponent(window.location.hash.replace("#/", ""))), false, true, false);
+                if (isJson(decodeURIComponent(window.location.hash.replace('##', ''))) === true) { //TODO: Check if localstorage isn't the same
+                    messagesService.importMessages(JSON.parse(decodeURIComponent(window.location.hash.replace('##', ''))), false, true, false);
                     loaded = true;
                     shared = true;
                     $rootScope.settings.shared = true;
@@ -97,11 +94,15 @@
             customLoaded = true;
             isLoaded();
         };
+        var onCommandLoad = function (data) {
+            $rootScope.init.commands = data;
+        };
         var onFail = function (reason, type) {
             //TODO: ERROR HANDLER
         };
         messagesService.getMessages().then(onMessagesLoad, onFail);
         messagesService.getCustom().then(onCustomLoad, onFail);
+        messagesService.getCommand().then(onCommandLoad, onFail);
     }];
     app.controller('loadingController', loadingController);
 } ());

@@ -5,19 +5,19 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var importController = ['$scope', '$rootScope', '$uibModalInstance', 'messagesService', 'VDFService', function ($scope, $rootScope, $uibModalInstance, messagesService, VDFService) {
+    var importController = ['$scope', '$rootScope', '$mdDialog', 'messagesService', 'VDFService', '$filter', function ($scope, $rootScope, $mdDialog, messagesService, VDFService, $filter) {
 
-        $scope.import = { copy: true };
+        $scope.import = { copy: true, "switch_label": $filter('translate')('modal.import.copy') };
 
         var Import = function (model) {
             var parse = VDFService.parse(model.file);
-            if (typeof parse["RadioPanel.txt"] !== "undefined" && parse !== false) {
+            if (typeof parse['RadioPanel.txt'] !== 'undefined' && parse !== false) {
                 var obj = {};
-                for (var group in parse["RadioPanel.txt"].Groups) {
-                    if (group === "group" || group === "report" || group === "standard") {
+                for (var group in parse['RadioPanel.txt'].Groups) {
+                    if (group === 'group' || group === 'report' || group === 'standard') {
                         obj[group] = [];
-                        for (var msg in parse["RadioPanel.txt"].Groups[group].Commands) {
-                            var cMsg = parse["RadioPanel.txt"].Groups[group].Commands[msg];
+                        for (var msg in parse['RadioPanel.txt'].Groups[group].Commands) {
+                            var cMsg = parse['RadioPanel.txt'].Groups[group].Commands[msg];
                             if ($rootScope.model.messages.hasOwnProperty(cMsg.cmd) === true) {
                                 obj[group].push(cMsg.cmd);
                             } else {
@@ -26,20 +26,20 @@
                         }
                     }
                 }
-                obj["titles"] = Array((parse["RadioPanel.txt"].Groups.standard.title === "#SFUI_CommandRadio") ? null : parse["RadioPanel.txt"].Groups.standard.title,
-                    (parse["RadioPanel.txt"].Groups.group.title === "#SFUI_StandardRadio") ? null : parse["RadioPanel.txt"].Groups.group.title,
-                    (parse["RadioPanel.txt"].Groups.report.title === "#SFUI_ReportRadio") ? null : parse["RadioPanel.txt"].Groups.report.title);
-                messagesService.importMessages({ "StandardRadio": obj.standard, "GroupRadio": obj.group, "ReportRadio": obj.report, "Titles": obj.titles }, true, false, model.copy);
+                obj['titles'] = Array((parse['RadioPanel.txt'].Groups.standard.title === '#SFUI_CommandRadio') ? null : parse['RadioPanel.txt'].Groups.standard.title,
+                    (parse['RadioPanel.txt'].Groups.group.title === '#SFUI_StandardRadio') ? null : parse['RadioPanel.txt'].Groups.group.title,
+                    (parse['RadioPanel.txt'].Groups.report.title === '#SFUI_ReportRadio') ? null : parse['RadioPanel.txt'].Groups.report.title);
+                messagesService.importMessages({ 'StandardRadio': obj.standard, 'GroupRadio': obj.group, 'ReportRadio': obj.report, 'Titles': obj.titles }, true, false, model.copy);
             }
         };
 
         $scope.cancel = function () {
-            $uibModalInstance.close('cancel');
+            $mdDialog.cancel();
         };
 
         $scope.ok = function () {
             Import($scope.import);
-            $uibModalInstance.close('ok');
+            $mdDialog.hide();
         };
     }];
     app.controller('importController', importController);

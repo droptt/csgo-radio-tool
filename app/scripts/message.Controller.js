@@ -5,20 +5,9 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var messageController = ['$scope', '$rootScope', '$uibModal', '$filter', function ($scope, $rootScope, $uibModal, $filter) {
-        $scope.isMessage = function (message) {
-            if (typeof message === 'string') {
-                return true;
-            } else {
-                if (message.type === 'imported') {
-                    return message.type;
-                } else {
-                    return false;
-                }
-            }
-        };
+    var messageController = ['$scope', '$rootScope', '$filter', function ($scope, $rootScope, $filter) {
         $scope.removeMessage = function (list, message, index) {
-            if ($scope.isMessage(message) === true) {
+            if (message.type === "message") {
                 $rootScope.model.messages[message].disabled = false;
                 $rootScope.model[list].splice(index, 1);
             } else {
@@ -32,7 +21,7 @@
                         controller: 'promptController',
                         resolve: {
                             action: function () {
-                                return "deleteImportedCommand";
+                                return 'deleteImportedCommand';
                             },
                             extra: function () {
                                 return { list: list, message: message, index: index };
@@ -43,24 +32,22 @@
             }
         };
         $scope.editMessage = function (list, message, index) {
-            if ($rootScope.model.custom.hasOwnProperty(message.UID) === true) {
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: 'edit-message-modal.html',
-                    controller: 'editMessageModalController',
-                    resolve: {
-                        list: function () {
-                            return list;
-                        },
-                        message: function () {
-                            return message;
-                        },
-                        index: function () {
-                            return index;
-                        }
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'edit-message-modal.html',
+                controller: 'editMessageModalController',
+                resolve: {
+                    list: function () {
+                        return list;
+                    },
+                    message: function () {
+                        return message;
+                    },
+                    index: function () {
+                        return index;
                     }
-                });
-            }
+                }
+            });
         };
         $scope.checkLimit = function (event, index, item) {
             if (event.target.attributes[0].nodeName === 'data-list-name') { //Checks if target is the list
@@ -74,7 +61,14 @@
             } else if (event.target.parentNode.parentNode.parentNode.parentNode.attributes[0].nodeName === 'data-list-name') { //Or the button
                 var targetName = event.target.parentNode.parentNode.parentNode.parentNode.attributes[0].nodeValue;
             }
-            console.log(targetName);
+            if (item.type === "message") {
+                delete item.id;
+                delete item.label;
+                delete item.text;
+            }
+            if ($rootScope.model[targetName].indexOf(item) !== -1) {
+                return item;
+            }
             if ($rootScope.model[targetName].length > 8) {
                 return false;
             }
