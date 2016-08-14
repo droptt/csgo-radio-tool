@@ -25,7 +25,6 @@
 </head>
 
 <body>
-  <div growl></div>
   <div class="loading-wrapper" ng-controller="loadingController" ng-class="{hidden: init.loaded = true}">
     <div class="loading"><span>{{loading.state}}</span></div>
     <div class="loading-footer text-inverse-light" style="display:block;"><a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">Steam, </a>
@@ -233,7 +232,7 @@
     </md-dialog>
     </script>
 
-  <script type="text/ng-template" id="new-message-dialog.html">
+    <script type="text/ng-template" id="new-message-dialog.html">
     <md-dialog aria-label="New Message" flex="45">
       <form>
         <md-toolbar>
@@ -331,300 +330,98 @@
 
 
     <script type="text/ng-template" id="help-dialog.html">
-  <md-dialog aria-label="Help">
-  <form>
-    <md-toolbar>
-      <div class="md-toolbar-tools">
-        <h2>Help</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon aria-label="Close dialog">close</md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-    <md-dialog-content style="max-width:800px;max-height:810px; ">
-      <md-tabs md-dynamic-height md-border-bottom md-selected="selectedI">
-        <md-tab label="Console">
-          <md-content class="md-padding">
-            <h1 class="md-display-2">Console</h1>
-            <p translate="modal.chelp.p1"></p>
-          </br>
-          <p translate="modal.chelp.p2"></p>
-          </br>
-          <p translate="modal.chelp.p3"></p>
-          </md-content>
-        </md-tab>
-        <md-tab label="RadioPanel.txt">
-          <md-content class="md-padding">
-            <h1 class="md-display-2">RadioPanel.txt</h1>
-            <p translate="modal.help.p1">
-          </p>
-          <h3>#1</h3>
-          <p>
-            <ol>
-              <li translate="modal.help.m1_1"></li>
-              <li translate="modal.help.m1_2"></li>
-              <li><span translate="modal.help.m1_3"></span> <code>csgo/resource/ui</code></li>
-              <li> <span translate="modal.help.m1_4"></span> <code>radiopanel.txt</code>.</li>
-            </ol>
-            <span translate="modal.help.bkp"></span>
-          </p>
-          <h3>
-            #2             </h3>
-          <p>
-            <b translate="modal.help.m2_MSWIN"></b></br>
-            <ol>
-              <li> <span translate="modal.help.m2_1"></span> <code>[your steam library]/SteamApps/common/</code></li>
-              <li> <span translate="modal.help.m2_2"></span> <code>Counter Strike: Global Offensive</code></li>
-              <li> <span translate="modal.help.m2_3"></span> <code>csgo/resource/ui</code>.</li>
-              <li> <span translate="modal.help.m2_4"></span> <code>radiopanel.txt</code> and replace the contents with the result
-                </span>.</li>
-            </ol>
-            <span translate="modal.help.lib"></span> <code>C:\Program Files (x86)</code>.
-            </ol>
-            </br><b translate="modal.help.m2_osx">OS X:</b></br>
-            <ol>
-              <li> <span translate="modal.help.m2o_1"></span> <code>~/Library/Application Support/Steam/SteamApps/common/</code></li>
-              <li> <span translate="modal.help.m2o_2"></span> <code>Counter Strike: Global Offensive</code> </li>
-              <li> <span translate="modal.help.m2o_3"></span> <code>csgo/resource/ui</code>.</li>
-              <li> <span translate="modal.help.m2o_4"></span> <code>radiopanel.txt</code> (I hope it's the same path/name) and
-                replace the contents with the result.</span>
-              </li>
-            </ol>
-          </p>
-          </br>
-          <p>
-            Please <a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">drop</a>            me an <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email</a> or
-            <a href="https://twitter.com/rafacavalm" target="_blank" onclick="javascript:misc.tracking.notifyclick('twitter');">tweet</a>            if the OS X Methods are wrong.
-          </p>
-          </md-content>
-        </md-tab>
-        <md-tab label="About">
-          <md-content class="md-padding">
-            <h1 class="md-display-2">About</h1>
-            <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
-          </md-content>
-        </md-tab>
-      </md-tabs>
-    </md-dialog-content>
-    <md-dialog-actions layout="row">
-      <span flex></span>
-      <md-button ng-click="answer('not useful')" >
-        Not Useful
-      </md-button>
-      <md-button ng-click="answer('useful')" style="margin-right:20px;" >
-        Useful
-      </md-button>
-    </md-dialog-actions>
-  </form>
-</md-dialog>
-  </script>
-    <!-- MODAL TEMPLATES -->
-    <script type="text/ng-template" id="success-modal.html">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" translate="modal.success.title"></h4>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="message-text" class="control-label">RadioPanel.txt:</label>
-            <textarea class="form-control" rows="5">{{extra}}</textarea>
+    <md-dialog aria-label="Help">
+      <form>
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>Help</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon aria-label="Close dialog">close</md-icon>
+            </md-button>
           </div>
-          <li>
-            <a data-target="#help-modal" data-toggle="modal" href="#help-modal" onclick="javascript:misc.tracking.notifyclick('helpModalToggle');"
-              translate="modal.success.help"></a>
-          </li>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" ng-click="ok()" translate="modal.close"></button>
-        </div>
-  </script>
-    <script type="text/ng-template" id="import-modal.html">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="importModalLabel" translate="modal.import.title"></h4>
-        </div>
-        <form id="import-file" action="#">
-          <div class="modal-body">
-            <div class="form-group">
-              <label for="message-text" class="control-label"></label>
-              <textarea class="form-control" rows="5" ng-model="import.file" required></textarea>
-              <input type="checkbox" name="customList" ng-model="import.copy"><label for="customList" class="control-label" translate="modal.import.copy"></label>
-            </div>
-            <li>
-              <a data-target="#help-modal" data-toggle="modal" href="#help-modal" onclick="javascript:misc.tracking.notifyclick('helpModalToggle');"
-                translate="modal.import.help"></a>
-            </li>
-          </div>
-          <div class="modal-footer">
-            <label class="btn btn-default" translate="modal.close" ng-click="cancel()"></label>
-            <label class="btn btn-primary" translate="modal.import.submit" ng-click="ok()"></label>
-          </div>
-        </form>
-  </script>
-    <script type="text/ng-template" id="new-message-modal.html">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="newmessageModalLabel" translate="modal.new.title"></h4>
-        </div>
-        <div class="modal-body">
-          <form id="new-message" action="#">
-            <div class="form-group">
-              <label for="new-message-title" translate="modal.form.label"></label>
-              <div class="input-group">
-                <input type="text" class="form-control" name="new-message-title" ng-model="newMsg.text" translate-attr-placeholder="modal.form.label_placeholder"
-                  required>
-                <span class="input-group-btn" data-toggle="buttons">
-									<label type="button" class="btn btn-default" ng-model="newMsg.italic" uib-btn-checkbox><i class="glyphicon glyphicon-italic"></i></label>
-									<label type="button" class="btn btn-default" ng-model="newMsg.bold" uib-btn-checkbox><i class="glyphicon glyphicon-bold"></i></label>
-									<button id="new-message-color" translate-attr-uib-tooltip="modal.form.tooltip" type="button" class="btn btn-default" data-toggle="tooltip"><span class="comp" style="background-color: rgb(0, 0, 0);"><i></i></span>
-                <input id="new-message-colorval" data-color-format="hex" type="text" hidden name="new-message-colorval" value="#00AABB"></button>
-                </span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="new-message-cmd" translate="modal.form.cmd"></label>
-              <input type="text" class="form-control" name="new-message-cmd" ng-model="newMsg.cmd" translate-attr-placeholder="modal.form.cmd_placeholder" required>
-              <span class="help-block" translate="modal.form.cmd_help"></span>
-            </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" ng-click="cancel()" translate="modal.close"></button>
-          <button type="submit" class="btn btn-success" ng-click="save()" translate="modal.new.submit"></button></form>
-        </div>
-  </script>
-    <script type="text/ng-template" id="console-help-modal.html">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="consolehelpModalLabel" translate="modal.chelp.title"></h4>
-        </div>
-        <div class="modal-body">
-          <p translate="modal.chelp.p1"></p>
-          </br>
-          <p translate="modal.chelp.p2"></p>
-          </br>
-          <p translate="modal.chelp.p3"></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" ng-click="ok()" translate="modal.close">Close</button>
-        </div>
-  </script>
-    <script type="text/ng-template" id="help-modal.html">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="helpModalLabel" translate="modal.help.title">Help</h4>
-        </div>
-        <div class="modal-body">
-          <p translate="modal.help.p1">
-          </p>
-          <h3>#1</h3>
-          <p>
-            <ol>
-              <li translate="modal.help.m1_1"></li>
-              <li translate="modal.help.m1_2"></li>
-              <li><span translate="modal.help.m1_3"></span> <code>csgo/resource/ui</code></li>
-              <li> <span translate="modal.help.m1_4"></span> <code>radiopanel.txt</code>.</li>
-            </ol>
-            <span translate="modal.help.bkp"></span>
-          </p>
-          <h3>
-            #2             </h3>
-          <p>
-            <b translate="modal.help.m2_MSWIN"></b></br>
-            <ol>
-              <li> <span translate="modal.help.m2_1"></span> <code>[your steam library]/SteamApps/common/</code></li>
-              <li> <span translate="modal.help.m2_2"></span> <code>Counter Strike: Global Offensive</code></li>
-              <li> <span translate="modal.help.m2_3"></span> <code>csgo/resource/ui</code>.</li>
-              <li> <span translate="modal.help.m2_4"></span> <code>radiopanel.txt</code> and replace the contents with the result
-                </span>.</li>
-            </ol>
-            <span translate="modal.help.lib"></span> <code>C:\Program Files (x86)</code>.
-            </ol>
-            </br><b translate="modal.help.m2_osx">OS X:</b></br>
-            <ol>
-              <li> <span translate="modal.help.m2o_1"></span> <code>~/Library/Application Support/Steam/SteamApps/common/</code></li>
-              <li> <span translate="modal.help.m2o_2"></span> <code>Counter Strike: Global Offensive</code> </li>
-              <li> <span translate="modal.help.m2o_3"></span> <code>csgo/resource/ui</code>.</li>
-              <li> <span translate="modal.help.m2o_4"></span> <code>radiopanel.txt</code> (I hope it's the same path/name) and
-                replace the contents with the result.</span>
-              </li>
-            </ol>
-          </p>
-          </br>
-          <p>
-            Please <a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">drop</a>            me an <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email</a> or
-            <a href="https://twitter.com/rafacavalm" target="_blank" onclick="javascript:misc.tracking.notifyclick('twitter');">tweet</a>            if the OS X Methods are wrong.
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" translate="modal.close"></button>
-        </div>
-  </script>
-    <script type="text/ng-template" id="edit-message-modal.html">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="editmessageModalLabel">Edit <span></span></h4>
-        </div>
-        <div class="modal-body">
-          <form id="edit-message" class="form-bordered" action="#">
-            <div class="form-group">
-              <label for="edit-message-title" translate="modal.form.label"></label>
-              <div class="input-group">
-                <input type="text" class="form-control" ng-model="edit.label" translate-attr-placeholder="modal.form.label_placeholder">
-                <span class="input-group-btn">
-									<label type="button" class="btn btn-default" ng-model="edit.italic" uib-btn-checkbox><i class="glyphicon glyphicon-italic"></i></label>
-									<label type="button" class="btn btn-default" ng-model="edit.bold" uib-btn-checkbox><i class="glyphicon glyphicon-bold"></i></label>
-									<button id="edit-message-color" translate-attr-uib-tooltip="modal.form.tooltip" tooltip-trigger="'mouseenter'" type="button" class="btn btn-default" data-toggle="tooltip"><span class="comp" style="background-color: rgb(0, 0, 0);"><i></i></span>
-                <input id="edit-message-colorval" type="text" hidden name="edit-message-colorval" value="#00AABB"></button>
-                </span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="edit-message-cmd">Command</label>
-              <input type="text" class="form-control" name="edit-message-cmd" ng-model="edit.command" translate-attr-placeholder="modal.form.cmd_placeholder">
-              <span class="help-block" translate="modal.form.cmd_help"></span>
-            </div>
-            <div class="form-group copy-btn" ng-show="edit.copyBtn === true">
-              <label class="btn btn-primary btn-lg btn-block" ng-click="copy()" placement="top" uib-popover="{{modal.edit.popover_content | translate}}" popover-title="{{modal.edit.title | translate}}"
-                translate="modal.edit.copy"></label>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" ng-click="cancel()" translate="modal.close"></button>
-          <button type="submit" class="btn btn-success" ng-click="save()" translate="modal.edit.submit"></button></form>
-        </div>
-  </script>
-    <script type="text/ng-template" id="prompt-modal.html">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <b><h4 class="modal-title"><b translate="modal.prompt.title"></b> <span>{{message}}</span>?</h4>
-          </b>
-        </div>
-        <div class="modal-footer">
-          <label class="btn btn-default" ng-click="cancel()" translate="modal.prompt.no">No</label>
-          <label class="btn btn-danger" ng-click="confirm()">{{yes}}</label>
-        </div>
-  </script>
-    <script type="text/ng-template" id="popup.html">
-  <div class="popup hidden">
-    <div class="popup-box">
-      <div class="popup-box-header">
-        <b><span translate="modal.prompt.title"></span></b>
-      </div>
-      <div class="popup-box-message">
-        <div translate="modal.prompt.body"></div> <span></span>?</h4>
-        </b>
-      </div>
-      <div class="popup-box-options">
-        <a>#Close</a>
-        <a onclick="javascript:ui.dimissPrompt();" translate="modal.prompt.no"></a>
-      </div>
-    </div>
-  </div>
-  </script>
-    <div id="changelog">
-    </div>
+        </md-toolbar>
+        <md-dialog-content style="max-width:800px;max-height:810px; ">
+          <md-tabs md-dynamic-height md-border-bottom md-selected="selectedI">
+            <md-tab label="Console">
+              <md-content class="md-padding">
+                <h1 class="md-display-2">Console</h1>
+                <p translate="modal.chelp.p1"></p>
+                </br>
+                <p translate="modal.chelp.p2"></p>
+                </br>
+                <p translate="modal.chelp.p3"></p>
+              </md-content>
+            </md-tab>
+            <md-tab label="RadioPanel.txt">
+              <md-content class="md-padding">
+                <h1 class="md-display-2">RadioPanel.txt</h1>
+                <p translate="modal.help.p1">
+                </p>
+                <h3>#1</h3>
+                <p>
+                  <ol>
+                    <li translate="modal.help.m1_1"></li>
+                    <li translate="modal.help.m1_2"></li>
+                    <li><span translate="modal.help.m1_3"></span> <code>csgo/resource/ui</code></li>
+                    <li> <span translate="modal.help.m1_4"></span> <code>radiopanel.txt</code>.</li>
+                  </ol>
+                  <span translate="modal.help.bkp"></span>
+                </p>
+                <h3>
+                  #2             </h3>
+                <p>
+                  <b translate="modal.help.m2_MSWIN"></b></br>
+                  <ol>
+                    <li> <span translate="modal.help.m2_1"></span> <code>[your steam library]/SteamApps/common/</code></li>
+                    <li> <span translate="modal.help.m2_2"></span> <code>Counter Strike: Global Offensive</code></li>
+                    <li> <span translate="modal.help.m2_3"></span> <code>csgo/resource/ui</code>.</li>
+                    <li> <span translate="modal.help.m2_4"></span> <code>radiopanel.txt</code> and replace the contents with the
+                      result
+                      </span>.</li>
+                  </ol>
+                  <span translate="modal.help.lib"></span> <code>C:\Program Files (x86)</code>.
+                  </ol>
+                  </br><b translate="modal.help.m2_osx">OS X:</b></br>
+                  <ol>
+                    <li> <span translate="modal.help.m2o_1"></span> <code>~/Library/Application Support/Steam/SteamApps/common/</code></li>
+                    <li> <span translate="modal.help.m2o_2"></span> <code>Counter Strike: Global Offensive</code> </li>
+                    <li> <span translate="modal.help.m2o_3"></span> <code>csgo/resource/ui</code>.</li>
+                    <li> <span translate="modal.help.m2o_4"></span> <code>radiopanel.txt</code> (I hope it's the same path/name)
+                      and replace the contents with the result.</span>
+                    </li>
+                  </ol>
+                </p>
+                </br>
+                <p>
+                  Please <a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">drop</a>                  me an <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email</a>                  or
+                  <a href="https://twitter.com/rafacavalm" target="_blank" onclick="javascript:misc.tracking.notifyclick('twitter');">tweet</a>                  if the OS X Methods are wrong.
+                </p>
+              </md-content>
+            </md-tab>
+            <md-tab label="About">
+              <md-content class="md-padding">
+                <h1 class="md-display-2">About</h1>
+                <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum.
+                  Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum
+                  nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque,
+                  finibus commodo lectus.</p>
+              </md-content>
+            </md-tab>
+          </md-tabs>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+          <span flex></span>
+          <md-button ng-click="answer('not useful')">
+            Not Useful
+          </md-button>
+          <md-button ng-click="answer('useful')" style="margin-right:20px;">
+            Useful
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
+    </script>
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
