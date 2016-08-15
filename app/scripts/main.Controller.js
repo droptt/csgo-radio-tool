@@ -5,7 +5,7 @@
 (function () {
     var app = angular.module('csgo-radio');
     var mainController = ['$scope', '$rootScope', '$translate', 'localStorageService', 'VDFService', '$filter', 'messagesService', '$mdDialog', function ($scope, $rootScope, $translate, localStorageService, VDFService, $filter, messagesService, $mdDialog) {
-        $scope.tooltip = { "edit": $filter("translate")("boxes.tooltip_edit") };
+        $scope.tooltip = { 'edit': $filter('translate')('boxes.tooltip_edit') };
         $scope.generate = function () {
             console.log($rootScope.model);
             if ($rootScope.model.standard.length > 0 || $rootScope.model.group.length > 0 || $rootScope.model.report.length > 0) {
@@ -125,6 +125,11 @@
 
                 });
         };
+
+        $scope.moved = function (list, index) {
+            $rootScope.model[list].splice(index, 1);
+        };
+        
         var Confirm = function (action, extra, ev) {
             switch (action) {
                 case 'reset':
@@ -161,7 +166,7 @@
             }
             var confirm = $mdDialog.confirm()
                 .title($filter('translate')('modal.prompt.title'))
-                .textContent($filter('translate')('modal.prompt.body') + " " + message + '? This action cannot be undone (in the near-future it will).')
+                .textContent($filter('translate')('modal.prompt.body') + ' ' + message + '? This action cannot be undone (in the near-future it will).')
                 .targetEvent(ev)
                 .ok(yes)
                 .cancel($filter('translate')('modal.prompt.no'));

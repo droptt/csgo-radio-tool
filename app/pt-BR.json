@@ -48,6 +48,7 @@
   "modal": {
     "close": "Fechar",
     "edit": {
+      "title": "Editando {{name}}",
       "submit": "Salvar Mudanças",
       "copy": "Copiar para Meus Comandos",
       "popover_title": "Meus Comandos",

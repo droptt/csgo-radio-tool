@@ -4,7 +4,7 @@
  */
 (function () {
 
-    var messagesService = ['$http', '$rootScope', 'localStorageService', '$filter', '$location', function ($http, $rootScope, localStorageService, $filter, $location) {
+    angular.module('csgo-radio').factory('messagesService', ['$http', '$rootScope', 'localStorageService', '$filter', '$location', function ($http, $rootScope, localStorageService, $filter, $location) {
 
         var getMessages = function () {
             return $http.get('radio.json')
@@ -23,6 +23,48 @@
                 .then(function (response) {
                     return response.data;
                 });
+        };
+
+        var convertList = function (list) {
+            var filteredList = [];
+            for (var message in list) {
+                if (list[message].type === "message") {
+                    filteredList.push(list[message].cmd);
+                } else {
+                    filteredList.push(list[message]);
+                    delete filteredList[message].type;
+                    delete filteredList[message].disabled;
+                    delete filteredList[message].UID;
+                    delete filteredList[message].$$hashKey;
+                }
+            }
+            return filteredList;
+        };
+
+        var filterCustomList = function (list) {
+            var filteredList = {};
+            for (var message in list) {
+                filteredList[message] = list[message];
+                delete filteredList[message].type;
+                delete filteredList[message].disabled;
+                delete filteredList[message].UID;
+            }
+            return filteredList;
+        };
+
+        var save = function () {
+            console.log("Saving")
+            var save = {
+                'StandardRadio': convertList($rootScope.model.standard), 'GroupRadio': convertList($rootScope.model.group), 'ReportRadio': convertList($rootScope.model.report), 'Titles': [
+                    ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
+                    ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
+                    ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
+                ]
+            };
+            if (localStorageService.isSupported) {
+                localStorageService.set('saved', save);
+            }
+            saveHash(save);
         };
 
         var htmlTags = function (msg, imported) { //actually, imported should be false
@@ -71,26 +113,25 @@
             }
         };
 
-        var importCustom = function (custom) {
-            $rootScope.model.custom = custom;
-            $rootScope.$watch('model.custom', function () { //Auto save custom
-                if (localStorageService.isSupported) {
-                    localStorageService.set('custom', $rootScope.model.custom);
-                }
-            }, true);
+        var customSave = function () { //Auto save custom
+            if (localStorageService.isSupported) {
+                localStorageService.set('custom', filterCustomList($rootScope.model.custom));
+            }
         };
 
+        var importCustom = function (custom) {
+            $rootScope.model.custom = custom;
+            $rootScope.$watch('model.custom', customSave, true);
+        };
+
+        var SaveMessages = save;
+
         var importMessages = function (save, imported, shared, copy) { //TODO: Add sanity checks
-            console.log('MessageService ImportMessages: Save: ' + JSON.stringify(save) + ' Imported: ' + imported + ' Shared: ' + shared);
             resetMessages();
             $rootScope.model.standard = save.StandardRadio;
             $rootScope.model.group = save.GroupRadio;
             $rootScope.model.report = save.ReportRadio;
             $rootScope.model.Titles = save.Titles;
-
-            if (shared === false && imported === false) {
-                $rootScope.$watch('model', messagesService.save);
-            }
 
             for (var i = 0; i <= 2; ++i) {
                 if ($rootScope.model.Titles[i] === null) {
@@ -104,7 +145,7 @@
                 for (var message in save[group]) {
                     if (typeof save[group][message] === 'string') {
                         $rootScope.model.messages[save[group][message]].disabled = true;
-                        save[group][message] = {"type": "message", "cmd": save[group][message]};
+                        save[group][message] = { 'type': 'message', 'cmd': save[group][message] };
                     }
                     else {
                         var check = customExists(save[group][message]);
@@ -131,7 +172,10 @@
                     }
                 }
             }
-            //console.log($rootScope.model)
+            if (shared === false && imported === false && $rootScope.model.watch !== true) {
+                $rootScope.$watch('model', SaveMessages, true);
+                $rootScope.model.watch = true;
+            }
         }
 
         var defaults = function () {
@@ -141,7 +185,7 @@
         var saveHash = function (save) {
             if (typeof save === 'undefined') {
                 var save = {
-                    'StandardRadio': $rootScope.model.standard, 'GroupRadio': $rootScope.model.group, 'ReportRadio': $rootScope.model.report, 'Titles': [
+                    'StandardRadio': convertList($rootScope.model.standard), 'GroupRadio': convertList($rootScope.model.group), 'ReportRadio': convertList($rootScope.model.report), 'Titles': [
                         ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
                         ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
                         ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
@@ -151,34 +195,19 @@
             $location.hash(JSON.stringify(save));
         }
 
-        var save = function () {
-            var save = {
-                'StandardRadio': $rootScope.model.standard, 'GroupRadio': $rootScope.model.group, 'ReportRadio': $rootScope.model.report, 'Titles': [
-                    ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
-                    ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
-                    ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
-                ]
-            };
-            if (localStorageService.isSupported) {
-                localStorageService.set('saved', save);
-            }
-            saveHash(save);
-        };
-
         return {
             getMessages: getMessages,
             getCustom: getCustom,
+            save: save,
             importMessages: importMessages,
             resetMessages: resetMessages,
             importCustom: importCustom,
             checkHtmlTags: htmlTags,
             default: defaults,
-            save: save,
             saveHash: saveHash,
-            getCommand: getCommand
+            getCommand: getCommand,
+            customSave: customSave
         };
 
-    }],
-        module = angular.module('csgo-radio');
-    module.factory('messagesService', messagesService);
+    }]);
 } ());

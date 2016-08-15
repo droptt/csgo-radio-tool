@@ -34,12 +34,15 @@
                     localStorageService.set('version', $rootScope.settings.version);
                     localStorageService.set('customVersion', 2); //TODO: customVersion is not supposed to be hardcoded.
                 }
-                if (isJson(decodeURIComponent(window.location.hash.replace('##', ''))) === true) { //TODO: Check if localstorage isn't the same
-                    messagesService.importMessages(JSON.parse(decodeURIComponent(window.location.hash.replace('##', ''))), false, true, false);
-                    loaded = true;
-                    shared = true;
-                    $rootScope.settings.shared = true;
-                    $rootScope.settings.hasSaved = (localStorageService.get('saved') === null) ? false : true;
+                var hashUrl = decodeURIComponent(window.location.hash.replace('##', ''));
+                if (isJson(hashUrl) === true) {
+                    if (hashUrl !== JSON.stringify(localStorageService.get('saved'))) {
+                        messagesService.importMessages(JSON.parse(hashUrl), false, true, false);
+                        loaded = true;
+                        shared = true;
+                        $rootScope.settings.shared = true;
+                        $rootScope.settings.hasSaved = (localStorageService.get('saved') === null) ? false : true;
+                    }
                 }
                 if (localStorageService.get('saved') !== null && loaded === false) {
                     var saved = angular.fromJson(localStorageService.get('saved'));
@@ -47,18 +50,7 @@
                     loaded = true;
                 } else {
                     if (shared === false && loaded === false) {
-                        $rootScope.$watch('model', function (model) { //Auto save
-                            if (localStorageService.isSupported) {
-                                localStorageService.set('saved', {
-                                    'StandardRadio': $rootScope.model.standard, 'GroupRadio': $rootScope.model.group, 'ReportRadio': $rootScope.model.report, 'Titles': [
-                                        ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
-                                        ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
-                                        ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
-                                    ]
-                                });
-                            }
-                        }, true);
-                        $rootScope.model.Titles = [$filter('translate')('boxes.title_0'), $filter('translate')('boxes.title_1'), $filter('translate')('boxes.title_2')];
+                        messagesService.default();
                         loaded = true;
                     }
                 }
@@ -66,11 +58,7 @@
                     var custom = angular.fromJson(localStorageService.get('custom'));
                     messagesService.importCustom(custom);
                 } else {
-                    $rootScope.$watch('model.custom', function () { //Auto save custom
-                        if (localStorageService.isSupported) {
-                            localStorageService.set('custom', $rootScope.model.custom);
-                        }
-                    }, true);
+                    $rootScope.$watch('model.custom', messagesService.saveCustom, true);
                 }
             }
         };

@@ -8,7 +8,7 @@
     var sharedController = ['$scope', '$rootScope', 'messagesService', function ($scope, $rootScope, messagesService) {
 
         $scope.save = function () {
-            $rootScope.$watch('model', messagesService.save);
+            $rootScope.$watch('model', messagesService.save, true);
             $rootScope.settings.shared = false;
             $rootScope.settings.hasSaved = false;
         };

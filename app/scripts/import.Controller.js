@@ -7,7 +7,7 @@
 
     var importController = ['$scope', '$rootScope', '$mdDialog', 'messagesService', 'VDFService', '$filter', function ($scope, $rootScope, $mdDialog, messagesService, VDFService, $filter) {
 
-        $scope.import = { copy: true, "switch_label": $filter('translate')('modal.import.copy') };
+        $scope.import = { copy: true};
 
         var Import = function (model) {
             var parse = VDFService.parse(model.file);

@@ -49,6 +49,7 @@
   "modal": {
     "close": "Close",
     "edit": {
+      "title": "Editing {{name}}",
       "submit": "Save Changes",
       "copy": "Copy to Commands List",
       "popover_title": "Commands List",
@@ -72,9 +73,21 @@
       "cmd": "Command",
       "cmd_placeholder": "Command to be executed",
       "cmd_help": "Use <code>;</code> to seperate commands.",
-      "label": "Title",
-      "label_placeholder": "Title appears on the menu",
-      "tooltip": "If you don't want a color anymore, set it to black."
+      "arguments": "Arguments",
+      "default": "Default value",
+      "rawcmd": "Raw Commands",
+      "advanced": "Advanced",
+      "cancel": "Cancel",
+      "label": "Name",
+      "add": "Add",
+      "label_hint": "Name appears on the Radio menu",
+      "label_required": "Name is required.",
+      "tooltip": "If you don't want a color anymore, set it to black.",
+      "clear_color": "Remove Color",
+      "autocomplete": {
+        "cheats": "Requires Cheats",
+        "nomatches": "No commands matching \"{{command.searchText}}\" were found."
+      }
     },
     "chelp": {
       "title": "Custom Commands Help",
@@ -93,6 +106,10 @@
       "delete": "Delete",
       "yes": "Yes",
       "Reset": "Reset"
+    },
+    "about": {
+      "title": "About",
+      "name": "CS:GO Radio Tool"
     },
     "help": {
       "title": "Help",
@@ -119,13 +136,15 @@
       "c_1": "Please",
       "c_2": "drop",
       "c_3": "me an",
-      "c_4": "if the OS X Methods are wrong."
+      "c_4": "if the OS X Methods are wrong.",
+      "useful": "Useful",
+      "notuseful": "Not useful"
     }
   },
   "messages": {
-    "coverme": "Dêem-me cobertura",
-    "takepoint": "Tomem a liderança",
-    "holdpos": "Mantenham esta posição",
+    "coverme": "Dï¿½em-me cobertura",
+    "takepoint": "Tomem a lideranï¿½a",
+    "holdpos": "Mantenham esta posiï¿½ï¿½o",
     "regroup": "Equipe, reagrupar",
     "followme": "Sigam-me",
     "takingfire": "Sob fogo inimigo, preciso de ajuda",
@@ -135,12 +154,12 @@
     "cheer": "Viva!",
     "thanks": "Obrigado!",
     "compliment": "Boa!",
-    "report": "Comuniquem a situação",
+    "report": "Comuniquem a situaï¿½ï¿½o",
     "roger": "Afirmativo/Entendido",
     "enemyspot": "Inimigo localizado",
     "needbackup": "Preciso de ajuda",
     "sectorclear": "Sector limpo",
-    "inposition": "Estou em posição",
+    "inposition": "Estou em posiï¿½ï¿½o",
     "getout": "Vai explodir!",
     "negative": "Negativo",
     "enemydown": "Inimigo Abatido"

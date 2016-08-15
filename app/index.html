@@ -117,11 +117,11 @@
             </div>
             <p class="text-center box-desc" translate="boxes.desc"></p>
             <ul data-list-name="standard" id="StandardRadio" dnd-list="model.standard" dnd-drop="checkLimit(event, index, item)">
-              <li ng-repeat="message in model.standard" dnd-draggable="message" dnd-moved="model.standard.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
+              <li ng-repeat="message in model.standard" dnd-draggable="message" dnd-moved="moved('standard', $index)" dnd-effect-allowed="move">{{($index+1)}}.
                 <div ng-show="::message.type === 'message'" class="message-name">{{::"messages." + message.cmd | translate}}</div>
                 <div ng-hide="::message.type === 'message'" class="message-name">{{message.text}}</div>
                 <div class="pull-right">
-                  <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'">
+                  <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'standard', message, $index)">
                     <md-tooltip md-direction="top">
                       {{::tooltip.edit}}
                     </md-tooltip>
@@ -140,11 +140,11 @@
             </div>
             <p class="text-center box-desc" translate="boxes.desc"></p>
             <ul data-list-name="group" id="GroupRadio" dnd-list="model.group" dnd-drop="checkLimit(event, index, item)">
-              <li ng-repeat="message in model.group" dnd-draggable="message" dnd-moved="model.group.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
+              <li ng-repeat="message in model.group" dnd-draggable="message" dnd-moved="moved('group', $index)" dnd-effect-allowed="move">{{($index+1)}}.
                 <div ng-show="::message.type === 'message'" class="message-name">{{::"messages." + message.cmd | translate}}</div>
                 <div ng-hide="::message.type === 'message'" class="message-name">{{message.text}}</div>
                 <div class="pull-right">
-                  <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'">
+                  <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'group', message, $index)">
                     <md-tooltip md-direction="top">
                       {{::tooltip.edit}}
                     </md-tooltip>
@@ -163,11 +163,11 @@
             </div>
             <p class="text-center box-desc" translate="boxes.desc"></p>
             <ul data-list-name="report" id="ReportRadio" dnd-list="model.report" dnd-drop="checkLimit(event, index, item)">
-              <li ng-repeat="message in model.report" dnd-draggable="message" dnd-moved="model.report.splice($index, 1)" dnd-effect-allowed="move">{{($index+1)}}.
+              <li ng-repeat="message in model.report" dnd-draggable="message" dnd-moved="moved('report', $index)" dnd-effect-allowed="move">{{($index+1)}}.
                 <div ng-show="::message.type === 'message'" class="message-name">{{::"messages." + message.cmd | translate}}</div>
                 <div ng-hide="::message.type === 'message'" class="message-name">{{message.text}}</div>
                 <div class="pull-right">
-                  <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'">
+                  <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'report', message, $index)">
                     <md-tooltip md-direction="top">
                       {{::tooltip.edit}}
                     </md-tooltip>
@@ -215,7 +215,7 @@
       </div>
       <md-button class="md-icon-button" style="display:inline-block;" ng-if="mdColorClearButton && value" ng-click="clearValue();" aria-label="Clear Color">
         <md-tooltip md-direction="top">
-          Remove Color
+          {{::modal.form.remove_color |translate}}
         </md-tooltip>
         <md-icon>clear</md-icon>
       </md-button>
@@ -223,21 +223,21 @@
   <script type="text/ng-template" id="import-dialog.html">
     <md-dialog aria-label="List dialog" flex="40">
       <md-dialog-content class="md-dialog-content">
-        <h2 class="md-title">title</h2>
+        <h2 class="md-title" translate="modal.import.title"></h2>
         <div class="md-dialog-content-body">
           <p>something</p>
         </div>
         <md-input-container md-no-float class="md-prompt-input-container" style="display: block;">
           <textarea rows="5" md-autofocus ng-model="import.file" placeholder="RadioPanel.txt" md-no-autogrow></textarea>
         </md-input-container>
-        <md-switch ng-model="import.copy" aria-label="Copy" class="md-primary"> {{::import.switch_label}}
+        <md-switch ng-model="import.copy" aria-label="Copy" class="md-primary"> <div translate="modal.import.copy"></div>
         </md-switch>
       </md-dialog-content>
       <md-dialog-actions>
-        <md-button ng-click="cancel()" class="md-primary">cancel
+        <md-button ng-click="cancel()" class="md-primary"><div translate=""></div>
         </md-button>
         <md-button ng-click="ok()" class="md-primary">
-          close
+          <div translate="modal.import.submit"></div>
         </md-button>
       </md-dialog-actions>
     </md-dialog>
@@ -248,7 +248,7 @@
       <form>
         <md-toolbar>
           <div class="md-toolbar-tools">
-            <h2>New Message</h2>
+            <h2 translate="modal.{{::mode}}.title" translate-values="{name: message.label}"></h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="cancel()">
               <md-icon aria-label="Close dialog">close</md-icon>
@@ -261,16 +261,16 @@
               <md-content class="md-padding">
                 <div layout="row">
                   <md-input-container class="md-block" flex="70">
-                    <label>Name</label>
+                    <label translate="modal.form.label"></label>
                     <input md-maxlength="30" name="label" required ng-model="message.label" />
-                    <div class="hint">Name in the Radio menu.</div>
+                    <div class="hint" translate="modal.form.label_hint"></div>
                     <div ng-messages="{'required': !message.label}">
-                      <div ng-message="required">Name is required.</div>
+                      <div ng-message="required" translate="modal.form.label_required"></div>
                     </div>
                   </md-input-container>
                   <md-button-group class="md-raised" flex="15">
-                    <md-button ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}">I</md-button>
-                    <md-button ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}">B</md-button>
+                    <md-button ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}"><md-icon>format_italic</md-icon></md-button>
+                    <md-button ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}"><md-icon>format_bold</md-icon></md-button>
                     <div md-color-picker="dialog.colorpickeroptions" ng-model="message.color"></div>
                   </md-button-group>
                 </div>
@@ -297,43 +297,42 @@
                           {{item.dcs}}
                         </span>
                       <span class="item-metastat requirements" ng-show="item.ch">
-                          <strong style="color:red;">Requires cheats</strong>
+                          <strong style="color:red;" translate="modal.form.autocomplete.cheats"></strong>
                         </span>
                       </span>
                     </md-item-template>
-                    <md-not-found>
-                      No commands matching "{{command.searchText}}" were found.
+                    <md-not-found translate="modal.form.autocomplete.nomatches">
                     </md-not-found>
                   </md-autocomplete>
                   <md-input-container class="md-block" flex-gt-sm>
-                    <label>Arguments</label>
+                    <label translate="modal.form.arguments"></label>
                     <input ng-model="command.args">
-                    <div class="hint" ng-if="command.cmd.Value">Default value: {{command.cmd.Value}}</div>
+                    <div class="hint" ng-if="command.cmd.Value"><div translate="modal.form.default"></div>: {{command.cmd.Value}}</div>
                   </md-input-container>
                 </div>
                 <div ng-if="dialog.advanced === true">
                   <form name="cmdForm">
                     <md-input-container class="md-block" flex-gt-sm>
-                      <label>Raw command</label>
+                      <label translate="modal.form.rawcmd"></label>
                       <input name="raw" ng-model="newMsg.rawCommand">
                     </md-input-container>
                   </form>
                 </div>
               </md-content>
-              <md-button class="md-raised pull-right" ng-click="addField()" ng-if="dialog.advanced === false">Add</md-button>
+              <md-button class="md-raised pull-right" ng-click="addField()" ng-if="dialog.advanced === false"><div translate="modal.form.add"></div></md-button>
             </md-tab>
           </md-tabs>
         </md-dialog-content>
         <md-dialog-actions layout="row">
           <md-switch ng-model="dialog.advanced" ng-change="togAdv()" aria-label="Advanced" ng-if="selected === 1">
-            Advanced
+            <div translate="modal.form.advanced"></div>
           </md-switch>
           <span flex></span>
-          <md-button ng-click="cancel()">
-            Cancel
+          <md-button ng-click="cancel()" aria-label="Cancel">
+            <div translate="modal.form.cancel"></div>
           </md-button>
-          <md-button ng-click="confirm()" class="md-primary" style="margin-right:20px;">
-            Create
+          <md-button ng-click="confirm()" class="md-primary" style="margin-right:20px;" aria-label="Submit">
+            <div translate="modal.{{::mode}}.submit"></div>
           </md-button>
         </md-dialog-actions>
       </form>
@@ -346,7 +345,7 @@
       <form>
         <md-toolbar>
           <div class="md-toolbar-tools">
-            <h2>Help</h2>
+            <h2 translate="modal.help.title"></h2>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="cancel()">
               <md-icon aria-label="Close dialog">close</md-icon>
@@ -357,7 +356,7 @@
           <md-tabs md-dynamic-height md-border-bottom md-selected="selectedI">
             <md-tab label="Console">
               <md-content class="md-padding">
-                <h1 class="md-display-2">Console</h1>
+                <h1 class="md-display-2" translate="sidebar.menu.help"></h1>
                 <p translate="modal.chelp.p1"></p>
                 </br>
                 <p translate="modal.chelp.p2"></p>
@@ -388,8 +387,7 @@
                     <li> <span translate="modal.help.m2_1"></span> <code>[your steam library]/SteamApps/common/</code></li>
                     <li> <span translate="modal.help.m2_2"></span> <code>Counter Strike: Global Offensive</code></li>
                     <li> <span translate="modal.help.m2_3"></span> <code>csgo/resource/ui</code>.</li>
-                    <li> <span translate="modal.help.m2_4"></span> <code>radiopanel.txt</code> and replace the contents with the
-                      result
+                    <li> <span translate="modal.help.m2_4"></span> <code>radiopanel.txt</code><span translate="modal.help.m2_42"></span>
                       </span>.</li>
                   </ol>
                   <span translate="modal.help.lib"></span> <code>C:\Program Files (x86)</code>.
@@ -399,21 +397,20 @@
                     <li> <span translate="modal.help.m2o_1"></span> <code>~/Library/Application Support/Steam/SteamApps/common/</code></li>
                     <li> <span translate="modal.help.m2o_2"></span> <code>Counter Strike: Global Offensive</code> </li>
                     <li> <span translate="modal.help.m2o_3"></span> <code>csgo/resource/ui</code>.</li>
-                    <li> <span translate="modal.help.m2o_4"></span> <code>radiopanel.txt</code> (I hope it's the same path/name)
-                      and replace the contents with the result.</span>
+                    <li> <span translate="modal.help.m2o_4"></span> <code>radiopanel.txt</code><span translate="modal.help.m2o_5"></span>
                     </li>
                   </ol>
                 </p>
                 </br>
                 <p>
-                  Please <a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">drop</a>                  me an <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email</a>                  or
-                  <a href="https://twitter.com/rafacavalm" target="_blank" onclick="javascript:misc.tracking.notifyclick('twitter');">tweet</a>                  if the OS X Methods are wrong.
+                  Please <a href="http://steamcommunity.com/id/dropt/" target="_blank">drop</a>                  me an <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email</a>                  or
+                  <a href="https://twitter.com/rafacavalm" target="_blank">tweet</a>                  if the OS X Methods are wrong.
                 </p>
               </md-content>
             </md-tab>
             <md-tab label="About">
               <md-content class="md-padding">
-                <h1 class="md-display-2">About</h1>
+                <h1 class="md-display-2" translate="modal.about.title">About</h1>
                 <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum.
                   Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum
                   nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque,
@@ -425,10 +422,10 @@
         <md-dialog-actions layout="row">
           <span flex></span>
           <md-button ng-click="answer('not useful')">
-            Not Useful
+            <div translate="modal.help.notuseful"></div>
           </md-button>
           <md-button ng-click="answer('useful')" style="margin-right:20px;">
-            Useful
+            <div translate="modal.help.useful"></div>
           </md-button>
         </md-dialog-actions>
       </form>

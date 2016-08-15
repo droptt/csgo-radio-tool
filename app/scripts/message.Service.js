@@ -4,7 +4,7 @@
  */
 (function () {
 
-    var messageService = ['$rootScope', 'messagesService', function ($rootScope, messagesService) {
+    angular.module('csgo-radio').factory('messageService', ['$rootScope', 'messagesService', function ($rootScope, messagesService) {
 
         var querySearch = function (query) {
             var results = query ? $rootScope.init.commands.filter(this.newFilter(query)) : $rootScope.init.commands;
@@ -12,18 +12,18 @@
         };
 
         var renderCommand = function (commandArray) {
-            var output = "";
+            var output = '';
             for (var command in commandArray) {
                 if (commandArray[command].searchText.length === 0) {
                     continue;
                 }
-                var args = (commandArray[command].args.length > 0) ? " " + commandArray[command].args : "";
-                output = output + commandArray[command].searchText + args + "; ";
+                var args = (commandArray[command].args.length > 0) ? ' ' + commandArray[command].args : '';
+                output = output + commandArray[command].searchText + args + '; ';
             }
             return output;
         };
 
-        var saveChanges = function (message, origMessage, commandArray) {
+        var saveChanges = function (message, origMessage, commandArray, list) {
             if (origMessage.type === 'custom') {
                 console.log(this.renderCommand(commandArray))
                 $rootScope.model.custom[origMessage.UID].cmd = this.renderCommand(commandArray);
@@ -39,7 +39,7 @@
                         $mdToast.show(
                             $mdToast.simple()
                                 .textContent('Could not find the copy of the message.')
-                                .position("top right")
+                                .position('top right')
                                 .hideDelay(7000)
                         );
                         return false; //TODO: tell the user
@@ -89,13 +89,13 @@
         };
 
         var renderCommand = function (commandArray) {
-            var output = "";
+            var output = '';
             for (var command in commandArray) {
                 if (commandArray[command].searchText.length === 0) {
                     continue;
                 }
-                var args = (commandArray[command].args.length > 0) ? " " + commandArray[command].args : "";
-                output = output + commandArray[command].searchText + args + "; ";
+                var args = (commandArray[command].args.length > 0) ? ' ' + commandArray[command].args : '';
+                output = output + commandArray[command].searchText + args + '; ';
             }
             return output;
         };
@@ -113,21 +113,21 @@
         };
 
         var parseCommandLine = function (commandLine) {
-            var commands = commandLine.split(";"), cmdArray = [];
+            var commands = commandLine.split(';'), cmdArray = [];
             for (var cmd in commands) {
                 if (commands[cmd].length > 0) {//TODO: REDO
-                    var split = commands[cmd].split(" ");
+                    var split = commands[cmd].split(' ');
                     if (split.length === 1 && split[0].length > 0) {//single command
                         var cmdInfo = this.findCommand(((skipfirst === true) ? split[1] : split[0]));
-                        cmdArray.push({ "cmd": cmdInfo, "args": (cmdInfo.Value.length > 0) ? cmdInfo.Value : "", "searchText": split[0] })
+                        cmdArray.push({ 'cmd': cmdInfo, 'args': (cmdInfo.Value.length > 0) ? cmdInfo.Value : '', 'searchText': split[0] })
                     } else {
-                        var skipfirst = (split[0] === " " || split[0] === "  " || split[0] === "") ? true : false;
-                        var args = (skipfirst === true) ? commands[cmd].replace(split[0] + split[1], "") : commands[cmd].replace(split[0], "");
-                        if (args.charAt(0) === " ") {
+                        var skipfirst = (split[0] === ' ' || split[0] === '  ' || split[0] === '') ? true : false;
+                        var args = (skipfirst === true) ? commands[cmd].replace(split[0] + split[1], '') : commands[cmd].replace(split[0], '');
+                        if (args.charAt(0) === ' ') {
                             args = args.substring(1);
                         }
                         var cmdInfo = this.findCommand(((skipfirst === true) ? split[1] : split[0]));
-                        cmdArray.push({ "cmd": cmdInfo, "args": args, "searchText": (skipfirst === true) ? split[1] : split[0] })
+                        cmdArray.push({ 'cmd': cmdInfo, 'args': args, 'searchText': (skipfirst === true) ? split[1] : split[0] })
                     }
                 }
 
@@ -137,15 +137,15 @@
 
         var create = function (message, commandArray) {
             $rootScope.model.custom[msg.UID] = {
-                "UID": $scope.message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1),
-                "type": "custom",
-                "disabled": false,
-                "cmd": this.renderCommand(commandArray),
-                "label": $scope.message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''),
-                "text": $scope.message.label,
-                "italic": $scope.message.bold,
-                "bold": $scope.message.bold,
-                "color": $scope.message.color,
+                'UID': $scope.message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1),
+                'type': 'custom',
+                'disabled': false,
+                'cmd': this.renderCommand(commandArray),
+                'label': $scope.message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''),
+                'text': $scope.message.label,
+                'italic': $scope.message.bold,
+                'bold': $scope.message.bold,
+                'color': $scope.message.color,
             };
         };
         return {
@@ -158,7 +158,5 @@
             querySearch: querySearch
         };
 
-    }],
-        module = angular.module('csgo-radio');
-    module.factory('messageService', messageService);
+    }]);
 } ());

@@ -7,7 +7,7 @@
 
     var messageController = ['$scope', '$rootScope', '$filter', function ($scope, $rootScope, $filter) {
         $scope.removeMessage = function (list, message, index) {
-            if (message.type === "message") {
+            if (message.type === 'message') {
                 $rootScope.model.messages[message.cmd].disabled = false;
                 $rootScope.model[list].splice(index, 1);
             } else {
@@ -31,24 +31,6 @@
                 }
             }
         };
-        $scope.editMessage = function (list, message, index) {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'edit-message-modal.html',
-                controller: 'editMessageModalController',
-                resolve: {
-                    list: function () {
-                        return list;
-                    },
-                    message: function () {
-                        return message;
-                    },
-                    index: function () {
-                        return index;
-                    }
-                }
-            });
-        };
         $scope.checkLimit = function (event, index, item) {
             if (event.target.attributes[0].nodeName === 'data-list-name') { //Checks if target is the list
                 var targetName = event.target.attributes[0].nodeValue;
@@ -61,7 +43,7 @@
             } else if (event.target.parentNode.parentNode.parentNode.parentNode.attributes[0].nodeName === 'data-list-name') { //Or the button
                 var targetName = event.target.parentNode.parentNode.parentNode.parentNode.attributes[0].nodeValue;
             }
-            if (item.type === "message") {
+            if (item.type === 'message') {
                 delete item.id;
                 delete item.label;
                 delete item.text;

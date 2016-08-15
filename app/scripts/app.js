@@ -14,7 +14,7 @@ var app = angular.module('csgo-radio', ['pascalprecht.translate',
 	//'angulartics.google.analytics',
 	'LocalStorageModule']);
 
-app.config(function ($translateProvider) {
+app.config(['$translateProvider', function ($translateProvider) {
     $translateProvider.useStaticFilesLoader({
         prefix: '',
         suffix: '.json'
@@ -23,14 +23,13 @@ app.config(function ($translateProvider) {
         .determinePreferredLanguage()
         .fallbackLanguage('en-US')
         .useLocalStorage();
-})
-    .config(function (localStorageServiceProvider) {
-        localStorageServiceProvider.setPrefix('');
-    })
+}]).config(['localStorageServiceProvider', function (localStorageServiceProvider) {
+	localStorageServiceProvider.setPrefix('');
+}])
 	/*.config(function ($analyticsProvider) {
 		$analyticsProvider.virtualPageviews(false);
 	})*/
-	.run(function ($rootScope) {
+	.run(['$rootScope', function ($rootScope) {
 		$rootScope.init = { 'loaded': false };
 		$rootScope.settings = {
 			'allowed_types': ['none', 'and'], 'msg_type': 'message', 'radioMenu': {
@@ -60,4 +59,4 @@ app.config(function ($translateProvider) {
 		};
 		$rootScope.settings.version = 20;
 		$rootScope.model = { 'standard': [], 'group': [], 'report': [], 'Titles': [null, null, null] };
-	});
+	}]);
