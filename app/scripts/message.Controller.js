@@ -5,8 +5,8 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var messageController = ['$scope', '$rootScope', '$filter', function ($scope, $rootScope, $filter) {
-        $scope.removeMessage = function (list, message, index) {
+    var messageController = ['$scope', '$rootScope', 'uiService', function ($scope, $rootScope, uiService) {
+        $scope.removeMessage = function (list, message, index, ev) {
             if (message.type === 'message') {
                 $rootScope.model.messages[message.cmd].disabled = false;
                 $rootScope.model[list].splice(index, 1);
@@ -15,19 +15,7 @@
                     $rootScope.model.custom[message.UID].disabled = false;
                     $rootScope.model[list].splice(index, 1);
                 } else {
-                    var modalInstance = $uibModal.open({
-                        animation: true,
-                        templateUrl: 'prompt-modal.html',
-                        controller: 'promptController',
-                        resolve: {
-                            action: function () {
-                                return 'deleteImportedCommand';
-                            },
-                            extra: function () {
-                                return { list: list, message: message, index: index };
-                            }
-                        }
-                    });
+                    uiService.Confirm.deleteImportedCommand(ev, list, message, index);
                 }
             }
         };

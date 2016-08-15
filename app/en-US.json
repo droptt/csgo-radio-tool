@@ -61,25 +61,28 @@
     },
     "import": {
       "title": "Import Radiopanel.txt",
+      "desc": "Import existing configuration",
       "copy": "Place imported customs into the Custom List",
       "help": "Help?",
       "submit": "Import"
     },
     "success": {
-      "title": "Success!",
-      "help": "Where do I put this?"
+      "title": "Output",
+      "desc": "If you know where your game is installed, replace the contents of csgo/resource/ui/Radiopanel.txt.",
+      "help": "Lost?"
     },
     "form": {
       "cmd": "Command",
       "cmd_placeholder": "Command to be executed",
       "cmd_help": "Use <code>;</code> to seperate commands.",
       "arguments": "Arguments",
-      "default": "Default value",
+      "default": "Default value: {{default_value}}",
       "rawcmd": "Raw Commands",
       "advanced": "Advanced",
       "cancel": "Cancel",
       "label": "Name",
       "add": "Add",
+      "delete": "Delete",
       "label_hint": "Name appears on the Radio menu",
       "label_required": "Name is required.",
       "tooltip": "If you don't want a color anymore, set it to black.",

@@ -58,7 +58,7 @@
                     var custom = angular.fromJson(localStorageService.get('custom'));
                     messagesService.importCustom(custom);
                 } else {
-                    $rootScope.$watch('model.custom', messagesService.saveCustom, true);
+                    $rootScope.$watch('model.custom', messagesService.customSave, true);
                 }
             }
         };

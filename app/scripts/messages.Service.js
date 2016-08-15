@@ -4,7 +4,7 @@
  */
 (function () {
 
-    angular.module('csgo-radio').factory('messagesService', ['$http', '$rootScope', 'localStorageService', '$filter', '$location', function ($http, $rootScope, localStorageService, $filter, $location) {
+    angular.module('csgo-radio').factory('messagesService', ['$http', '$rootScope', 'localStorageService', '$filter', '$location', 'VDFService', function ($http, $rootScope, localStorageService, $filter, $location, VDFService) {
 
         var getMessages = function () {
             return $http.get('radio.json')
@@ -25,29 +25,64 @@
                 });
         };
 
+        var generateRP = function ($event) {
+            if ($rootScope.model.standard.length > 0 || $rootScope.model.group.length > 0 || $rootScope.model.report.length > 0) {
+                var buildList = angular.extend({}, $rootScope.settings.radioMenu);
+                buildList['RadioPanel.txt'].Groups.standard.title = ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? '#SFUI_CommandRadio' : $rootScope.model.Titles[0];
+                buildList['RadioPanel.txt'].Groups.group.title = ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? '#SFUI_StandardRadio' : $rootScope.model.Titles[1];
+                buildList['RadioPanel.txt'].Groups.report.title = ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? '#SFUI_ReportRadio' : $rootScope.model.Titles[2];
+                for (var C_box in $rootScope.settings.boxes) {
+                    var C_I = 1,
+                        E = $rootScope.settings.boxes[C_box].replace('Radio', '').toLowerCase();
+                    for (var C_msg in $rootScope.model[E]) {
+                        var msg = $rootScope.model[E][C_msg];
+                        if (msg.type === 'message') {
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd] = {};
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd].hotkey = C_I;
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd].label = $rootScope.model.messages[msg.cmd].label;
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd].cmd = $rootScope.model.messages[msg.cmd].cmd;
+                        } else {
+                            console.log($rootScope.model.custom);
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.UID] = {};
+                            if (msg.italic === true && msg.bold === false) {
+                                var label = '<i>' + msg.label + '</i>';
+                            } else if (msg.italic === false && msg.bold === true) {
+                                var label = '<b>' + msg.label + '</b>';
+                            } else if (msg.italic === true && msg.bold === true) {
+                                var label = '<i><b>' + msg.label + '</b></i>';
+                            } else {
+                                var label = msg.label;
+                            }
+                            if (msg.color !== false && msg.color !== "#000000" && typeof msg.color !== 'undefined') {
+                                label = "<font color=" + msg.color + ">" + label + "</font>";
+                            }
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.UID].hotkey = C_I;
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.UID].label = label;
+                            buildList['RadioPanel.txt'].Groups[E].Commands[msg.UID].cmd = msg.cmd;
+                        }
+                        C_I++;
+                    }
+                }
+
+                return VDFService.stringify(buildList, true);
+            }
+        };
+
         var convertList = function (list) {
             var filteredList = [];
             for (var message in list) {
                 if (list[message].type === "message") {
                     filteredList.push(list[message].cmd);
                 } else {
-                    filteredList.push(list[message]);
-                    delete filteredList[message].type;
-                    delete filteredList[message].disabled;
-                    delete filteredList[message].UID;
-                    delete filteredList[message].$$hashKey;
+                    filteredList.push({
+                        "label": list[message].label,
+                        "text": list[message].text,
+                        "cmd": list[message].cmd,
+                        "italic": (typeof list[message].italic !== 'undefined') ? list[message].italic : false,
+                        "bold": (typeof list[message].bold !== 'undefined') ? list[message].bold : false,
+                        "color": (typeof list[message].color !== 'undefined') ? list[message].color : false,
+                    });
                 }
-            }
-            return filteredList;
-        };
-
-        var filterCustomList = function (list) {
-            var filteredList = {};
-            for (var message in list) {
-                filteredList[message] = list[message];
-                delete filteredList[message].type;
-                delete filteredList[message].disabled;
-                delete filteredList[message].UID;
             }
             return filteredList;
         };
@@ -113,9 +148,26 @@
             }
         };
 
+        var customFilter = function (list) {
+            var filteredList = {};
+            for (var message in list) {
+                filteredList[message] = {
+                    "UID": list[message].UID,
+                    "label": list[message].label,
+                    "text": list[message].text,
+                    "cmd": list[message].cmd,
+                    "italic": (typeof list[message].italic !== 'undefined') ? list[message].italic : false,
+                    "bold": (typeof list[message].bold !== 'undefined') ? list[message].bold : false,
+                    "color": (typeof list[message].color !== 'undefined') ? list[message].color : false,
+                    "type": list[message].type
+                };
+            }
+            return filteredList;
+        };
+
         var customSave = function () { //Auto save custom
             if (localStorageService.isSupported) {
-                localStorageService.set('custom', filterCustomList($rootScope.model.custom));
+                localStorageService.set('custom', customFilter($rootScope.model.custom));
             }
         };
 
@@ -125,6 +177,30 @@
         };
 
         var SaveMessages = save;
+
+        var ImportRP = function (model) {
+            var parse = VDFService.parse(model.file);
+            if (typeof parse['RadioPanel.txt'] !== 'undefined' && parse !== false) {
+                var obj = {};
+                for (var group in parse['RadioPanel.txt'].Groups) {
+                    if (group === 'group' || group === 'report' || group === 'standard') {
+                        obj[group] = [];
+                        for (var msg in parse['RadioPanel.txt'].Groups[group].Commands) {
+                            var cMsg = parse['RadioPanel.txt'].Groups[group].Commands[msg];
+                            if ($rootScope.model.messages.hasOwnProperty(cMsg.cmd) === true) {
+                                obj[group].push(cMsg.cmd);
+                            } else {
+                                obj[group].push(this.checkHtmlTags(cMsg));
+                            }
+                        }
+                    }
+                }
+                obj['titles'] = Array((parse['RadioPanel.txt'].Groups.standard.title === '#SFUI_CommandRadio') ? null : parse['RadioPanel.txt'].Groups.standard.title,
+                    (parse['RadioPanel.txt'].Groups.group.title === '#SFUI_StandardRadio') ? null : parse['RadioPanel.txt'].Groups.group.title,
+                    (parse['RadioPanel.txt'].Groups.report.title === '#SFUI_ReportRadio') ? null : parse['RadioPanel.txt'].Groups.report.title);
+                this.importMessages({ 'StandardRadio': obj.standard, 'GroupRadio': obj.group, 'ReportRadio': obj.report, 'Titles': obj.titles }, true, false, model.copy);
+            }
+        };
 
         var importMessages = function (save, imported, shared, copy) { //TODO: Add sanity checks
             resetMessages();
@@ -206,7 +282,9 @@
             default: defaults,
             saveHash: saveHash,
             getCommand: getCommand,
-            customSave: customSave
+            customSave: customSave,
+            ImportRP: ImportRP,
+            GenerateRP: generateRP
         };
 
     }]);

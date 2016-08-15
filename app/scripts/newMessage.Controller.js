@@ -5,7 +5,7 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var newMessageController = ['$scope', '$rootScope', '$mdDialog', '$mdToast', 'list', 'message', 'index', 'messageService', function ($scope, $rootScope, $mdDialog, $mdToast, list, message, index, messageService) { //This is for creation and editing.
+    var newMessageController = ['$scope', '$rootScope', '$mdDialog', 'list', 'message', 'index', 'messageService', function ($scope, $rootScope, $mdDialog, list, message, index, messageService) { //This is for creation and editing.
         $scope.dialog = { 'advanced': false };
         if (typeof list == 'undefined' && typeof message == 'undefined' && typeof list == 'undefined') { //Creation Mode
             $scope.message = { 'italic': false, 'bold': false, 'color': '' };
@@ -18,7 +18,8 @@
                 $scope.message = {
                     'italic': (typeof $rootScope.model.custom[message.UID].italic == 'undefined') ? false : $rootScope.model.custom[message.UID].italic,
                     'bold': (typeof $rootScope.model.custom[message.UID].bold == 'undefined') ? false : $rootScope.model.custom[message.UID].bold,
-                    'label': $rootScope.model.custom[message.UID].text
+                    'label': $rootScope.model.custom[message.UID].text,
+                    'UID': message.UID
                 };
 
                 $scope.commands = messageService.parseCommandLine($rootScope.model.custom[message.UID].cmd);
@@ -48,6 +49,11 @@
 
         $scope.cacheResults = true;
 
+        $scope.debug = function () {
+            console.log($scope.commands)
+            console.log($scope.message)
+            console.log($rootScope.model)
+        };
         $scope.querySearch = function (query) {
             var results = query ? $rootScope.init.commands.filter(messageService.newFilter(query)) : $rootScope.init.commands;
             return results;
@@ -68,7 +74,7 @@
                 $scope.message.rawCommandBefore = messageService.renderCommand($scope.commands);
             } else {
                 if ($scope.message.rawCommand !== $scope.message.rawCommandBefore) {
-                    $scope.commands = messageService.parseCommandLine($scope.newMsg.rawCommand);
+                    $scope.commands = messageService.parseCommandLine($scope.message.rawCommand);
                 }
 
             }
@@ -88,11 +94,11 @@
 
         $scope.hide = function () {
             $mdDialog.hide();
-            //$scope.$destroy();
+            $scope.$destroy();
         };
         $scope.cancel = function () {
             $mdDialog.cancel();
-            //$scope.$destroy();
+            $scope.$destroy();
         };
         $scope.confirm = function (answer) {
             if (New === true) {
@@ -101,7 +107,7 @@
                 messageService.saveEdit($scope.message, message, $scope.commands, list);
             }
             $mdDialog.hide(answer);
-            //$scope.$destroy();
+            $scope.$destroy();
         };
     }];
 

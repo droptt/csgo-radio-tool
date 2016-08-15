@@ -39,7 +39,7 @@
         <div class="sidebar-header" style="padding-left: 0;">
           <span class="sidebar-header" translate="sidebar.menu.title"></span>
         </div>
-        <li><a ng-click="generate()" analytics-on analytics-event="success" analytics-category="submit"><span class="g-stack pull-left"><md-icon>save</md-icon></span> <div translate="sidebar.menu.submit"></div></a></li>
+        <li><a ng-click="generate($event)" analytics-on analytics-event="success" analytics-category="submit"><span class="g-stack pull-left"><md-icon>save</md-icon></span> <div translate="sidebar.menu.submit"></div></a></li>
         <li><a ng-click="importFile($event)"><span class="g-stack pull-left"><md-icon>unarchive</md-icon></span> <div translate="sidebar.menu.import"></div></a></li>
         <li><a ng-click="defaults($event)"><span class="g-stack pull-left"><md-icon>assignment</md-icon></span> <div translate="sidebar.menu.defaults"></div></a></li>
         <li><a ng-click="resetMessages($event)"><span class="g-stack pull-left"><md-icon>delete_forever</md-icon></span> <div translate="sidebar.menu.reset"></div></a></li>
@@ -78,7 +78,7 @@
           <div class="pull-right">
             <md-button class="md-icon-button" aria-label="Edit" ng-click="editMessage($event, 'custom', custom, $index)">
               <md-tooltip md-direction="top">
-                {{::tooltip.edit}}
+                <div translate="boxes.tooltip_edit"></div>
               </md-tooltip>
               <md-icon class="material-icons edit">mode_edit</md-icon>
             </md-button>
@@ -123,7 +123,7 @@
                 <div class="pull-right">
                   <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'standard', message, $index)">
                     <md-tooltip md-direction="top">
-                      {{::tooltip.edit}}
+                      <div translate="boxes.tooltip_edit"></div>
                     </md-tooltip>
                     <md-icon class="material-icons edit">mode_edit</md-icon>
                   </md-button>
@@ -146,7 +146,7 @@
                 <div class="pull-right">
                   <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'group', message, $index)">
                     <md-tooltip md-direction="top">
-                      {{::tooltip.edit}}
+                      <div translate="boxes.tooltip_edit"></div>
                     </md-tooltip>
                     <md-icon class="material-icons edit">mode_edit</md-icon>
                   </md-button>
@@ -169,7 +169,7 @@
                 <div class="pull-right">
                   <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'report', message, $index)">
                     <md-tooltip md-direction="top">
-                      {{::tooltip.edit}}
+                      <div translate="boxes.tooltip_edit"></div>
                     </md-tooltip>
                     <md-icon class="material-icons edit">mode_edit</md-icon>
                   </md-button>
@@ -215,33 +215,58 @@
       </div>
       <md-button class="md-icon-button" style="display:inline-block;" ng-if="mdColorClearButton && value" ng-click="clearValue();" aria-label="Clear Color">
         <md-tooltip md-direction="top">
-          {{::modal.form.remove_color |translate}}
+          <div translate="modal.form.clear_color"></div>
         </md-tooltip>
         <md-icon>clear</md-icon>
       </md-button>
   </script>
+  <script type="text/ng-template" id="output-dialog.html">
+    <md-dialog aria-label="Result dialog" flex="40">
+      <md-dialog-content class="md-dialog-content">
+        <h2 class="md-title" translate="modal.success.title"></h2>
+        <div class="md-dialog-content-body">
+          <p translate="modal.import.desc"></p>
+        </div>
+        <md-input-container md-no-float class="md-prompt-input-container" style="display: block;">
+          <textarea rows="5" md-autofocus readonly placeholder="RadioPanel.txt" md-no-autogrow ng-model="extra.output"></textarea>
+        </md-input-container>
+      </md-dialog-content>
+      <md-dialog-actions layout="row">
+        <md-button ng-click="extra.helpD($event, 1)" class="md-primary" aria-label="Help">
+          <div translate="modal.success.help"></div>
+        </md-button>
+        <span flex></span>
+        <md-button ng-click="cancel()" class="md-primary" aria-label="Close">
+          <div translate="modal.close"></div>
+        </md-button>
+      </md-dialog-actions>
+    </md-dialog>
+  </script>
+
   <script type="text/ng-template" id="import-dialog.html">
     <md-dialog aria-label="List dialog" flex="40">
       <md-dialog-content class="md-dialog-content">
         <h2 class="md-title" translate="modal.import.title"></h2>
         <div class="md-dialog-content-body">
-          <p>something</p>
+          <p translate="modal.import.desc"></p>
         </div>
         <md-input-container md-no-float class="md-prompt-input-container" style="display: block;">
           <textarea rows="5" md-autofocus ng-model="import.file" placeholder="RadioPanel.txt" md-no-autogrow></textarea>
         </md-input-container>
-        <md-switch ng-model="import.copy" aria-label="Copy" class="md-primary"> <div translate="modal.import.copy"></div>
+        <md-switch ng-model="import.copy" aria-label="Copy" class="md-primary">
+          <div translate="modal.import.copy"></div>
         </md-switch>
       </md-dialog-content>
       <md-dialog-actions>
-        <md-button ng-click="cancel()" class="md-primary"><div translate=""></div>
+        <md-button ng-click="cancel()" class="md-primary" aria-label="Cancel">
+          <div translate="modal.form.cancel"></div>
         </md-button>
-        <md-button ng-click="ok()" class="md-primary">
+        <md-button ng-click="ok()" class="md-primary" aria-label="Import">
           <div translate="modal.import.submit"></div>
         </md-button>
       </md-dialog-actions>
     </md-dialog>
-    </script>
+  </script>
 
   <script type="text/ng-template" id="new-message-dialog.html">
     <md-dialog aria-label="New Message" flex="45">
@@ -269,8 +294,12 @@
                     </div>
                   </md-input-container>
                   <md-button-group class="md-raised" flex="15">
-                    <md-button ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}"><md-icon>format_italic</md-icon></md-button>
-                    <md-button ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}"><md-icon>format_bold</md-icon></md-button>
+                    <md-button ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}">
+                      <md-icon>format_italic</md-icon>
+                    </md-button>
+                    <md-button ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}">
+                      <md-icon>format_bold</md-icon>
+                    </md-button>
                     <div md-color-picker="dialog.colorpickeroptions" ng-model="message.color"></div>
                   </md-button-group>
                 </div>
@@ -307,19 +336,26 @@
                   <md-input-container class="md-block" flex-gt-sm>
                     <label translate="modal.form.arguments"></label>
                     <input ng-model="command.args">
-                    <div class="hint" ng-if="command.cmd.Value"><div translate="modal.form.default"></div>: {{command.cmd.Value}}</div>
+                    <div class="hint" ng-if="command.cmd.Value">
+                      <div translate="modal.form.default" translate-values="{'default_value': command.cmd.Value}"></div>
+                      </div>
                   </md-input-container>
                 </div>
                 <div ng-if="dialog.advanced === true">
                   <form name="cmdForm">
                     <md-input-container class="md-block" flex-gt-sm>
                       <label translate="modal.form.rawcmd"></label>
-                      <input name="raw" ng-model="newMsg.rawCommand">
+                      <input name="raw" ng-model="message.rawCommand">
                     </md-input-container>
                   </form>
                 </div>
+                <md-button class="md-raised " ng-click="debug()" aria-label="Add">
+                debug
+              </md-button>
+                <md-button class="md-raised pull-right" ng-click="addField()" ng-if="dialog.advanced === false" aria-label="Add">
+                <div translate="modal.form.add"></div>
+              </md-button>
               </md-content>
-              <md-button class="md-raised pull-right" ng-click="addField()" ng-if="dialog.advanced === false"><div translate="modal.form.add"></div></md-button>
             </md-tab>
           </md-tabs>
         </md-dialog-content>
@@ -337,7 +373,7 @@
         </md-dialog-actions>
       </form>
     </md-dialog>
-    </script>
+  </script>
 
 
   <script type="text/ng-template" id="help-dialog.html">
@@ -403,8 +439,9 @@
                 </p>
                 </br>
                 <p>
-                  Please <a href="http://steamcommunity.com/id/dropt/" target="_blank">drop</a>                  me an <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email</a>                  or
-                  <a href="https://twitter.com/rafacavalm" target="_blank">tweet</a>                  if the OS X Methods are wrong.
+                  Please <a href="http://steamcommunity.com/id/dropt/" target="_blank">drop</a> me an <a href="mailto:rafael@dropt.top"
+                    onclick="javascript:misc.tracking.notifyclick('email');">Email</a> or
+                  <a href="https://twitter.com/rafacavalm" target="_blank">tweet</a> if the OS X Methods are wrong.
                 </p>
               </md-content>
             </md-tab>
@@ -421,16 +458,16 @@
         </md-dialog-content>
         <md-dialog-actions layout="row">
           <span flex></span>
-          <md-button ng-click="answer('not useful')">
+          <md-button ng-click="answer('not useful')" aria-label="Not Useful">
             <div translate="modal.help.notuseful"></div>
           </md-button>
-          <md-button ng-click="answer('useful')" style="margin-right:20px;">
+          <md-button ng-click="answer('useful')" style="margin-right:20px;" aria-label="Useful">
             <div translate="modal.help.useful"></div>
           </md-button>
         </md-dialog-actions>
       </form>
     </md-dialog>
-    </script>
+  </script>
 
   <!-- build:js scripts/vendor.js -->
   <!-- bower:js -->

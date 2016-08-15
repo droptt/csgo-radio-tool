@@ -25,7 +25,6 @@
 
         var saveChanges = function (message, origMessage, commandArray, list) {
             if (origMessage.type === 'custom') {
-                console.log(this.renderCommand(commandArray))
                 $rootScope.model.custom[origMessage.UID].cmd = this.renderCommand(commandArray);
                 $rootScope.model.custom[origMessage.UID].text = message.label;
                 $rootScope.model.custom[origMessage.UID].italic = message.italic;
@@ -52,7 +51,7 @@
                 } else if ($rootScope.model.custom[origMessage.UID].disabled === true) {
                     var lists = ['standard', 'group', 'report'];
                     for (var msgGroup in lists) {
-                        var messageCopy = $rootScope.model[msgGroup].filter(function (messageCopy) {
+                        var messageCopy = $rootScope.model[list[msGroup]].filter(function (messageCopy) {
                             return messageCopy.UID === origMessage.UID;
                         })[0];
                         if (typeof messageCopy == 'undefined') { //That's not supposed to happen.
@@ -97,6 +96,7 @@
                 var args = (commandArray[command].args.length > 0) ? ' ' + commandArray[command].args : '';
                 output = output + commandArray[command].searchText + args + '; ';
             }
+            console.log(output)
             return output;
         };
 
@@ -118,8 +118,8 @@
                 if (commands[cmd].length > 0) {//TODO: REDO
                     var split = commands[cmd].split(' ');
                     if (split.length === 1 && split[0].length > 0) {//single command
-                        var cmdInfo = this.findCommand(((skipfirst === true) ? split[1] : split[0]));
-                        cmdArray.push({ 'cmd': cmdInfo, 'args': (cmdInfo.Value.length > 0) ? cmdInfo.Value : '', 'searchText': split[0] })
+                        var cmdInfo = this.findCommand(((skipfirst === true) ? split[1] : split[0])), args = (typeof cmdInfo === 'undefined') ? '' : (typeof cmdInfo.Value === 'undefined') ? '' : cmdInfo.Value;
+                        cmdArray.push({ 'cmd': cmdInfo, 'args': args, 'searchText': split[0] })
                     } else {
                         var skipfirst = (split[0] === ' ' || split[0] === '  ' || split[0] === '') ? true : false;
                         var args = (skipfirst === true) ? commands[cmd].replace(split[0] + split[1], '') : commands[cmd].replace(split[0], '');
@@ -136,16 +136,18 @@
         };
 
         var create = function (message, commandArray) {
-            $rootScope.model.custom[msg.UID] = {
-                'UID': $scope.message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1),
+            console.log(message.color)
+            message.UID = message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)
+            $rootScope.model.custom[message.UID] = {
+                'UID': message.UID,
                 'type': 'custom',
                 'disabled': false,
                 'cmd': this.renderCommand(commandArray),
-                'label': $scope.message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''),
-                'text': $scope.message.label,
-                'italic': $scope.message.bold,
-                'bold': $scope.message.bold,
-                'color': $scope.message.color,
+                'label': message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''),
+                'text': message.label,
+                'italic': message.bold,
+                'bold': message.bold,
+                'color': message.color,
             };
         };
         return {
