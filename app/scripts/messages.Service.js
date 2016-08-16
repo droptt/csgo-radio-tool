@@ -7,25 +7,25 @@
     angular.module('csgo-radio').factory('messagesService', ['$http', '$rootScope', 'localStorageService', '$filter', '$location', 'VDFService', '$mdToast', function ($http, $rootScope, localStorageService, $filter, $location, VDFService, $mdToast) {
 
         var getMessages = function () {
-            return $http.get('radio.json')
+            return $http.get('data/radio.json')
                 .then(function (response) {
                     return response.data;
                 });
         };
         var getChangelog = function () {
-            return $http.get('changelog.json')
+            return $http.get('data/changelog.json')
                 .then(function (response) {
                     return response.data;
                 });
         };
         var getCustom = function () {
-            return $http.get('custom.json')
+            return $http.get('data/custom.json')
                 .then(function (response) {
                     return response.data;
                 });
         };
         var getCommand = function () {
-            return $http.get('command.json')
+            return $http.get('data/command.json')
                 .then(function (response) {
                     return response.data;
                 });

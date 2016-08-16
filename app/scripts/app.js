@@ -18,7 +18,7 @@ var app = angular.module('csgo-radio', ['pascalprecht.translate',
 
 app.config(['$translateProvider', function ($translateProvider) {
   $translateProvider.useStaticFilesLoader({
-    prefix: '',
+    prefix: 'I18N/',
     suffix: '.json'
   })
     .uniformLanguageTag('bcp47')
