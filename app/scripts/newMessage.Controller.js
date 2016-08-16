@@ -8,7 +8,7 @@
     var newMessageController = ['$scope', '$rootScope', '$mdDialog', 'list', 'message', 'index', 'messageService', function ($scope, $rootScope, $mdDialog, list, message, index, messageService) { //This is for creation and editing.
         $scope.dialog = { 'advanced': false };
         if (typeof list == 'undefined' && typeof message == 'undefined' && typeof list == 'undefined') { //Creation Mode
-            $scope.message = { 'italic': false, 'bold': false, 'color': '' };
+            $scope.message = { 'label': '', 'italic': false, 'bold': false, 'color': '' };
 
             $scope.commands = [{ 'cmd': { 'Name': 'noclip' }, 'args': '', 'searchText': 'noclip' }];
             var New = true;
