@@ -57,7 +57,7 @@
                 } else if ($rootScope.model.custom[origMessage.UID].disabled === true) {
                     var lists = ['standard', 'group', 'report'];
                     for (var msgGroup in lists) {
-                        var messageCopy = $rootScope.model[list[msGroup]].filter(function (messageCopy) {
+                        var messageCopy = $rootScope.model[list[msgGroup]].filter(function (messageCopy) {
                             return messageCopy.UID === origMessage.UID;
                         })[0];
                         if (typeof messageCopy == 'undefined') { //That's not supposed to happen.

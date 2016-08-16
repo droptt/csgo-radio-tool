@@ -101,7 +101,6 @@
             $scope.$destroy();
         };
         $scope.confirm = function () {
-            console.log(myForm.myName.$error)
             if (New === true) {
                 messageService.newMessage($scope.message, $scope.commands);
             } else {

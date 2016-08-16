@@ -10,7 +10,7 @@
             $mdToast.show(
                 $mdToast.simple()
                     .textContent(text)
-                    .position("top right")
+                    .position('top right')
                     .hideDelay(5000)
             );
         };

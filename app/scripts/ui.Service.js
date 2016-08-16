@@ -67,7 +67,7 @@
                 });
             },
             deleteImportedCommand: function ($event, list, message, index) {
-                InvokeConfirm($event, $filter('translate')('modal.prompt.delcmd'), $filter('translate')('modal.prompt.delete') + " " + message.text, function () {
+                InvokeConfirm($event, $filter('translate')('modal.prompt.delcmd'), $filter('translate')('modal.prompt.delete') + ' ' + message.text, function () {
                     $rootScope.model[list].splice(index, 1);
                 });
             }

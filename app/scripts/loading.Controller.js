@@ -6,7 +6,7 @@
   var app = angular.module('csgo-radio');
 
   var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', '$filter', '$location', '$analytics', '$mdToast', function ($scope, $rootScope, messagesService, localStorageService, $filter, $location, $analytics, $mdToast) {
-    $scope.loading_state = "Loading Assets";
+    $scope.loading_state = 'Loading Assets';
     var isJson = function (str) {
       try {
         JSON.parse(str);
@@ -35,6 +35,20 @@
           localStorageService.set('version', $rootScope.settings.version);
           localStorageService.set('customVersion', 2); //TODO: customVersion is not supposed to be hardcoded.
         }
+        if (localStorageService.get('custom') !== null) {
+          var custom = angular.fromJson(localStorageService.get('custom'));
+          if (custom.constructor === Array) {
+            $analytics.eventTrack('Legacy Custom List', {
+              category: 'radio_tool',
+            });
+            messagesService.importOldCustom(custom);
+          } else {
+            messagesService.importCustom(custom);
+          }
+        } else {
+          $rootScope.model.custom = $rootScope.init.custom;
+          $rootScope.$watch('model.custom', messagesService.customSave, true);
+        }
         var hashUrl = decodeURIComponent(window.location.hash.replace('##', ''));
         if (isJson(hashUrl) === true) {
           if (hashUrl !== JSON.stringify(localStorageService.get('saved'))) {
@@ -58,12 +72,6 @@
             loaded = true;
           }
         }
-        if (localStorageService.get('custom') !== null) {
-          var custom = angular.fromJson(localStorageService.get('custom'));
-          messagesService.importCustom(custom);
-        } else {
-          $rootScope.$watch('model.custom', messagesService.customSave, true);
-        }
       }
     };
     var messagesLoaded = false;
@@ -81,7 +89,6 @@
       isLoaded();
     };
     var onCustomLoad = function (data) {
-      $rootScope.model.custom = data;
       $rootScope.init.custom = data;
       customLoaded = true;
       isLoaded();
@@ -93,31 +100,31 @@
     var onFail = function (reason) {
       $mdToast.show(
         $mdToast.simple()
-          .textContent(reason.data + ": " + reason.statusText + ". Please Reload the page or contact me.")
-          .position("top right")
+          .textContent(reason.data + ': ' + reason.statusText + '. Please Reload the page or contact me.')
+          .position('top right')
           .hideDelay(10000)
       );
       $analytics.eventTrack('Error: ' + reason.data, {
         category: 'radio_tool',
-        label: reason.statusText + ": " + reason.stauts
+        label: reason.statusText + ': ' + reason.stauts
       });
-      $scope.loading_state = "Couldn't load Messages.";
+      $scope.loading_state = 'Couldn\'t load Messages.';
       $scope.error = true;
     };
     var onCmdFail = function (reason) {
       $mdToast.show(
         $mdToast.simple()
-          .textContent("Unable to fetch commands list. Autocomplete is disabled.")
-          .position("top right")
+          .textContent('Unable to fetch commands list. Autocomplete is disabled.')
+          .position('top right')
           .hideDelay(10000)
       );
       $analytics.eventTrack('Error: ' + reason.data, {
         category: 'radio_tool',
-        label: reason.statusText + ": " + reason.stauts
+        label: reason.statusText + ': ' + reason.stauts
       });
       $scope.error = true;
     }
-    $scope.loading_state = "Loading Data";
+    $scope.loading_state = 'Loading Data';
     messagesService.getMessages().then(onMessagesLoad, onFail);
     messagesService.getCustom().then(onCustomLoad, onFail);
     messagesService.getCommand().then(onCommandLoad, onCmdFail);

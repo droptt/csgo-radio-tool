@@ -27,9 +27,9 @@ app.config(['$translateProvider', function ($translateProvider) {
     .useLocalStorage();
 }]).config(['localStorageServiceProvider', function (localStorageServiceProvider) {
   localStorageServiceProvider.setPrefix('');
-}]).config(function ($analyticsProvider) {
+}]).config(['$analyticsProvider',function ($analyticsProvider) {
   $analyticsProvider.virtualPageviews(false);
-}).run(['$rootScope', function ($rootScope) {
+}]).run(['$rootScope', function ($rootScope) {
   $rootScope.init = {
     'loaded': false
   };

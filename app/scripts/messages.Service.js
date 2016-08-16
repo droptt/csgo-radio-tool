@@ -58,8 +58,8 @@
                             } else {
                                 var label = msg.label;
                             }
-                            if (msg.color !== false && msg.color !== "#000000" && typeof msg.color !== 'undefined') {
-                                label = "<font color=" + msg.color + ">" + label + "</font>";
+                            if (msg.color !== false && msg.color !== '#000000' && typeof msg.color !== 'undefined') {
+                                label = '<font color=' + msg.color + '>' + label + '</font>';
                             }
                             buildList['RadioPanel.txt'].Groups[E].Commands[msg.UID].hotkey = C_I;
                             buildList['RadioPanel.txt'].Groups[E].Commands[msg.UID].label = label;
@@ -76,16 +76,16 @@
         var convertList = function (list) {
             var filteredList = [];
             for (var message in list) {
-                if (list[message].type === "message") {
+                if (list[message].type === 'message') {
                     filteredList.push(list[message].cmd);
                 } else {
                     filteredList.push({
-                        "label": list[message].label,
-                        "text": list[message].text,
-                        "cmd": list[message].cmd,
-                        "italic": (typeof list[message].italic !== 'undefined') ? list[message].italic : false,
-                        "bold": (typeof list[message].bold !== 'undefined') ? list[message].bold : false,
-                        "color": (typeof list[message].color !== 'undefined') ? list[message].color : false,
+                        'label': list[message].label,
+                        'text': list[message].text,
+                        'cmd': list[message].cmd,
+                        'italic': (typeof list[message].italic !== 'undefined') ? list[message].italic : false,
+                        'bold': (typeof list[message].bold !== 'undefined') ? list[message].bold : false,
+                        'color': (typeof list[message].color !== 'undefined') ? list[message].color : false,
                     });
                 }
             }
@@ -156,14 +156,14 @@
             var filteredList = {};
             for (var message in list) {
                 filteredList[message] = {
-                    "UID": list[message].UID,
-                    "label": list[message].label,
-                    "text": list[message].text,
-                    "cmd": list[message].cmd,
-                    "italic": (typeof list[message].italic !== 'undefined') ? list[message].italic : false,
-                    "bold": (typeof list[message].bold !== 'undefined') ? list[message].bold : false,
-                    "color": (typeof list[message].color !== 'undefined') ? list[message].color : false,
-                    "type": list[message].type
+                    'UID': list[message].UID,
+                    'label': list[message].label,
+                    'text': list[message].text,
+                    'cmd': list[message].cmd,
+                    'italic': (typeof list[message].italic !== 'undefined') ? list[message].italic : false,
+                    'bold': (typeof list[message].bold !== 'undefined') ? list[message].bold : false,
+                    'color': (typeof list[message].color !== 'undefined') ? list[message].color : false,
+                    'type': list[message].type
                 };
             }
             return filteredList;
@@ -178,6 +178,24 @@
         var importCustom = function (custom) {
             $rootScope.model.custom = custom;
             $rootScope.$watch('model.custom', customSave, true);
+        };
+
+        var importOldCustom = function (custom) {
+            var newList = {};
+            for (var message in custom) {
+                var UID = custom[message].label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1);
+                newList[UID] = {
+                    'UID': UID,
+                    'text': custom[message].label,
+                    'label': custom[message].label.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''),
+                    'cmd': custom[message].cmd,
+                    'italic': (typeof custom[message].italic !== 'undefined') ? custom[message].italic : false,
+                    'bold': (typeof custom[message].bold !== 'undefined') ? custom[message].bold : false,
+                    'color': (typeof custom[message].color !== 'undefined') ? custom[message].color : false,
+                    'type': 'custom'
+                };
+            }
+            this.importCustom(newList);
         };
 
         var SaveMessages = save;
@@ -231,8 +249,14 @@
                             save[group][message] = { 'type': 'message', 'cmd': save[group][message] };
                         }
                         else {
+                            console.log(save[group][message])
+                            if (typeof save[group][message].text === 'undefined') { //We have a 1.x commandlist here
+                                console.log("hello");
+                                save[group][message].text = save[group][message].label;
+                            }
                             var check = customExists(save[group][message]);
                             if (typeof check === 'string') {
+                                console.log(check);
                                 $rootScope.model.custom[check].disabled = true;
                                 save[group][message].type = 'custom';
                                 save[group][message].UID = $rootScope.model.custom[check].UID;
@@ -261,8 +285,8 @@
             } else {
                 $mdToast.show(
                     $mdToast.simple()
-                        .textContent("This is not RadioPanel.txt")
-                        .position("top right")
+                        .textContent('This is not RadioPanel.txt')
+                        .position('top right')
                         .hideDelay(5000)
                 );
             }
@@ -299,7 +323,8 @@
             getCommand: getCommand,
             customSave: customSave,
             ImportRP: ImportRP,
-            GenerateRP: generateRP
+            GenerateRP: generateRP,
+            importOldCustom: importOldCustom
         };
 
     }]);
