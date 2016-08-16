@@ -15,7 +15,7 @@
                 .cancel($filter('translate')('modal.prompt.no'))).then(callback, function () { });
         };
 
-        var GenericDialogController = function ($scope, $mdDialog) {
+        var GenericDialogController = ['$scope', '$mdDialog', '$rootScope', function ($scope, $mdDialog, $rootScope) {
             $scope.hide = function () {
                 $mdDialog.hide();
             };
@@ -25,7 +25,7 @@
             $scope.answer = function (awnser) {
                 $mdDialog.cancel(awnser);
             }
-        };
+        }];
 
         var InvokeDialog = function (ev, options) {
             options.controller = (typeof options.controller === 'undefined') ? GenericDialogController : options.controller;
@@ -61,7 +61,6 @@
                 });
             },
             deleteImportedCommand: function ($event, list, message, index) {
-                console.log(message)
                 InvokeConfirm($event, $filter('translate')('modal.prompt.delcmd'), $filter('translate')('modal.prompt.delete') + " " + message.text, function () {
                     $rootScope.model[list].splice(index, 1);
                 });
@@ -79,6 +78,21 @@
             editMessage: function ($event, locals) {
                 InvokeDialog($event, { controller: 'newMessageController', template: 'new-message-dialog.html', locals: locals });
             },
+            changelog: function ($event, locals) {
+                var onChangelog = function (data) {
+                    $rootScope.init.Changelog = true;
+                    $rootScope.init.changelog = data;
+                    InvokeDialog($event, { template: 'changelog-dialog.html' });
+                };
+                var onFail = function (reason, type) {
+                    //TODO: ERROR HANDLER
+                };
+                if ($rootScope.init.ChangeLog === true) {
+                    InvokeDialog($event, { template: 'changelog-dialog.html' });
+                } else {
+                    messagesService.getChangelog().then(onChangelog, onFail)
+                }
+            },
             import: function ($event) {
                 InvokeDialog($event, {
                     controller: ['$scope', '$mdDialog', 'messagesService', function ($scope, $mdDialog, messagesService) {
@@ -89,8 +103,11 @@
                         };
 
                         $scope.ok = function () {
-                            messagesService.ImportRP($scope.import);
-                            $mdDialog.hide();
+                            if (messagesService.ImportRP($scope.import) !== false) {
+                                $mdDialog.hide();
+                            } else {
+                                $scope.import.error = true;
+                            }
                         };
                     }], template: 'import-dialog.html'
                 });

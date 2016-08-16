@@ -9,6 +9,10 @@
            uiService.Dialog.output(ev, messagesService.GenerateRP(ev));
         };
 
+        $scope.openChangelog = function(ev) {
+            uiService.Dialog.changelog(ev);
+        }
+
         $scope.showHelp = function (ev, index) {
             uiService.Dialog.help(ev, index);
         };

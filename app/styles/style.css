@@ -122,6 +122,11 @@ li .pull-right .btn, .customSidebar .btn {
 	order: 1;
 }
 
+md-button-group .active {
+	background-color: rgba(0, 0, 0, 0.12);
+	color: rgba(0, 0, 0, 0.38);
+}
+
 md-button-group {
 	border-radius: 3px;
 	display: inline-block;

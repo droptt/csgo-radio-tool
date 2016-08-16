@@ -27,9 +27,9 @@
 <body>
   <div class="loading-wrapper" ng-controller="loadingController" ng-class="{hidden: init.loaded = true}">
     <div class="loading"><span>{{loading.state}}</span></div>
-    <div class="loading-footer text-inverse-light" style="display:block;"><a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:misc.tracking.notifyclick('steam');">Steam, </a>
-      <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email, </a><a href="https://twitter.com/rafacavalm"
-        target="_blank" onclick="javascript:notifyclick('twitter');"> Twitter</a></div>
+    <div class="loading-footer text-inverse-light" style="display:block;"><a href="http://steamcommunity.com/id/dropt/" target="_blank" analytics-on analytics-category="click" analytics-event="steam">Steam, </a>
+      <a href="mailto:rafael@dropt.top" analytics-on analytics-category="click" analytics-event="email">Email, </a><a href="https://twitter.com/rafacavalm"
+        target="_blank" analytics-on analytics-category="click" analytics-event="twitter"> Twitter</a></div>
   </div>
   <div class="wrapper" ng-controller="mainController" ng-show="init.loaded" layout="row">
     <!-- Sidebars-->
@@ -64,7 +64,7 @@
           <span class="sidebar-header" translate="sidebar.custom_title"></span>
           <div class="pull-right btn-group">
             <md-button class="md-fab md-mini md-primary" ng-click="newMessage($event)" aria-label="New Custom">
-              <md-icon>new</md-icon>
+              <md-icon>add</md-icon>
             </md-button>
           </div>
         </div>
@@ -189,13 +189,16 @@
         <!-- FOOTER -->
         <div class="footer">
           <div class="pull-right text-inverse-light">
-            <span translate="footer.by"></span> <a href="http://steamcommunity.com/id/dropt/" target="_blank" onclick="javascript:notifyclick('steam');">Drop</a></br>
-            <a id="changelog-btn" href="#" translate="footer.changelog"></a>
+            <span translate="footer.by"></span> <a href="http://steamcommunity.com/id/dropt/" target="_blank" analytics-on
+              analytics-category="click" analytics-event="steam">Drop</a></br>
+            <md-button translate="footer.changelog" analytics-on analytics-category="click" analytics-event="changelog" ng-click="openChangelog($event)"></md-button>
             <br><span id="translation" translate="footer.Tby" class="hidden"></span>
           </div>
           <div class="pull-left text-inverse-light">
-            <a href="mailto:rafael@dropt.top" onclick="javascript:notifyclick('email');">Email</a> <span translate="footer.or"></span>
-            <a href="https://twitter.com/rafacavalm" target="_blank" onclick="javascript:misc.tracking.notifyclick('twitter');" translate="footer.tweet"></a> <span translate="footer.text"></span>
+            <a href="mailto:rafael@dropt.top" analytics-on analytics-category="click" analytics-event="email">Email</a>
+            <span translate="footer.or"></span>
+            <a href="https://twitter.com/rafacavalm" target="_blank" analytics-on analytics-category="click" analytics-event="twitter"
+              translate="footer.tweet"></a> <span translate="footer.text"></span>
           </div>
         </div>
       </div>
@@ -220,6 +223,41 @@
         <md-icon>clear</md-icon>
       </md-button>
   </script>
+
+
+  <script type="text/ng-template" id="changelog-dialog.html">
+    <md-dialog aria-label="Changelog">
+      <form>
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>Changelog</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon aria-label="Close dialog">close</md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div class="md-dialog-content">
+            <div ng-repeat="version in $root.init.changelog">
+              <h2 ng-if="version.type === 'version'">Version {{::version.name}}: {{::version.date}}</h2>
+              <h2 ng-if="version.type === 'patch'">Patch to {{::version.to}} ({{::version.name}}): {{::version.date}}</h2>
+              <ul>
+                <li ng-repeat="change in version.changes"><ng-bind-html ng-bind-html="change"></ng-bind-html></li>
+              </ul>
+            </div>
+          </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+          <md-button ng-click="cancel()">
+            Useful
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
+  </script>
+
+
   <script type="text/ng-template" id="output-dialog.html">
     <md-dialog aria-label="Result dialog" flex="40">
       <md-dialog-content class="md-dialog-content">
@@ -250,15 +288,21 @@
         <div class="md-dialog-content-body">
           <p translate="modal.import.desc"></p>
         </div>
-        <md-input-container md-no-float class="md-prompt-input-container" style="display: block;">
-          <textarea rows="5" md-autofocus ng-model="import.file" placeholder="RadioPanel.txt" md-no-autogrow></textarea>
-        </md-input-container>
-        <md-switch ng-model="import.copy" aria-label="Copy" class="md-primary">
-          <div translate="modal.import.copy"></div>
-        </md-switch>
+        <form>
+          <md-input-container md-no-float class="md-prompt-input-container" style="display: block;">
+            <textarea rows="5" md-autofocus ng-model="import.file" placeholder="RadioPanel.txt" md-no-autogrow></textarea>
+            <div ng-messages="{'required': !import.file, 'parse_error': import.error === true}">
+              <div ng-message="required" translate="modal.import.required"></div>
+              <div ng-message="parse_error" translate="modal.import.parse_error"></div>
+            </div>
+          </md-input-container>
+          <md-switch ng-model="import.copy" aria-label="Copy" class="md-primary">
+            <div translate="modal.import.copy"></div>
+          </md-switch>
+        </form>
       </md-dialog-content>
       <md-dialog-actions>
-        <md-button ng-click="cancel()" class="md-primary" aria-label="Cancel">
+        <md-button ng-click="cancel()" aria-label="Cancel">
           <div translate="modal.form.cancel"></div>
         </md-button>
         <md-button ng-click="ok()" class="md-primary" aria-label="Import">
@@ -349,9 +393,6 @@
                     </md-input-container>
                   </form>
                 </div>
-                <md-button class="md-raised " ng-click="debug()" aria-label="Add">
-                debug
-              </md-button>
                 <md-button class="md-raised pull-right" ng-click="addField()" ng-if="dialog.advanced === false" aria-label="Add">
                 <div translate="modal.form.add"></div>
               </md-button>
@@ -458,10 +499,10 @@
         </md-dialog-content>
         <md-dialog-actions layout="row">
           <span flex></span>
-          <md-button ng-click="answer('not useful')" aria-label="Not Useful">
+          <md-button analytics-on analytics-category="help" analytics-event="not_useful" aria-label="Not Useful">
             <div translate="modal.help.notuseful"></div>
           </md-button>
-          <md-button ng-click="answer('useful')" style="margin-right:20px;" aria-label="Useful">
+          <md-button analytics-on analytics-category="help" analytics-event="useful" style="margin-right:20px;" aria-label="Useful">
             <div translate="modal.help.useful"></div>
           </md-button>
         </md-dialog-actions>
@@ -489,6 +530,7 @@
   <script src="/bower_components/angular-material/angular-material.js"></script>
   <script src="/bower_components/tinycolor/tinycolor.js"></script>
   <script src="/bower_components/md-color-picker/dist/mdColorPicker.min.js"></script>
+  <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 

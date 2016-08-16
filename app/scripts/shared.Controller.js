@@ -18,7 +18,6 @@
             for (var group in groups) {
                 var group = groups[group];
                 for (var custom in $rootScope.model[group]) {
-                    console.log($rootScope.model[group])
                     if (typeof $rootScope.model[group][custom] !== 'string') {
                         if ($rootScope.model[group][custom].type === 'imported') {
                             $rootScope.model[group][custom].UID = $rootScope.model[group][custom].text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1);

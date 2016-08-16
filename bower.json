@@ -12,7 +12,8 @@
     "angulartics-google-analytics": "^0.2.1",
     "angular-material": "^1.0.9",
     "angular-messages": "^1.5.8",
-    "md-color-picker": "^0.2.6"
+    "md-color-picker": "^0.2.6",
+    "angular-sanitize": "^1.5.8"
   },
   "overrides": {
     "bootstrap": {

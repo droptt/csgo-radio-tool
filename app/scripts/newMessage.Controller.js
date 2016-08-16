@@ -68,8 +68,7 @@
         };
 
         $scope.togAdv = function () {
-            console.log('togAdv, ' + $scope.dialog.advanced)
-            if ($scope.dialog.advanced === true) {
+                if ($scope.dialog.advanced === true) {
                 $scope.message.rawCommand = messageService.renderCommand($scope.commands);
                 $scope.message.rawCommandBefore = messageService.renderCommand($scope.commands);
             } else {

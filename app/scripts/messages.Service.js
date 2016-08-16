@@ -12,6 +12,12 @@
                     return response.data;
                 });
         };
+        var getChangelog = function () {
+            return $http.get('changelog.json')
+                .then(function (response) {
+                    return response.data;
+                });
+        };
         var getCustom = function () {
             return $http.get('custom.json')
                 .then(function (response) {
@@ -42,7 +48,6 @@
                             buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd].label = $rootScope.model.messages[msg.cmd].label;
                             buildList['RadioPanel.txt'].Groups[E].Commands[msg.cmd].cmd = $rootScope.model.messages[msg.cmd].cmd;
                         } else {
-                            console.log($rootScope.model.custom);
                             buildList['RadioPanel.txt'].Groups[E].Commands[msg.UID] = {};
                             if (msg.italic === true && msg.bold === false) {
                                 var label = '<i>' + msg.label + '</i>';
@@ -88,7 +93,6 @@
         };
 
         var save = function () {
-            console.log("Saving")
             var save = {
                 'StandardRadio': convertList($rootScope.model.standard), 'GroupRadio': convertList($rootScope.model.group), 'ReportRadio': convertList($rootScope.model.report), 'Titles': [
                     ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
@@ -199,6 +203,8 @@
                     (parse['RadioPanel.txt'].Groups.group.title === '#SFUI_StandardRadio') ? null : parse['RadioPanel.txt'].Groups.group.title,
                     (parse['RadioPanel.txt'].Groups.report.title === '#SFUI_ReportRadio') ? null : parse['RadioPanel.txt'].Groups.report.title);
                 this.importMessages({ 'StandardRadio': obj.standard, 'GroupRadio': obj.group, 'ReportRadio': obj.report, 'Titles': obj.titles }, true, false, model.copy);
+            } else {
+                return false;
             }
         };
 
@@ -225,7 +231,6 @@
                     }
                     else {
                         var check = customExists(save[group][message]);
-                        console.log(check);
                         if (typeof check === 'string') {
                             $rootScope.model.custom[check].disabled = true;
                             save[group][message].type = 'custom';
@@ -274,6 +279,7 @@
         return {
             getMessages: getMessages,
             getCustom: getCustom,
+            getChangelog: getChangelog,
             save: save,
             importMessages: importMessages,
             resetMessages: resetMessages,

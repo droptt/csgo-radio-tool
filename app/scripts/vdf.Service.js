@@ -5,7 +5,15 @@
 //Adapted as an angular service by Drop
 (function () {
 
-    var VDFService = function () {
+    var VDFService = ['$mdToast', function ($mdToast) {
+        var error = function (text) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(text)
+                    .position("top right")
+                    .hideDelay(5000)
+            );
+        };
         var _dump = function (obj, pretty, level) {
             if (typeof obj != 'object') {
                 ui.notification('vdf', 'VDF.stringify: a key has value of type other than string or object');
@@ -35,7 +43,7 @@
         },
             parse = function (text) {
                 if (typeof text != 'string') {
-                    ui.notification('vdf', 'VDF.parse: Expecting parameter to be a string');
+                    error('VDF.parse: Expecting parameter to be a string');
                     return false;
                 }
 
@@ -71,7 +79,7 @@
                     }
 
                     if (expect_bracket) {
-                        ui.notification('vdf', 'VDF.parse: invalid syntax on line ' + (i + 1));
+                        error('VDF.parse: invalid syntax on line ' + (i + 1));
                         return false;
                     }
 
@@ -86,7 +94,7 @@
                         m = re_kv.exec(line);
 
                         if (m === null) {
-                            ui.notification('vdf', 'VDF.parse: invalid syntax on line ' + (i + 1));
+                            error('VDF.parse: invalid syntax on line ' + (i + 1));
                             return false;
                         }
 
@@ -116,7 +124,7 @@
                 }
 
                 if (stack.length != 1) {
-                    ui.notification('vdf', 'VDF.parse: open parentheses somewhere');
+                    error('VDF.parse: open parentheses somewhere');
                     return false;
                 }
 
@@ -125,7 +133,7 @@
 
             stringify = function (obj, pretty) {
                 if (typeof obj != 'object') {
-                    ui.notification('vdf', 'VDF.stringify: First input parameter is not an object');
+                    error('VDF.stringify: First input parameter is not an object');
                 }
 
                 pretty = (typeof pretty == 'boolean' && pretty) ? true : false;
@@ -133,7 +141,7 @@
                 return _dump(obj, pretty, 0);
             };
         return { parse: parse, stringify: stringify };
-    },
+    }],
         module = angular.module('csgo-radio');
     module.factory('VDFService', VDFService);
 } ());

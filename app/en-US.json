@@ -63,6 +63,8 @@
       "title": "Import Radiopanel.txt",
       "desc": "Import existing configuration",
       "copy": "Place imported customs into the Custom List",
+      "required": "You need to input the file!",
+      "parse_error": "Something went wrong with parsing. Are you sure this is a valid VDF File?",
       "help": "Help?",
       "submit": "Import"
     },

@@ -96,7 +96,6 @@
                 var args = (commandArray[command].args.length > 0) ? ' ' + commandArray[command].args : '';
                 output = output + commandArray[command].searchText + args + '; ';
             }
-            console.log(output)
             return output;
         };
 
@@ -136,7 +135,6 @@
         };
 
         var create = function (message, commandArray) {
-            console.log(message.color)
             message.UID = message.label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)
             $rootScope.model.custom[message.UID] = {
                 'UID': message.UID,
