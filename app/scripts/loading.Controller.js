@@ -5,7 +5,7 @@
 (function () {
   var app = angular.module('csgo-radio');
 
-  var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', '$filter', '$location', '$analytics', '$mdToast', function ($scope, $rootScope, messagesService, localStorageService, $filter, $location, $analytics, $mdToast) {
+  var loadingController = ['$scope', '$rootScope', 'messagesService', 'localStorageService', '$filter', '$location', '$analytics', '$mdToast', '$mdDialog', function ($scope, $rootScope, messagesService, localStorageService, $filter, $location, $analytics, $mdToast, $mdDialog) {
     $scope.loading_state = 'Loading Assets';
     var isJson = function (str) {
       try {
@@ -27,6 +27,14 @@
             $rootScope.settings.versionNotification = false;
           } else {
             $rootScope.settings.versionNotification = true;
+            $mdDialog.show(
+              $mdDialog.alert()
+                .clickOutsideToClose(true)
+                .title('New on this version')
+                .textContent('Creating Custom messages is now way easier with Commands Autocomplete.')
+                .ariaLabel('New Version Dialog')
+                .ok('Got it!')
+            );
             localStorageService.set('version', $rootScope.settings.version);
           }
         } else {

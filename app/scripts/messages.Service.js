@@ -249,14 +249,11 @@
                             save[group][message] = { 'type': 'message', 'cmd': save[group][message] };
                         }
                         else {
-                            console.log(save[group][message])
                             if (typeof save[group][message].text === 'undefined') { //We have a 1.x commandlist here
-                                console.log("hello");
                                 save[group][message].text = save[group][message].label;
                             }
                             var check = customExists(save[group][message]);
                             if (typeof check === 'string') {
-                                console.log(check);
                                 $rootScope.model.custom[check].disabled = true;
                                 save[group][message].type = 'custom';
                                 save[group][message].UID = $rootScope.model.custom[check].UID;
