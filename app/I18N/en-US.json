@@ -22,9 +22,9 @@
     }
   },
   "boxes": {
-    "title_0": "Standard",
-    "title_1": "Group",
-    "title_2": "Report",
+    "title_0": "Standard (Z)",
+    "title_1": "Group (X)",
+    "title_2": "Report (C)",
     "desc": "Drop Here",
     "tooltip_edit": "Edit"
   },

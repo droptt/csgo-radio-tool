@@ -35,6 +35,9 @@
                 .ariaLabel('New Version Dialog')
                 .ok('Got it!')
             );
+            $analytics.eventTrack('New Version Dialog', {
+              category: 'radio_tool',
+            });
             localStorageService.set('version', $rootScope.settings.version);
           }
         } else {
