@@ -49,7 +49,7 @@
           $rootScope.model.custom = $rootScope.init.custom;
           $rootScope.$watch('model.custom', messagesService.customSave, true);
         }
-        var hashUrl = decodeURIComponent(window.location.hash.replace('##', ''));
+        var hashUrl = decodeURIComponent(window.location.hash.replace('#/', '').replace('##', ''));
         if (isJson(hashUrl) === true) {
           if (hashUrl !== JSON.stringify(localStorageService.get('saved'))) {
             $analytics.eventTrack('Shared Link loaded', {
