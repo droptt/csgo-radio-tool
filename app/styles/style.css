@@ -17,6 +17,11 @@ body nav.navbar {
 
 /* Preloader */
 
+.error span {
+	color: darkred!important;
+	font-weight: bold;
+}
+
 .loading-wrapper {
 	z-index: 1001;
 	background-color: #202020;

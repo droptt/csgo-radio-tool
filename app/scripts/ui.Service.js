@@ -4,7 +4,7 @@
  */
 (function () {
 
-    angular.module('csgo-radio').factory('uiService', ['$rootScope', '$filter', '$mdDialog', 'messagesService', 'VDFService', function ($rootScope, $filter, $mdDialog, messagesService, VDFService) {
+    angular.module('csgo-radio').factory('uiService', ['$rootScope', '$filter', '$mdDialog', 'messagesService', 'VDFService', '$analytics', function ($rootScope, $filter, $mdDialog, messagesService, VDFService, $analytics) {
 
         var InvokeConfirm = function (ev, yes, message, callback) {
             $mdDialog.show($mdDialog.confirm()
@@ -48,11 +48,17 @@
             reset: function ($event) {
                 InvokeConfirm($event, $filter('translate')('modal.prompt.Reset'), $filter('translate')('modal.prompt.reset'), function () {
                     messagesService.resetMessages();
+                    $analytics.eventTrack('Reset Messages', {
+                        category: 'radio_tool',
+                    });
                 });
             },
             default: function ($event) {
                 InvokeConfirm($event, $filter('translate')('modal.prompt.defaults'), $filter('translate')('modal.prompt.yes'), function () {
                     messagesService.default();
+                    $analytics.eventTrack('Reset to Game defaults', {
+                        category: 'radio_tool',
+                    });
                 });
             },
             deleteCustomCommand: function ($event, UID) {
@@ -71,6 +77,9 @@
             help: function ($event, index) {
                 index = (typeof index === 'undefined') ? 0 : index;
                 InvokeDialog($event, { template: 'help-dialog.html', skipHide: true, clickOutsideToClose: true, });
+                $analytics.eventTrack('Help Dialog', {
+                    category: 'radio_tool',
+                });
             },
             newMessage: function ($event) {
                 InvokeDialog($event, { controller: 'newMessageController', template: 'new-message-dialog.html', locals: { list: undefined, message: undefined, index: undefined } });
@@ -105,8 +114,10 @@
                         $scope.ok = function () {
                             if (messagesService.ImportRP($scope.import) !== false) {
                                 $mdDialog.hide();
+                                $analytics.eventTrack('Imported RadioPanel.txt', {
+                                    category: 'radio_tool',
+                                });
                             } else {
-                                $scope.import.error = true;
                             }
                         };
                     }], template: 'import-dialog.html'
@@ -124,6 +135,9 @@
                             $mdDialog.cancel();
                         };
                     }]
+                });
+                $analytics.eventTrack('Generated RadioPanel.txt', {
+                    category: 'radio_tool',
                 });
             }
         };

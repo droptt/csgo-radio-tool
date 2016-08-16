@@ -4,11 +4,14 @@
  */
 (function () {
 
-    angular.module('csgo-radio').factory('messageService', ['$rootScope', 'messagesService', function ($rootScope, messagesService) {
+    angular.module('csgo-radio').factory('messageService', ['$rootScope', 'messagesService', '$analytics', function ($rootScope, messagesService, $analytics) {
 
         var querySearch = function (query) {
-            var results = query ? $rootScope.init.commands.filter(this.newFilter(query)) : $rootScope.init.commands;
-            return results;
+            if ($rootScope.init.Commands === true) {
+                var results = query ? $rootScope.init.commands.filter(this.newFilter(query)) : $rootScope.init.commands;
+                return results;
+            }
+            return false;
         };
 
         var renderCommand = function (commandArray) {
@@ -41,7 +44,10 @@
                                 .position('top right')
                                 .hideDelay(7000)
                         );
-                        return false; //TODO: tell the user
+                        $analytics.eventTrack('Could not find Message clone', {
+                            category: 'radio_tool',
+                        });
+                        return false;
                     }
                     messageCopy.cmd = this.renderCommand(commandArray);
                     messageCopy.text = message.label;
@@ -147,6 +153,9 @@
                 'bold': message.bold,
                 'color': message.color,
             };
+            $analytics.eventTrack('New Custom Command', {
+                category: 'radio_tool',
+            });
         };
         return {
             saveEdit: saveChanges,

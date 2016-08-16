@@ -25,11 +25,13 @@
 </head>
 
 <body>
-  <div class="loading-wrapper" ng-controller="loadingController" ng-class="{hidden: init.loaded = true}">
-    <div class="loading"><span>{{loading.state}}</span></div>
-    <div class="loading-footer text-inverse-light" style="display:block;"><a href="http://steamcommunity.com/id/dropt/" target="_blank" analytics-on analytics-category="click" analytics-event="steam">Steam, </a>
-      <a href="mailto:rafael@dropt.top" analytics-on analytics-category="click" analytics-event="email">Email, </a><a href="https://twitter.com/rafacavalm"
-        target="_blank" analytics-on analytics-category="click" analytics-event="twitter"> Twitter</a></div>
+  <div class="loading-wrapper" ng-controller="loadingController" ng-class="{hidden: init.loaded === true}">
+    <div class="loading" ng-class="{error: error === true}"><span ng-bind="loading_state">Loading Assets</span></div>
+    <div class="loading-footer text-inverse-light" style="display:block;"><a href="http://steamcommunity.com/id/dropt/" target="_blank" analytics-on analytics-category="radio_tool" analytics-event="Clicked on Steam">Steam, </a>
+      <a href="mailto:rafael@dropt.top" analytics-on analytics-category="radio_tool" analytics-event="Clicked on Email">Email, </a>
+      <a href="https://twitter.com/rafacavalm" target="_blank" analytics-on analytics-category="radio_tool" analytics-event="Clicked on Twitter">
+      Twitter</a>
+    </div>
   </div>
   <div class="wrapper" ng-controller="mainController" ng-show="init.loaded" layout="row">
     <!-- Sidebars-->
@@ -39,7 +41,7 @@
         <div class="sidebar-header" style="padding-left: 0;">
           <span class="sidebar-header" translate="sidebar.menu.title"></span>
         </div>
-        <li><a ng-click="generate($event)" analytics-on analytics-event="success" analytics-category="submit"><span class="g-stack pull-left"><md-icon>save</md-icon></span> <div translate="sidebar.menu.submit"></div></a></li>
+        <li><a ng-click="generate($event)"><span class="g-stack pull-left"><md-icon>save</md-icon></span> <div translate="sidebar.menu.submit"></div></a></li>
         <li><a ng-click="importFile($event)"><span class="g-stack pull-left"><md-icon>unarchive</md-icon></span> <div translate="sidebar.menu.import"></div></a></li>
         <li><a ng-click="defaults($event)"><span class="g-stack pull-left"><md-icon>assignment</md-icon></span> <div translate="sidebar.menu.defaults"></div></a></li>
         <li><a ng-click="resetMessages($event)"><span class="g-stack pull-left"><md-icon>delete_forever</md-icon></span> <div translate="sidebar.menu.reset"></div></a></li>
@@ -63,7 +65,8 @@
         <div class="sidebar-brand">
           <span class="sidebar-header" translate="sidebar.custom_title"></span>
           <div class="pull-right btn-group">
-            <md-button class="md-fab md-mini md-primary" ng-click="newMessage($event)" aria-label="New Custom">
+            <md-button class="md-fab md-mini md-primary" ng-click="newMessage($event)" aria-label="New Custom" analytics-on analytics-category="radio_tool"
+              analytics-event="New Custom Button">
               <md-icon>add</md-icon>
             </md-button>
           </div>
@@ -112,7 +115,7 @@
         <!-- MENUS START -->
         <div class="menus" ng-controller="messageController">
           <div class="box">
-            <div class="title text-center" inline-edit="model.Titles[0]" inline-edit-btn-edit='<div class="pull-right"><md-icon class="inline-icon">mode edit</md-icon></div>'
+            <div class="title text-center" inline-edit="model.Titles[0]" inline-edit-btn-edit='<div class="pull-right"><md-icon class="inline-icon" analytics-on analytics-category="radio_tool" analytics-event="Edit Standard Title">mode edit</md-icon></div>'
               inline-edit-btn-save='<div class="pull-right"><md-icon class="inline-editing">done</md-icon></div>' inline-edit-on-blur="cancel">
             </div>
             <p class="text-center box-desc" translate="boxes.desc"></p>
@@ -135,7 +138,7 @@
             </ul>
           </div>
           <div class="box">
-            <div class="title text-center" inline-edit="model.Titles[1]" inline-edit-btn-edit='<div class="pull-right"><md-icon class="inline-icon">mode edit</md-icon></div>'
+            <div class="title text-center" inline-edit="model.Titles[1]" inline-edit-btn-edit='<div class="pull-right"><md-icon class="inline-icon" analytics-on analytics-category="radio_tool" analytics-event="Edit Group Title">mode edit</md-icon></div>'
               inline-edit-btn-save='<div class="pull-right"><md-icon class="inline-editing">done</md-icon></div>' inline-edit-on-blur="cancel">
             </div>
             <p class="text-center box-desc" translate="boxes.desc"></p>
@@ -158,7 +161,7 @@
             </ul>
           </div>
           <div class="box">
-            <div class="title text-center" inline-edit="model.Titles[2]" inline-edit-btn-edit='<div class="pull-right"><md-icon class="inline-icon">mode edit</md-icon></div>'
+            <div class="title text-center" inline-edit="model.Titles[2]" inline-edit-btn-edit='<div class="pull-right"><md-icon class="inline-icon" analytics-on analytics-category="radio_tool" analytics-event="Edit Report Title">mode edit</md-icon></div>'
               inline-edit-btn-save='<div class="pull-right"><md-icon class="inline-editing">done</md-icon></div>' inline-edit-on-blur="cancel">
             </div>
             <p class="text-center box-desc" translate="boxes.desc"></p>
@@ -190,14 +193,14 @@
         <div class="footer">
           <div class="pull-right text-inverse-light">
             <span translate="footer.by"></span> <a href="http://steamcommunity.com/id/dropt/" target="_blank" analytics-on
-              analytics-category="click" analytics-event="steam">Drop</a></br>
-            <md-button translate="footer.changelog" analytics-on analytics-category="click" analytics-event="changelog" ng-click="openChangelog($event)"></md-button>
+              analytics-category="radio_tool" analytics-event="Clicked on Steam">Drop</a></br>
+            <md-button translate="footer.changelog" analytics-on analytics-category="radio_tool" analytics-event="Changelog" ng-click="openChangelog($event)"></md-button>
             <br><span id="translation" translate="footer.Tby" class="hidden"></span>
           </div>
           <div class="pull-left text-inverse-light">
-            <a href="mailto:rafael@dropt.top" analytics-on analytics-category="click" analytics-event="email">Email</a>
+            <a href="mailto:rafael@dropt.top" analytics-on analytics-category="radio_tool" analytics-event="Clicked on Email">Email</a>
             <span translate="footer.or"></span>
-            <a href="https://twitter.com/rafacavalm" target="_blank" analytics-on analytics-category="click" analytics-event="twitter"
+            <a href="https://twitter.com/rafacavalm" target="_blank" analytics-on analytics-category="radio_tool" analytics-event="Clicked on Twitter"
               translate="footer.tweet"></a> <span translate="footer.text"></span>
           </div>
         </div>
@@ -206,22 +209,31 @@
     </div>
   </div>
   <script>
-	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  	ga('create', 'UA-43605131-6', { 'cookieDomain': 'none' });
-	</script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-82640124-1', {
+      'cookieDomain': 'none'
+    });
+  </script>
   <script type="text/ng-template" id="mdColorPicker.tpl.html">
-      <div class="md-color-picker-preview md-color-picker-checkered-bg" ng-click="showColorPicker($event)" ng-if="mdColorPreview">
-        <div class="md-color-picker-result" ng-style="{background: value}"></div>
-      </div>
-      <md-button class="md-icon-button" style="display:inline-block;" ng-if="mdColorClearButton && value" ng-click="clearValue();" aria-label="Clear Color">
-        <md-tooltip md-direction="top">
-          <div translate="modal.form.clear_color"></div>
-        </md-tooltip>
-        <md-icon>clear</md-icon>
-      </md-button>
+    <div class="md-color-picker-preview md-color-picker-checkered-bg" ng-click="showColorPicker($event)" ng-if="mdColorPreview">
+      <div class="md-color-picker-result" ng-style="{background: value}"></div>
+    </div>
+    <md-button class="md-icon-button" style="display:inline-block;" ng-if="mdColorClearButton && value" ng-click="clearValue();" aria-label="Clear Color">
+      <md-tooltip md-direction="top">
+        <div translate="modal.form.clear_color"></div>
+      </md-tooltip>
+      <md-icon>clear</md-icon>
+    </md-button>
   </script>
 
 
@@ -243,14 +255,16 @@
               <h2 ng-if="version.type === 'version'">Version {{::version.name}}: {{::version.date}}</h2>
               <h2 ng-if="version.type === 'patch'">Patch to {{::version.to}} ({{::version.name}}): {{::version.date}}</h2>
               <ul>
-                <li ng-repeat="change in version.changes"><ng-bind-html ng-bind-html="change"></ng-bind-html></li>
+                <li ng-repeat="change in version.changes">
+                  <ng-bind-html ng-bind-html="change"></ng-bind-html>
+                </li>
               </ul>
             </div>
           </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
           <md-button ng-click="cancel()">
-            Useful
+            <div translate="modal.close"></div>
           </md-button>
         </md-dialog-actions>
       </form>
@@ -288,12 +302,11 @@
         <div class="md-dialog-content-body">
           <p translate="modal.import.desc"></p>
         </div>
-        <form>
+        <form name="importForm">
           <md-input-container md-no-float class="md-prompt-input-container" style="display: block;">
-            <textarea rows="5" md-autofocus ng-model="import.file" placeholder="RadioPanel.txt" md-no-autogrow></textarea>
-            <div ng-messages="{'required': !import.file, 'parse_error': import.error === true}">
+            <textarea rows="5" md-autofocus ng-model="import.file" name="file" required placeholder="RadioPanel.txt" md-no-autogrow></textarea>
+            <div ng-messages="importForm.file.$error">
               <div ng-message="required" translate="modal.import.required"></div>
-              <div ng-message="parse_error" translate="modal.import.parse_error"></div>
             </div>
           </md-input-container>
           <md-switch ng-model="import.copy" aria-label="Copy" class="md-primary">
@@ -314,105 +327,107 @@
 
   <script type="text/ng-template" id="new-message-dialog.html">
     <md-dialog aria-label="New Message" flex="45">
-      <form>
-        <md-toolbar>
-          <div class="md-toolbar-tools">
-            <h2 translate="modal.{{::mode}}.title" translate-values="{name: message.label}"></h2>
-            <span flex></span>
-            <md-button class="md-icon-button" ng-click="cancel()">
-              <md-icon aria-label="Close dialog">close</md-icon>
-            </md-button>
-          </div>
-        </md-toolbar>
-        <md-dialog-content style="max-width:800px;max-height:810px;">
-          <md-tabs md-dynamic-height md-border-bottom md-selected="selected">
-            <md-tab label="Appearance">
-              <md-content class="md-padding">
-                <div layout="row">
-                  <md-input-container class="md-block" flex="70">
-                    <label translate="modal.form.label"></label>
-                    <input md-maxlength="30" name="label" required ng-model="message.label" />
-                    <div class="hint" translate="modal.form.label_hint"></div>
-                    <div ng-messages="{'required': !message.label}">
-                      <div ng-message="required" translate="modal.form.label_required"></div>
-                    </div>
-                  </md-input-container>
-                  <md-button-group class="md-raised" flex="15">
-                    <md-button ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}">
-                      <md-icon>format_italic</md-icon>
-                    </md-button>
-                    <md-button ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}">
-                      <md-icon>format_bold</md-icon>
-                    </md-button>
-                    <div md-color-picker="dialog.colorpickeroptions" ng-model="message.color"></div>
-                  </md-button-group>
-                </div>
-                <div flex="5" hide-xs hide-sm></div>
-              </md-content>
-            </md-tab>
-            <md-tab label="Commands">
-              <md-content class="md-padding">
-                <div layout-gt-sm="row" ng-repeat="command in commands" ng-if="dialog.advanced === false">
-                  <!--<md-input-container class="md-block" flex-gt-sm>
-                    <label>Command</label>
-                    <input ng-model="command.cmd">
-                  </md-input-container> -->
-                  <md-autocomplete md-selected-item="command.cmd" md-search-text="command.searchText" md-items="item in querySearch(command.searchText)"
-                    md-item-text="item.Name" md-min-length="2" md-floating-label="Command" md-menu-class="autocomplete-custom-template"
-                    md-no-cache="cacheResults" md-selected-item-change="checkArg($index)" flex-gt-sm>
-                    <div class="hint" ng-if="command.cmd.dcs">{{command.cmd.dcs}}</div>
-                    <md-item-template>
-                      <span class="item-title">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2 translate="modal.{{::mode}}.title" translate-values="{name: message.label}"></h2>
+          <span flex></span>
+          <md-button class="md-icon-button" ng-click="cancel()">
+            <md-icon aria-label="Close dialog">close</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-dialog-content style="max-width:800px;max-height:810px;">
+        <md-tabs md-dynamic-height md-border-bottom md-selected="selected">
+          <md-tab label="Appearance">
+            <md-content class="md-padding">
+              <form layout="row" name="cmdName">
+                <md-input-container class="md-block" flex="70">
+                  <label translate="modal.form.label"></label>
+                  <input md-maxlength="30" ng-maxlength="30" name="label" required ng-model="message.label" />
+                  <div class="hint" translate="modal.form.label_hint"></div>
+                  <div ng-messages="cmdName.label.$error">
+                    <div ng-message="required" translate="modal.form.label_required"></div>
+                    <div ng-message="maxlength" translate="modal.form.maxlength"></div>
+                  </div>
+                </md-input-container>
+                <md-button-group class="md-raised" flex="15">
+                  <md-button ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}">
+                    <md-icon>format_italic</md-icon>
+                  </md-button>
+                  <md-button ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}">
+                    <md-icon>format_bold</md-icon>
+                  </md-button>
+                  <div md-color-picker="dialog.colorpickeroptions" ng-model="message.color"></div>
+                </md-button-group>
+              </form>
+              <div flex="5" hide-xs hide-sm></div>
+            </md-content>
+          </md-tab>
+          <md-tab label="Commands">
+            <md-content class="md-padding">
+              <div layout-gt-sm="row" ng-repeat="command in commands" ng-if="dialog.advanced === false">
+                <md-input-container class="md-block" flex-gt-sm ng-if="autocomplete !== true">
+                  <label>Command</label>
+                  <input ng-model="command.searchText">
+                  <div class="hint">Autocomplete is disabled (load error)</div>
+                </md-input-container>
+                <md-autocomplete ng-if="autocomplete === true" md-selected-item="command.cmd" md-search-text="command.searchText" md-items="item in querySearch(command.searchText)"
+                  md-item-text="item.Name" md-min-length="2" md-floating-label="Command" md-menu-class="autocomplete-custom-template"
+                  md-no-cache="cacheResults" md-selected-item-change="checkArg($index)" flex-gt-sm>
+                  <div class="hint" ng-if="command.cmd.dcs">{{command.cmd.dcs}}</div>
+                  <md-item-template>
+                    <span class="item-title">
                         <span> {{item.Name}} </span>
-                      </span>
-                      <span class="item-metadata">
+                    </span>
+                    <span class="item-metadata">
                         <span class="item-metastat">
                           {{item.dcs}}
                         </span>
-                      <span class="item-metastat requirements" ng-show="item.ch">
+                    <span class="item-metastat requirements" ng-show="item.ch">
                           <strong style="color:red;" translate="modal.form.autocomplete.cheats"></strong>
                         </span>
-                      </span>
-                    </md-item-template>
-                    <md-not-found translate="modal.form.autocomplete.nomatches">
-                    </md-not-found>
-                  </md-autocomplete>
+                    </span>
+                  </md-item-template>
+                  <md-not-found translate="modal.form.autocomplete.nomatches">
+                  </md-not-found>
+                </md-autocomplete>
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label translate="modal.form.arguments"></label>
+                  <input ng-model="command.args">
+                  <div class="hint" ng-if="command.cmd.Value">
+                    <div translate="modal.form.default" translate-values="{'default_value': command.cmd.Value}"></div>
+                  </div>
+                </md-input-container>
+              </div>
+              <div ng-if="dialog.advanced === true">
+                <form name="cmdForm">
                   <md-input-container class="md-block" flex-gt-sm>
-                    <label translate="modal.form.arguments"></label>
-                    <input ng-model="command.args">
-                    <div class="hint" ng-if="command.cmd.Value">
-                      <div translate="modal.form.default" translate-values="{'default_value': command.cmd.Value}"></div>
-                      </div>
+                    <label translate="modal.form.rawcmd"></label>
+                    <input name="raw" ng-model="message.rawCommand">
                   </md-input-container>
-                </div>
-                <div ng-if="dialog.advanced === true">
-                  <form name="cmdForm">
-                    <md-input-container class="md-block" flex-gt-sm>
-                      <label translate="modal.form.rawcmd"></label>
-                      <input name="raw" ng-model="message.rawCommand">
-                    </md-input-container>
-                  </form>
-                </div>
-                <md-button class="md-raised pull-right" ng-click="addField()" ng-if="dialog.advanced === false" aria-label="Add">
+                </form>
+              </div>
+              <md-button class="md-raised pull-right" ng-click="addField()" ng-if="dialog.advanced === false" aria-label="Add" analytics-on
+                analytics-category="radio_tool" analytics-event="Add New Command Field">
                 <div translate="modal.form.add"></div>
               </md-button>
-              </md-content>
-            </md-tab>
-          </md-tabs>
-        </md-dialog-content>
-        <md-dialog-actions layout="row">
-          <md-switch ng-model="dialog.advanced" ng-change="togAdv()" aria-label="Advanced" ng-if="selected === 1">
-            <div translate="modal.form.advanced"></div>
-          </md-switch>
-          <span flex></span>
-          <md-button ng-click="cancel()" aria-label="Cancel">
-            <div translate="modal.form.cancel"></div>
-          </md-button>
-          <md-button ng-click="confirm()" class="md-primary" style="margin-right:20px;" aria-label="Submit">
-            <div translate="modal.{{::mode}}.submit"></div>
-          </md-button>
-        </md-dialog-actions>
-      </form>
+            </md-content>
+          </md-tab>
+        </md-tabs>
+      </md-dialog-content>
+      <md-dialog-actions layout="row">
+        <md-switch ng-model="dialog.advanced" ng-change="togAdv()" aria-label="Advanced" ng-if="selected === 1" analytics-on analytics-category="radio_tool"
+          analytics-event="Toggle Advanced">
+          <div translate="modal.form.advanced"></div>
+        </md-switch>
+        <span flex></span>
+        <md-button ng-click="cancel()" aria-label="Cancel">
+          <div translate="modal.form.cancel"></div>
+        </md-button>
+        <md-button ng-click="confirm()" class="md-primary" style="margin-right:20px;" aria-label="Submit">
+          <div translate="modal.{{::mode}}.submit"></div>
+        </md-button>
+      </md-dialog-actions>
     </md-dialog>
   </script>
 
@@ -480,29 +495,24 @@
                 </p>
                 </br>
                 <p>
-                  Please <a href="http://steamcommunity.com/id/dropt/" target="_blank">drop</a> me an <a href="mailto:rafael@dropt.top"
-                    onclick="javascript:misc.tracking.notifyclick('email');">Email</a> or
+                  Please <a href="http://steamcommunity.com/id/dropt/" target="_blank">drop</a> me an <a href="mailto:rafael@dropt.top" onclick="javascript:misc.tracking.notifyclick('email');">Email</a> or
                   <a href="https://twitter.com/rafacavalm" target="_blank">tweet</a> if the OS X Methods are wrong.
                 </p>
               </md-content>
             </md-tab>
-            <md-tab label="About">
+            <!--<md-tab label="About">
               <md-content class="md-padding">
                 <h1 class="md-display-2" translate="modal.about.title">About</h1>
-                <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum.
-                  Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum
-                  nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque,
-                  finibus commodo lectus.</p>
               </md-content>
-            </md-tab>
+            </md-tab>-->
           </md-tabs>
         </md-dialog-content>
         <md-dialog-actions layout="row">
           <span flex></span>
-          <md-button analytics-on analytics-category="help" analytics-event="not_useful" aria-label="Not Useful">
+          <md-button ng-click="cancel()" analytics-on analytics-category="radio_tool" analytics-event="Help: Not useful" aria-label="Not Useful">
             <div translate="modal.help.notuseful"></div>
           </md-button>
-          <md-button analytics-on analytics-category="help" analytics-event="useful" style="margin-right:20px;" aria-label="Useful">
+          <md-button ng-click="cancel()" analytics-on analytics-category="radio_tool" analytics-event="Help: Useful" style="margin-right:20px;" aria-label="Useful">
             <div translate="modal.help.useful"></div>
           </md-button>
         </md-dialog-actions>

@@ -4,7 +4,7 @@
  */
 (function () {
 
-    angular.module('csgo-radio').factory('messagesService', ['$http', '$rootScope', 'localStorageService', '$filter', '$location', 'VDFService', function ($http, $rootScope, localStorageService, $filter, $location, VDFService) {
+    angular.module('csgo-radio').factory('messagesService', ['$http', '$rootScope', 'localStorageService', '$filter', '$location', 'VDFService', '$mdToast', function ($http, $rootScope, localStorageService, $filter, $location, VDFService, $mdToast) {
 
         var getMessages = function () {
             return $http.get('radio.json')
@@ -208,54 +208,63 @@
             }
         };
 
-        var importMessages = function (save, imported, shared, copy) { //TODO: Add sanity checks
-            resetMessages();
-            $rootScope.model.standard = save.StandardRadio;
-            $rootScope.model.group = save.GroupRadio;
-            $rootScope.model.report = save.ReportRadio;
-            $rootScope.model.Titles = save.Titles;
+        var importMessages = function (save, imported, shared, copy) {
+            if (typeof save.StandardRadio !== 'undefined' && typeof save.GroupRadio !== 'undefined' && typeof save.ReportRadio !== 'undefined' && typeof save.Titles !== 'undefined') {
+                resetMessages();
+                $rootScope.model.standard = save.StandardRadio;
+                $rootScope.model.group = save.GroupRadio;
+                $rootScope.model.report = save.ReportRadio;
+                $rootScope.model.Titles = save.Titles;
 
-            for (var i = 0; i <= 2; ++i) {
-                if ($rootScope.model.Titles[i] === null) {
-                    $rootScope.model.Titles[i] = $filter('translate')('boxes.title_' + i);
-                }
-            }
-            var groups = ['StandardRadio', 'GroupRadio', 'ReportRadio'];
-
-            for (var group in groups) {
-                var group = groups[group];
-                for (var message in save[group]) {
-                    if (typeof save[group][message] === 'string') {
-                        $rootScope.model.messages[save[group][message]].disabled = true;
-                        save[group][message] = { 'type': 'message', 'cmd': save[group][message] };
+                for (var i = 0; i <= 2; ++i) {
+                    if ($rootScope.model.Titles[i] === null) {
+                        $rootScope.model.Titles[i] = $filter('translate')('boxes.title_' + i);
                     }
-                    else {
-                        var check = customExists(save[group][message]);
-                        if (typeof check === 'string') {
-                            $rootScope.model.custom[check].disabled = true;
-                            save[group][message].type = 'custom';
-                            save[group][message].UID = $rootScope.model.custom[check].UID;
-                            continue;
-                        } else {
-                            if (copy === true) {
-                                save[group][message].UID = message.text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1);
+                }
+                var groups = ['StandardRadio', 'GroupRadio', 'ReportRadio'];
+
+                for (var group in groups) {
+                    var group = groups[group];
+                    for (var message in save[group]) {
+                        if (typeof save[group][message] === 'string') {
+                            $rootScope.model.messages[save[group][message]].disabled = true;
+                            save[group][message] = { 'type': 'message', 'cmd': save[group][message] };
+                        }
+                        else {
+                            var check = customExists(save[group][message]);
+                            if (typeof check === 'string') {
+                                $rootScope.model.custom[check].disabled = true;
                                 save[group][message].type = 'custom';
-                                save[group][message].disabled = false;
-                                save[group][message].label = save[group][message].text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
-                                $rootScope.model.custom[save[group][message].UID] = save[group][message];
-                            }
-                            if (imported === true || shared === true) {
-                                save[group][message].type = 'imported';
-                                save[group][message].disabled = false;
-                                save[group][message].label = save[group][message].text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+                                save[group][message].UID = $rootScope.model.custom[check].UID;
+                                continue;
+                            } else {
+                                if (copy === true) {
+                                    save[group][message].UID = message.text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1);
+                                    save[group][message].type = 'custom';
+                                    save[group][message].disabled = false;
+                                    save[group][message].label = save[group][message].text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+                                    $rootScope.model.custom[save[group][message].UID] = save[group][message];
+                                }
+                                if (imported === true || shared === true) {
+                                    save[group][message].type = 'imported';
+                                    save[group][message].disabled = false;
+                                    save[group][message].label = save[group][message].text.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+                                }
                             }
                         }
                     }
                 }
-            }
-            if (shared === false && imported === false && $rootScope.model.watch !== true) {
-                $rootScope.$watch('model', SaveMessages, true);
-                $rootScope.model.watch = true;
+                if (shared === false && imported === false && $rootScope.model.watch !== true) {
+                    $rootScope.$watch('model', SaveMessages, true);
+                    $rootScope.model.watch = true;
+                }
+            } else {
+                $mdToast.show(
+                    $mdToast.simple()
+                        .textContent("This is not RadioPanel.txt")
+                        .position("top right")
+                        .hideDelay(5000)
+                );
             }
         }
 

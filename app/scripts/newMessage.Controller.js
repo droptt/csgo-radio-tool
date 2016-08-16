@@ -38,6 +38,7 @@
             $scope.mode = 'edit';
         }
 
+
         $scope.dialog.colorpickeroptions = {
             label: 'Choose a color',
             default: '#000000',
@@ -49,14 +50,14 @@
 
         $scope.cacheResults = true;
 
-        $scope.debug = function () {
-            console.log($scope.commands)
-            console.log($scope.message)
-            console.log($rootScope.model)
-        };
+        $scope.autocomplete = $rootScope.init.Commands;
+
         $scope.querySearch = function (query) {
-            var results = query ? $rootScope.init.commands.filter(messageService.newFilter(query)) : $rootScope.init.commands;
-            return results;
+            if ($rootScope.init.Commands === true) {
+                var results = query ? $rootScope.init.commands.filter(messageService.newFilter(query)) : $rootScope.init.commands;
+                return results;
+            }
+            return [];
         };
 
         $scope.checkArg = function (index) {
@@ -68,7 +69,7 @@
         };
 
         $scope.togAdv = function () {
-                if ($scope.dialog.advanced === true) {
+            if ($scope.dialog.advanced === true) {
                 $scope.message.rawCommand = messageService.renderCommand($scope.commands);
                 $scope.message.rawCommandBefore = messageService.renderCommand($scope.commands);
             } else {
@@ -88,7 +89,7 @@
         };
 
         $scope.addField = function () {
-            $scope.commands.push({ 'cmd': '', 'args': '' });
+            $scope.commands.push({ 'cmd': '', 'args': '', 'searchText': '' });
         };
 
         $scope.hide = function () {
@@ -99,13 +100,14 @@
             $mdDialog.cancel();
             $scope.$destroy();
         };
-        $scope.confirm = function (answer) {
+        $scope.confirm = function () {
+            console.log(myForm.myName.$error)
             if (New === true) {
                 messageService.newMessage($scope.message, $scope.commands);
             } else {
                 messageService.saveEdit($scope.message, message, $scope.commands, list);
             }
-            $mdDialog.hide(answer);
+            $mdDialog.hide();
             $scope.$destroy();
         };
     }];
