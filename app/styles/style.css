@@ -14,88 +14,6 @@ body nav.navbar {
 	margin-bottom: 0px;
 }
 
-
-/* Preloader */
-
-.error span {
-	color: darkred!important;
-	font-weight: bold;
-}
-
-.loading-wrapper {
-	z-index: 1001;
-	background-color: #202020;
-	width: 100vw;
-	height: 100vh;
-}
-
-.loading {
-	width: 200px;
-	height: 200px;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	margin: auto;
-	border-radius: 50%;
-	box-shadow: 0 0 5px #444;
-}
-
-.loading:before {
-	content: "";
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	background: linear-gradient(grey, black 60%);
-	animation: spin .5s infinite linear;
-}
-
-.loading:after {
-	content: "";
-	position: absolute;
-	width: 95%;
-	height: 95%;
-	top: 2.5%;
-	left: 2.5%;
-	background-color: #222;
-	border-radius: 50%;
-	box-shadow: inset 0 0 5px #444;
-}
-
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
-	}
-}
-
-.loading span {
-	color: #6f6f6f;
-	position: absolute;
-	margin: auto;
-	height: 30px;
-	width: auto;
-	text-align: center;
-	z-index: 2;
-	font-size: 18px;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-}
-
-.loading-footer {
-	bottom: 1vh;
-	left: 0;
-	right: 0;
-	height: auto;
-	margin: auto;
-	width: 200px;
-	position: absolute;
-	font-size: 18px;
-}
-
 .hidden {
 	display: none;
 }
@@ -185,26 +103,6 @@ md-button-group .md-button {
 
 .custom-shared {
 	height: 70% !important;
-}
-
-
-/* growl fixes */
-
-.growl-container.growl-fixed {
-	position: fixed;
-	margin: 0;
-	width: 90%;
-	max-width: 250px;
-	z-index: 9999;
-}
-
-.growl-container.growl-fixed.top-right {
-	top: 20px;
-	right: 20px;
-}
-
-.growl-container > .growl-item {
-	padding: 15px;
 }
 
 .alert-dismissable .close, .alert-dismissible .close {
@@ -445,82 +343,6 @@ i.glyphicon, .customSidebar span.glyphicon {
 
 .fixed-brand {
 	width: auto;
-}
-
-
-/* POPUP */
-
-.popup {
-	height: 100vh;
-	width: 100vw;
-	background-color: rgba(0, 0, 0, 0.45);
-	z-index: 5000;
-	position: absolute;
-	top: 0;
-}
-
-.popup-box {
-	height: 28.8vh;
-	width: 34.7vw;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	margin: auto;
-	background-color: black;
-	color: #c8c8c8;
-	-moz-user-select: -moz-none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	cursor: default;
-}
-
-.popup-box-header {
-	height: 18.4%;
-	width: 100%;
-	background-color: #1f1f1f;
-	background: linear-gradient(to right, #1f1f1f, black);
-}
-
-.popup-box-header span {
-	padding-top: 2%;
-	padding-left: 3%;
-	display: block;
-	color: white;
-	font-size: 1.3em;
-}
-
-.popup-box-message {
-	padding-top: 4.6%;
-	padding-left: 3%;
-	height: 51.6%;
-	width: 90%;
-}
-
-.popup-box-message div {
-	display: inline-block;
-}
-
-.popup-box-options {
-	padding-top: 3.8%;
-	padding-right: 3.4%;
-	float: right;
-	font-size: 18px;
-	width: 20%;
-}
-
-.popup-box-options a:first-child {
-	padding-right: 12%;
-}
-
-.popup-box-options a {
-	color: #c8c8c8;
-}
-
-.popup-box-options a:hover {
-	color: white;
-	text-decoration: none;
 }
 
 

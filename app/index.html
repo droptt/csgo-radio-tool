@@ -7,8 +7,86 @@
   <meta name="description" content="Counter-Strike:Global Offensive Radio Menu Organizer/Helper">
   <meta name="keywords" content="CSGO, Counter Strike, Global Offensive, Radio, Generator, Organizer, Menu, CS:GO, Radiomenu, Radiopanel.txt, Custom Commands, Radio Commands, Radio panel">
   <meta name="author" content="Drop">
-  <!-- Place favicon.ico in the root directory -->
-
+  <style>
+    .error span {
+      color: darkred!important;
+      font-weight: bold;
+    }
+    
+    .loading-wrapper {
+      z-index: 1001;
+      background-color: #202020;
+      width: 100vw;
+      height: 100vh;
+    }
+    
+    .loading {
+      width: 200px;
+      height: 200px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      border-radius: 50%;
+      box-shadow: 0 0 5px #444;
+    }
+    
+    .loading:before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(grey, black 60%);
+      animation: spin .5s infinite linear;
+    }
+    
+    .loading:after {
+      content: "";
+      position: absolute;
+      width: 95%;
+      height: 95%;
+      top: 2.5%;
+      left: 2.5%;
+      background-color: #222;
+      border-radius: 50%;
+      box-shadow: inset 0 0 5px #444;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .loading span {
+      color: #6f6f6f;
+      position: absolute;
+      margin: auto;
+      height: 30px;
+      width: auto;
+      text-align: center;
+      z-index: 2;
+      font-size: 18px;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+    
+    .loading-footer {
+      bottom: 1vh;
+      left: 0;
+      right: 0;
+      height: auto;
+      margin: auto;
+      width: 200px;
+      position: absolute;
+      font-size: 18px;
+    }
+  </style>
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="/bower_components/ng-inline-edit/dist/ng-inline-edit.css" />
