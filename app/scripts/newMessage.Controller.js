@@ -101,13 +101,18 @@
             $scope.$destroy();
         };
         $scope.confirm = function () {
-            if (New === true) {
-                messageService.newMessage($scope.message, $scope.commands);
+            if (Object.keys($scope.cmdName.label.$error).length > 0) {
+                $scope.selected = 0;
+                $scope.cmdName.$submitted = true;
             } else {
-                messageService.saveEdit($scope.message, message, $scope.commands, list);
+                if (New === true) {
+                    messageService.newMessage($scope.message, $scope.commands);
+                } else {
+                    messageService.saveEdit($scope.message, message, $scope.commands, list);
+                }
+                $mdDialog.hide();
+                $scope.$destroy();
             }
-            $mdDialog.hide();
-            $scope.$destroy();
         };
     }];
 
