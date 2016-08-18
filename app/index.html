@@ -93,19 +93,27 @@
         <div class="sidebar-menu">
           <div ng-show="settings.hasSaved  === true">
             <li class="shared-load">
-              <a href="http://dropt.top/csgo/radio" analytics-on analytics-event="load" analytics-category="shared"><span class="g-stack pull-left"><i class="glyphicon glyphicon-open"></i></span> <div translate="sidebar.shared.load"></div></a>
+              <a href="http://dropt.top/csgo/radio" analytics-on analytics-event="Clicked Load Saved" analytics-category="radio_tool"><span class="g-stack pull-left"><md-icon>archive</md-icon></span>
+                <div translate="sidebar.shared.load"></div>
+              </a>
             </li>
-            <li class="shared-override">
-              <a ng-click="save()" analytics-on analytics-category="shared" analytics-event="overwrite"><span class="g-stack pull-left"><i class="glyphicon glyphicon-hdd"></i></span> <div translate="sidebar.shared.override"></div></a>
+            <li class="shared-save">
+              <a ng-click="save()" analytics-on analytics-category="radio_tool" analytics-event="Saved Shared List"><span class="g-stack pull-left"><md-icon>save</md-icon></span> <div translate="sidebar.shared.save"></div></a>
             </li>
           </div>
           <div ng-hide="settings.hasSaved === true">
-            <li class="shared-save">
-              <a ng-click="save()" analytics-on analytics-category="shared" analytics-event="save"><span class="g-stack pull-left"><i class="glyphicon glyphicon-hdd"></i></span> <div translate="sidebar.shared.save"></div></a>
+            <li class="shared-override">
+              <a ng-click="save()" analytics-on analytics-category="radio_tool" analytics-event="Overwrote Saved Config">
+                <md-icon>content_copy</md-icon>
+                </span>
+                <div translate="sidebar.shared.override"></div>
+              </a>
             </li>
           </div>
           <li class="shared-copyall">
-            <a ng-click="copyAll()" analytics-on analytics-category="shared" analytics-event="copyAll"><span class="g-stack pull-left"><i class="glyphicon glyphicon-import"></i></span> <div translate="sidebar.shared.copy"></div></a>
+            <a ng-click="copyAll()" analytics-on analytics-category="radio_tool" analytics-event="Copied All Imported to Shared"><span class="g-stack pull-left"><md-icon>move_to_inbox</md-icon></span>
+              <div translate="sidebar.shared.copy"></div>
+            </a>
           </li>
         </div>
       </div>
