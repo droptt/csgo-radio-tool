@@ -112,12 +112,15 @@
                         };
 
                         $scope.ok = function () {
-                            if (messagesService.ImportRP($scope.import) !== false) {
-                                $mdDialog.hide();
-                                $analytics.eventTrack('Imported RadioPanel.txt', {
-                                    category: 'radio_tool',
-                                });
+                            if (Object.keys($scope.importForm.file.$error).length > 0) {
+                                $scope.importForm.$submitted = true;
                             } else {
+                                if (messagesService.ImportRP($scope.import) !== false) {
+                                    $mdDialog.hide();
+                                    $analytics.eventTrack('Imported RadioPanel.txt', {
+                                        category: 'radio_tool',
+                                    });
+                                }
                             }
                         };
                     }], template: 'import-dialog.html'
