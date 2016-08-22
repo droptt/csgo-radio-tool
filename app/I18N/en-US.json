@@ -109,7 +109,6 @@
       "no": "No",
       "reset": "delete everything",
       "defaults": "revert to defaults (Will delete current)",
-      "creset": "reload the custom list from the server (Will delete current)",
       "delcmd": "delete",
       "delete": "Delete",
       "yes": "Yes",

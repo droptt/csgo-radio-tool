@@ -1,6 +1,6 @@
 {
   "by": "Drop",
-  "version": 1.3,
+  "version": 2.0,
   "sidebar": {
     "menu": {
       "title": "Menu",
@@ -22,10 +22,11 @@
     }
   },
   "boxes": {
-    "title_0": "Padrão",
-    "title_1": "Grupo",
-    "title_2": "Aviso",
-    "desc": "Largue Aqui"
+    "title_0": "Padrão (Z)",
+    "title_1": "Grupo (X)",
+    "title_2": "Aviso (C)",
+    "desc": "Largue Aqui",
+    "tooltip_edit": "Editar"
   },
   "footer": {
     "by": "Feito por:",
@@ -60,21 +61,41 @@
     },
     "import": {
       "title": "Importar Radiopanel.txt",
+      "desc": "Importar configuração existente",
       "copy": "Copie Comandos Personalizados importados para Meus Comandos",
+      "required": "Você precisa inserir o arquivo!",
+      "parse_error": "Algo deu errado processando o arquivo. Você tem certeza que é um VDF válido?",
       "help": "Ajuda?",
       "submit": "Importar"
     },
     "success": {
       "title": "Successo!",
+      "desc": "Se você sabe onde o seu jogo está instalado, troque o conteúdo csgo/resource/ui/Radiopanel.txt.",
       "help": "Onde coloco isso?"
     },
     "form": {
       "cmd": "Commando",
       "cmd_placeholder": "Comando a ser executado",
       "cmd_help": "Use <code>;</code> para separar comandos.",
+      "arguments": "Arguments",
+      "default": "Default value: {{default_value}}",
+      "rawcmd": "Raw Commands",
+      "advanced": "Advanced",
+      "cancel": "Cancel",
       "label": "Nome",
-      "label_placeholder": "Nome aparece no Menu",
-      "tooltip": "Se você não quiser uma cor, coloque preto."
+       "add": "Add",
+      "delete": "Delete",
+      "label_hint": "Nome aparece no Menu",
+      "label_required": "Name is required.",
+      "tooltip": "Se você não quiser uma cor, coloque preto.",
+      "clear_color": "Remover Cor",
+      "value": "Valor",
+      "autocomplete": {
+        "cheats": "Requer Trapaça",
+        "devonly": "Requer modo de desenvolvedor",
+        "sponly": "Somente Single Player",
+        "nomatches": "Nenhum comando correspondente a \"{{searchText}}\" foi encontrado."
+      }
     },
     "chelp": {
       "title": "Ajuda de Comandos Personalizados",
@@ -88,11 +109,14 @@
       "no": "Não",
       "reset": "apagar tudo",
       "defaults": "reverter para padrão",
-      "creset": "reverter Meus Comandos para padrão",
       "delcmd": "apagar",
       "delete": "Apagar",
-      "yes": "Sim (irá apagar atuais)",
+      "yes": "Sim",
       "Reset": "Resetar"
+    },
+    "about": {
+      "title": "About",
+      "name": "CS:GO Radio Tool"
     },
     "help": {
       "title": "Ajuda",
