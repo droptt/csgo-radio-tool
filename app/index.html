@@ -464,7 +464,13 @@
                           {{item.dcs}}
                         </span>
                     <span class="item-metastat requirements" ng-show="item.ch">
-                          <strong style="color:red;" translate="modal.form.autocomplete.cheats"></strong>
+                          <strong translate="modal.form.autocomplete.cheats"></strong>
+                        </span>
+                    <span class="item-metastat requirements" ng-show="item.do">
+                          <strong translate="modal.form.autocomplete.devonly"></strong>
+                        </span>
+                    <span class="item-metastat requirements" ng-show="item.sp">
+                          <strong translate="modal.form.autocomplete.sponly"></strong>
                         </span>
                     </span>
                   </md-item-template>
@@ -488,10 +494,17 @@
                   </md-input-container>
                 </form>
               </div>
-              <md-button class="md-raised pull-right" ng-click="addField()" ng-if="dialog.advanced === false" aria-label="Add" analytics-on
-                analytics-category="radio_tool" analytics-event="Add New Command Field">
-                <div translate="modal.form.add"></div>
-              </md-button>
+              <div ng-if="dialog.advanced === false">
+                <div class="pull-left requirements">
+                  <strong ng-show="requirements.cheats === true" translate="modal.form.autocomplete.cheats"></strong>
+                  <strong ng-show="requirements.dev === true" translate="modal.form.autocomplete.devonly"></strong>
+                  <strong ng-show="requirements.sp === true" translate="modal.form.autocomplete.sponly"></strong>
+                </div>
+                <md-button class="md-raised pull-right" ng-click="addField()" aria-label="Add" analytics-on analytics-category="radio_tool"
+                  analytics-event="Add New Command Field">
+                  <div translate="modal.form.add"></div>
+                </md-button>
+              </div>
             </md-content>
           </md-tab>
         </md-tabs>

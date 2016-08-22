@@ -6,11 +6,22 @@
     var app = angular.module('csgo-radio');
 
     var newMessageController = ['$scope', '$rootScope', '$mdDialog', 'list', 'message', 'index', 'messageService', function ($scope, $rootScope, $mdDialog, list, message, index, messageService) { //This is for creation and editing.
+        function requirements() {
+        $scope.requirements = {"cheats": false, "dev": false, "sponly": false};
+            for (var command in $scope.commands) {
+                if ($scope.commands[command].cmd === null) { continue; }
+                if (typeof $scope.commands[command].cmd.ch !== 'undefined' && $scope.requirements.cheats === false) { $scope.requirements.cheats = true; }
+                if (typeof $scope.commands[command].cmd.do !== 'undefined' && $scope.requirements.dev === false) { $scope.requirements.dev = true; }
+                if (typeof $scope.commands[command].cmd.sp !== 'undefined' && $scope.requirements.sponly === false) { $scope.requirements.sponly = true; }
+            }
+        }
         $scope.dialog = { 'advanced': false };
         if (typeof list == 'undefined' && typeof message == 'undefined' && typeof list == 'undefined') { //Creation Mode
             $scope.message = { 'label': '', 'italic': false, 'bold': false, 'color': '' };
 
             $scope.commands = [{ 'cmd': { 'Name': 'noclip' }, 'args': '', 'searchText': 'noclip' }];
+
+            $scope.requirements = {"cheats": true, "dev": false, "sponly": false};
             var New = true;
             $scope.mode = 'new';
         } else {
@@ -34,6 +45,7 @@
                 $scope.commands = messageService.parseCommandLine(message.cmd);
                 $scope.dialog.copyBtn = true;
             }
+            requirements();
             var New = false;
             $scope.mode = 'edit';
         }
@@ -66,6 +78,7 @@
                     $scope.commands[index].args = $scope.commands[index].cmd.Value;
                 }
             }
+            requirements();
         };
 
         $scope.togAdv = function () {
@@ -75,6 +88,7 @@
             } else {
                 if ($scope.message.rawCommand !== $scope.message.rawCommandBefore) {
                     $scope.commands = messageService.parseCommandLine($scope.message.rawCommand);
+                    requirements();
                 }
 
             }

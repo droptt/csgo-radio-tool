@@ -92,6 +92,8 @@
       "value": "Value",
       "autocomplete": {
         "cheats": "Requires Cheats",
+        "devonly": "Requires Development Mode",
+        "sponly": "Single Player only",
         "nomatches": "No commands matching \"{{command.searchText}}\" were found."
       }
     },
