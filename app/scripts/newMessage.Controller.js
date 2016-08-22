@@ -5,9 +5,9 @@
 (function () {
     var app = angular.module('csgo-radio');
 
-    var newMessageController = ['$scope', '$rootScope', '$mdDialog', 'list', 'message', 'index', 'messageService', function ($scope, $rootScope, $mdDialog, list, message, index, messageService) { //This is for creation and editing.
+    var newMessageController = ['$scope', '$rootScope', '$mdDialog', 'list', 'message', 'index', 'messageService', 'uiService', function ($scope, $rootScope, $mdDialog, list, message, index, messageService, uiService) { //This is for creation and editing.
         function requirements() {
-        $scope.requirements = {"cheats": false, "dev": false, "sponly": false};
+            $scope.requirements = { "cheats": false, "dev": false, "sponly": false };
             for (var command in $scope.commands) {
                 if ($scope.commands[command].cmd === null) { continue; }
                 if (typeof $scope.commands[command].cmd.ch !== 'undefined' && $scope.requirements.cheats === false) { $scope.requirements.cheats = true; }
@@ -21,7 +21,7 @@
 
             $scope.commands = [{ 'cmd': { 'Name': 'noclip' }, 'args': '', 'searchText': 'noclip' }];
 
-            $scope.requirements = {"cheats": true, "dev": false, "sponly": false};
+            $scope.requirements = { "cheats": true, "dev": false, "sponly": false };
             var New = true;
             $scope.mode = 'new';
         } else {
@@ -33,6 +33,7 @@
                     'UID': message.UID
                 };
 
+                $scope.custom = true;
                 $scope.commands = messageService.parseCommandLine($rootScope.model.custom[message.UID].cmd);
             } else {
                 $scope.message = {
@@ -42,6 +43,7 @@
                     'color': message.color
                 };
 
+                $scope.custom = false;
                 $scope.commands = messageService.parseCommandLine(message.cmd);
                 $scope.dialog.copyBtn = true;
             }
@@ -104,6 +106,12 @@
 
         $scope.addField = function () {
             $scope.commands.push({ 'cmd': '', 'args': '', 'searchText': '' });
+        };
+
+        $scope.deleteM = function (ev) {
+            if (message.type === 'custom') {
+                uiService.Confirm.deleteCustomCommand(ev, message, list, $mdDialog);
+            }
         };
 
         $scope.hide = function () {

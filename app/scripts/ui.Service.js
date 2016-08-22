@@ -4,12 +4,12 @@
  */
 (function () {
 
-    angular.module('csgo-radio').factory('uiService', ['$rootScope', '$filter', '$mdDialog', 'messagesService', 'VDFService', '$analytics', function ($rootScope, $filter, $mdDialog, messagesService, VDFService, $analytics) {
+    angular.module('csgo-radio').factory('uiService', ['$rootScope', '$filter', '$mdDialog', 'messagesService', 'VDFService', '$analytics', 'messageService', function ($rootScope, $filter, $mdDialog, messagesService, VDFService, $analytics, messageService) {
 
         var InvokeConfirm = function (ev, yes, message, callback) {
-            $mdDialog.show($mdDialog.confirm()
+            $mdDialog.show($mdDialog.confirm({skipHide: true})
                 .title($filter('translate')('modal.prompt.title'))
-                .textContent($filter('translate')('modal.prompt.body') + ' ' + message + '? This action cannot be undone (in the near-future it will).')
+                .textContent($filter('translate')('modal.prompt.body') + ' ' + message + '?')
                 .targetEvent(ev)
                 .ok(yes)
                 .cancel($filter('translate')('modal.prompt.no'))).then(callback, function () { });
@@ -54,20 +54,21 @@
                 });
             },
             default: function ($event) {
-                InvokeConfirm($event, $filter('translate')('modal.prompt.defaults'), $filter('translate')('modal.prompt.yes'), function () {
+                InvokeConfirm($event, $filter('translate')('modal.prompt.yes'), $filter('translate')('modal.prompt.defaults'), function () {
                     messagesService.default();
                     $analytics.eventTrack('Reset to Game defaults', {
                         category: 'radio_tool',
                     });
                 });
             },
-            deleteCustomCommand: function ($event, UID) {
-                InvokeConfirm($event, $filter('translate')('modal.prompt.Reset'), $filter('translate')('modal.prompt.yes'), function () {
-                    messagesService.deleteMessage();
+            deleteCustomCommand: function ($event, message, list, dialog) {
+                InvokeConfirm($event, $filter('translate')('modal.prompt.delete'), $filter('translate')('modal.prompt.delcmd')+" "+message.text, function () {
+                    messageService.deleteMessage(message.UID, list);
+                    dialog.cancel();
                 });
             },
             deleteImportedCommand: function ($event, list, message, index) {
-                InvokeConfirm($event, $filter('translate')('modal.prompt.delcmd'), $filter('translate')('modal.prompt.delete') + ' ' + message.text, function () {
+                InvokeConfirm($event, $filter('translate')('modal.prompt.delete'), $filter('translate')('modal.prompt.delcmd') + ' ' + message.text, function () {
                     $rootScope.model[list].splice(index, 1);
                 });
             }
@@ -85,7 +86,7 @@
                 InvokeDialog($event, { controller: 'newMessageController', template: 'new-message-dialog.html', locals: { list: undefined, message: undefined, index: undefined } });
             },
             editMessage: function ($event, locals) {
-                InvokeDialog($event, { controller: 'newMessageController', template: 'new-message-dialog.html', locals: locals });
+                InvokeDialog($event, { controller: 'newMessageController', template: 'new-message-dialog.html', locals: locals, skipHide: true });
             },
             changelog: function ($event, locals) {
                 var onChangelog = function (data) {

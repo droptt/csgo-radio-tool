@@ -26,6 +26,46 @@
             return output;
         };
 
+        var deleteMessage = function (UID, list) {
+            if ($rootScope.model.custom[UID].disabled === true && list !== 'custom') { //copy of it somewhere, must find the precious!
+                var messageCopy = $rootScope.model[list].filter(function (messageCopy) {
+                    return messageCopy.UID === UID;
+                })[0];
+                if (typeof messageCopy == 'undefined') { //That's not supposed to happen.
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent('Could not find the copy of the message.')
+                            .position('top right')
+                            .hideDelay(7000)
+                    );
+                    $analytics.eventTrack('Could not find Message clone', {
+                        category: 'radio_tool',
+                    });
+                    return false;
+                } else {
+                    delete $rootScope.model[list].splice($rootScope.model[list].indexOf(messageCopy), 1);
+                    delete $rootScope.model.custom[UID];
+                }
+            } else {
+                if ($rootScope.model.custom[UID].disabled === true) {
+                    var lists = ['standard', 'group', 'report'];
+                    for (var msgGroup in lists) {
+                        var messageCopy = $rootScope.model[lists[msgGroup]].filter(function (messageCopy) {
+                            return messageCopy.UID === UID;
+                        })[0];
+                        if (typeof messageCopy == 'undefined') { //That's not supposed to happen.
+                            continue;
+                        } else {
+                            delete $rootScope.model[list].splice($rootScope.model[lists[msgGroup]].indexOf(messageCopy), 1);
+                            delete $rootScope.model.custom[UID];
+                        }
+                    }
+                } else {
+                    delete $rootScope.model.custom[UID];
+                }
+            }
+        };
+
         var saveChanges = function (message, origMessage, commandArray, list) {
             if (origMessage.type === 'custom') {
                 $rootScope.model.custom[origMessage.UID].cmd = this.renderCommand(commandArray);
@@ -164,7 +204,8 @@
             parseCommandLine: parseCommandLine,
             newMessage: create,
             findCommand: findCommand,
-            querySearch: querySearch
+            querySearch: querySearch,
+            deleteMessage: deleteMessage
         };
 
     }]);
