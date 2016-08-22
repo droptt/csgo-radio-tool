@@ -472,7 +472,8 @@
                   </md-not-found>
                 </md-autocomplete>
                 <md-input-container class="md-block" flex-gt-sm>
-                  <label translate="modal.form.arguments"></label>
+                  <label ng-hide="command.cmd.Value" translate="modal.form.arguments"></label>
+                  <label ng-show="command.cmd.Value" translate="modal.form.value"></label>
                   <input ng-model="command.args">
                   <div class="hint" ng-if="command.cmd.Value">
                     <div translate="modal.form.default" translate-values="{'default_value': command.cmd.Value}"></div>

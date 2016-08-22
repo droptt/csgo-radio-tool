@@ -89,6 +89,7 @@
       "label_required": "Name is required.",
       "tooltip": "If you don't want a color anymore, set it to black.",
       "clear_color": "Remove Color",
+      "value": "Value",
       "autocomplete": {
         "cheats": "Requires Cheats",
         "nomatches": "No commands matching \"{{command.searchText}}\" were found."
