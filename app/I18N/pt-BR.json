@@ -81,6 +81,7 @@
       "default": "Default value: {{default_value}}",
       "rawcmd": "Raw Commands",
       "advanced": "Advanced",
+      "advanced_tooltip": "Linha de Comando",
       "cancel": "Cancel",
       "label": "Nome",
        "add": "Add",

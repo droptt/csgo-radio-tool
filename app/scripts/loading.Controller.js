@@ -84,6 +84,19 @@
           }
         }
       }
+      else {
+        $mdDialog.show(
+              $mdDialog.alert()
+                .clickOutsideToClose(true)
+                .title('Warning')
+                .textContent('Your browser doesn\'t support Local Storage. Saving functionality is disabled.')
+                .ariaLabel('Localstorage Warning')
+                .ok('Got it!')
+            );
+            $analytics.eventTrack('Localstorage Warning Dialog', {
+              category: 'radio_tool',
+            });
+      }
     };
     var messagesLoaded = false;
     var customLoaded = false;

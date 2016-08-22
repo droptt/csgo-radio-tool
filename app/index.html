@@ -497,8 +497,18 @@
               </div>
               <div ng-if="dialog.advanced === false">
                 <div class="pull-left requirements">
-                  <strong ng-show="requirements.cheats === true" translate="modal.form.autocomplete.cheats"></strong>
-                  <strong ng-show="requirements.dev === true" translate="modal.form.autocomplete.devonly"></strong>
+                  <div><strong ng-show="requirements.cheats === true" translate="modal.form.autocomplete.cheats"></strong>
+                    <md-tooltip
+                      md-direction="top">
+                      sv_cheats 1;
+                      </md-tooltip>
+                  </div>
+                  <div><strong ng-show="requirements.dev === true" translate="modal.form.autocomplete.devonly"></strong>
+                    <md-tooltip
+                      md-direction="top">
+                      developer 1;
+                      </md-tooltip>
+                  </div>
                   <strong ng-show="requirements.sp === true" translate="modal.form.autocomplete.sponly"></strong>
                 </div>
                 <md-button class="md-raised pull-right" ng-click="addField()" aria-label="Add" analytics-on analytics-category="radio_tool"
@@ -513,10 +523,13 @@
       <md-dialog-actions layout="row">
         <md-switch ng-model="dialog.advanced" ng-change="togAdv()" aria-label="Advanced" ng-if="selected === 1" analytics-on analytics-category="radio_tool"
           analytics-event="Toggle Advanced">
+          <md-tooltip md-direction="top">
+            <div translate="modal.form.advanced_tooltip"></div>
+          </md-tooltip>
           <div translate="modal.form.advanced"></div>
         </md-switch>
-        <md-button ng-if="custom === true" class="md-raised md-warn pull-right" ng-click="deleteM($event)" aria-label="Delete" analytics-on analytics-category="radio_tool"
-          analytics-event="Delete Custom Command">
+        <md-button ng-if="custom === true" class="md-raised md-warn pull-right" ng-click="deleteM($event)" aria-label="Delete" analytics-on
+          analytics-category="radio_tool" analytics-event="Delete Custom Command">
           <div translate="modal.form.delete"></div>
         </md-button>
         <span flex></span>
