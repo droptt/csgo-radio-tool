@@ -94,7 +94,7 @@
         "cheats": "Requires Cheats",
         "devonly": "Requires Development Mode",
         "sponly": "Single Player only",
-        "nomatches": "No commands matching \"{{command.searchText}}\" were found."
+        "nomatches": "No commands matching \"{{searchText}}\" were found."
       }
     },
     "chelp": {
