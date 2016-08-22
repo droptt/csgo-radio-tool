@@ -133,6 +133,7 @@
       <ul class="sidebar-nav nav-pills nav-stacked sidebar-secondary" id="messages">
         <li ng-repeat="message in model.messages" dnd-draggable="message" dnd-effect-allowed="copy" dnd-copied="message.disabled = true"
           ng-class="{disabled: message.disabled === true}" dnd-disable-if="message.disabled === true" translate="{{::'messages.'+message.cmd}}">
+        </li>
       </ul>
     </div>
     <!-- RIGHT SIDEBAR -->

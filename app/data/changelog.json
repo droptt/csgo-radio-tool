@@ -1,5 +1,19 @@
 [
   {
+    "name": 2.1,
+    "date": "xx/08/2016",
+    "type": "version",
+    "changes": [
+      "Fix: Trying to translate messages before translations were loaded",
+      "Fix: Footer position",
+      "Fix: Verification in the import dialog",
+      "Fix: Verification in the creation/edit dialog",
+      "Fix: Autocomplete dropdown position",
+      "Styles cleaning",
+      "Shared Menu icons"
+    ]
+  },
+  {
     "name": 2.0,
     "date": "16/08/2016",
     "type": "version",
