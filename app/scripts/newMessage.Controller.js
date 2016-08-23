@@ -17,7 +17,7 @@
         }
         $scope.dialog = { 'advanced': false };
         if (typeof list == 'undefined' && typeof message == 'undefined' && typeof list == 'undefined') { //Creation Mode
-            $scope.message = { 'label': '', 'italic': false, 'bold': false, 'color': '' };
+            $scope.message = { 'label': '', 'italic': false, 'bold': false, 'color': '#000000' };
 
             $scope.commands = [{ 'cmd': { 'Name': 'noclip' }, 'args': '', 'searchText': 'noclip' }];
 
@@ -40,7 +40,7 @@
                     'italic': (typeof message.italic == 'undefined') ? false : message.italic,
                     'bold': (typeof message.bold == 'undefined') ? false : message.bold,
                     'label': message.text,
-                    'color': message.color
+                    'color': (typeof message.bold == 'undefined') ? "#000000" : message.color
                 };
 
                 $scope.custom = false;
@@ -57,6 +57,7 @@
             label: 'Choose a color',
             default: '#000000',
             genericPalette: false,
+            preview: false,
             history: true,
             rgb: false,
             hsl: false

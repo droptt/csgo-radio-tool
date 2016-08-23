@@ -305,15 +305,9 @@
     });
   </script>
   <script type="text/ng-template" id="mdColorPicker.tpl.html">
-    <div class="md-color-picker-preview md-color-picker-checkered-bg" ng-click="showColorPicker($event)" ng-if="mdColorPreview">
+    <div class="md-color-picker-preview md-color-picker-checkered-bg" ng-click="showColorPicker($event)">
       <div class="md-color-picker-result" ng-style="{background: value}"></div>
     </div>
-    <md-button class="md-icon-button" style="display:inline-block;" ng-if="mdColorClearButton && value" ng-click="clearValue();" aria-label="Clear Color">
-      <md-tooltip md-direction="top">
-        <div translate="modal.form.clear_color"></div>
-      </md-tooltip>
-      <md-icon>clear</md-icon>
-    </md-button>
   </script>
 
 
@@ -421,7 +415,7 @@
           <md-tab label="Appearance">
             <md-content class="md-padding">
               <form layout="row" name="cmdName">
-                <md-input-container class="md-block" flex="70">
+                <md-input-container class="md-block" flex="75">
                   <label translate="modal.form.label"></label>
                   <input md-maxlength="30" ng-maxlength="30" name="label" required ng-model="message.label" />
                   <div class="hint" translate="modal.form.label_hint"></div>
@@ -430,15 +424,20 @@
                     <div ng-message="maxlength" translate="modal.form.maxlength"></div>
                   </div>
                 </md-input-container>
-                <md-button-group class="md-raised" flex="15">
-                  <md-button ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}">
+                <section flex="20" layout="row">
+                  <md-button class="button-group left" ng-click="togI(message.italic)" ng-class="{'disable': !message.italic, 'active' : message.italic}">
                     <md-icon>format_italic</md-icon>
                   </md-button>
-                  <md-button ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}">
+                  <md-button class="button-group middle" ng-click="togB(message.bold)" ng-class="{'disable': !message.bold, 'active' : message.bold}">
                     <md-icon>format_bold</md-icon>
                   </md-button>
-                  <div md-color-picker="dialog.colorpickeroptions" ng-model="message.color"></div>
-                </md-button-group>
+                  <md-button class="button-group right">
+                    <md-tooltip md-direction="top">
+                      <div translate="modal.form.tooltip"></div>
+                    </md-tooltip>
+                    <div md-color-picker="dialog.colorpickeroptions" ng-model="message.color"></div>
+                  </md-button>
+                </section>
               </form>
               <div flex="5" hide-xs hide-sm></div>
             </md-content>
@@ -498,16 +497,14 @@
               <div ng-if="dialog.advanced === false">
                 <div class="pull-left requirements">
                   <div><strong ng-show="requirements.cheats === true" translate="modal.form.autocomplete.cheats"></strong>
-                    <md-tooltip
-                      md-direction="top">
+                    <md-tooltip md-direction="top">
                       sv_cheats 1;
-                      </md-tooltip>
+                    </md-tooltip>
                   </div>
                   <div><strong ng-show="requirements.dev === true" translate="modal.form.autocomplete.devonly"></strong>
-                    <md-tooltip
-                      md-direction="top">
+                    <md-tooltip md-direction="top">
                       developer 1;
-                      </md-tooltip>
+                    </md-tooltip>
                   </div>
                   <strong ng-show="requirements.sp === true" translate="modal.form.autocomplete.sponly"></strong>
                 </div>

@@ -19,7 +19,7 @@
     var init = function () {
       var loaded = false,
         shared = false;
-      if (localStorageService.isSupported) { //TODO: Verify if localstorage operations were successfuly executed
+      if (localStorageService.isSupported) {
         if (localStorageService.get('customVersion') !== null || localStorageService.get('version') !== null) {
           $rootScope.settings.newUser = false;
 

@@ -89,7 +89,6 @@
       "label_hint": "Nome aparece no Menu",
       "label_required": "Name is required.",
       "tooltip": "Se você não quiser uma cor, coloque preto.",
-      "clear_color": "Remover Cor",
       "value": "Valor",
       "autocomplete": {
         "cheats": "Requer Trapaça",
