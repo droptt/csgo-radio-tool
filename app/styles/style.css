@@ -45,6 +45,14 @@ li .pull-right .btn, .customSidebar .btn {
 	order: 1;
 }
 
+.message-italic {
+	font-style: italic;
+}
+
+.message-bold {
+	font-weight: bold;
+}
+
 .button-group {
 	font-size: 16px;
 	margin: 20px 0;
@@ -106,6 +114,10 @@ li .pull-right .btn, .customSidebar .btn {
 
 .message-name {
 	display: inline-block;
+}
+
+.customSidebar .message-name {
+	text-indent: 5px;
 }
 
 .sidebar-menu a {

@@ -154,7 +154,7 @@
           <md-tooltip md-direction="left">
             {{custom.cmd}}
           </md-tooltip>
-          {{custom.text}}
+          <div class="message-name" ng-style="{'color': custom.color}" ng-class="{'message-bold': custom.bold, 'message-italic': custom.italic}">{{custom.text}}</div>
           <div class="pull-right">
             <md-button class="md-icon-button" aria-label="Edit" ng-click="editMessage($event, 'custom', custom, $index)">
               <md-tooltip md-direction="top">
@@ -207,7 +207,7 @@
             <ul data-list-name="standard" id="StandardRadio" dnd-list="model.standard" dnd-drop="checkLimit(event, index, item)">
               <li ng-repeat="message in model.standard" dnd-draggable="message" dnd-moved="moved('standard', $index)" dnd-effect-allowed="move">{{($index+1)}}.
                 <div ng-show="::message.type === 'message'" class="message-name">{{::"messages." + message.cmd | translate}}</div>
-                <div ng-hide="::message.type === 'message'" class="message-name">{{message.text}}</div>
+                <div ng-hide="::message.type === 'message'" class="message-name" ng-style="{'color': message.color}" ng-class="{'message-bold': message.bold, 'message-italic': message.italic}">{{message.text}}</div>
                 <div class="pull-right">
                   <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'standard', message, $index)">
                     <md-tooltip md-direction="top">
@@ -230,7 +230,7 @@
             <ul data-list-name="group" id="GroupRadio" dnd-list="model.group" dnd-drop="checkLimit(event, index, item)">
               <li ng-repeat="message in model.group" dnd-draggable="message" dnd-moved="moved('group', $index)" dnd-effect-allowed="move">{{($index+1)}}.
                 <div ng-show="::message.type === 'message'" class="message-name">{{::"messages." + message.cmd | translate}}</div>
-                <div ng-hide="::message.type === 'message'" class="message-name">{{message.text}}</div>
+                <div ng-hide="::message.type === 'message'" class="message-name" ng-style="{'color': message.color}" ng-class="{'message-bold': message.bold, 'message-italic': message.italic}">{{message.text}}</div>
                 <div class="pull-right">
                   <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'group', message, $index)">
                     <md-tooltip md-direction="top">
@@ -253,7 +253,7 @@
             <ul data-list-name="report" id="ReportRadio" dnd-list="model.report" dnd-drop="checkLimit(event, index, item)">
               <li ng-repeat="message in model.report" dnd-draggable="message" dnd-moved="moved('report', $index)" dnd-effect-allowed="move">{{($index+1)}}.
                 <div ng-show="::message.type === 'message'" class="message-name">{{::"messages." + message.cmd | translate}}</div>
-                <div ng-hide="::message.type === 'message'" class="message-name">{{message.text}}</div>
+                <div ng-hide="::message.type === 'message'" class="message-name" ng-style="{'color': message.color}" ng-class="{'message-bold': message.bold, 'message-italic': message.italic}">{{message.text}}</div>
                 <div class="pull-right">
                   <md-button class="md-icon-button" aria-label="Edit" ng-hide="::message.type === 'message'" ng-click="editMessage($event, 'report', message, $index)">
                     <md-tooltip md-direction="top">
