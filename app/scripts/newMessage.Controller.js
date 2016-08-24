@@ -57,7 +57,7 @@
 
         $scope.dialog.colorpickeroptions = {
             label: 'Choose a color',
-            default: '#000000',
+            default: $scope.message.color,
             genericPalette: false,
             preview: false,
             history: true,

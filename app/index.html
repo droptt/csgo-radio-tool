@@ -308,6 +308,9 @@
     <div class="md-color-picker-preview md-color-picker-checkered-bg" ng-click="showColorPicker($event)">
       <div class="md-color-picker-result" ng-style="{background: value}"></div>
     </div>
+    <md-button class="md-icon-button md-color-picker-clear" ng-if="mdColorClearButton && value" ng-click="clearValue();" aria-label="Clear Color">
+      <md-icon>clear</md-icon>
+    </md-button>
   </script>
 
 

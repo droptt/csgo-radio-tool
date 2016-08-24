@@ -33,7 +33,7 @@
 
         var generateRP = function ($event) {
             if ($rootScope.model.standard.length > 0 || $rootScope.model.group.length > 0 || $rootScope.model.report.length > 0) {
-                var buildList = angular.extend({}, $rootScope.settings.radioMenu);
+                var buildList = angular.copy($rootScope.settings.radioMenu);
                 buildList['RadioPanel.txt'].Groups.standard.title = ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? '#SFUI_CommandRadio' : $rootScope.model.Titles[0];
                 buildList['RadioPanel.txt'].Groups.group.title = ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? '#SFUI_StandardRadio' : $rootScope.model.Titles[1];
                 buildList['RadioPanel.txt'].Groups.report.title = ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? '#SFUI_ReportRadio' : $rootScope.model.Titles[2];
@@ -68,9 +68,9 @@
                         C_I++;
                     }
                 }
-
                 return VDFService.stringify(buildList, true);
             }
+            return false;
         };
 
         var convertList = function (list) {
@@ -139,9 +139,9 @@
         };
 
         var resetMessages = function () {
-            $rootScope.model.standard = [];
-            $rootScope.model.group = [];
-            $rootScope.model.report = [];
+            $rootScope.model.standard.length = 0;
+            $rootScope.model.group.length = 0;
+            $rootScope.model.report.length = 0;
             $rootScope.model.Titles = [$filter('translate')('boxes.title_0'), $filter('translate')('boxes.title_1'), $filter('translate')('boxes.title_2')];
 
             for (var message in $rootScope.model.messages) {

@@ -7,7 +7,7 @@
     angular.module('csgo-radio').factory('uiService', ['$rootScope', '$filter', '$mdDialog', 'messagesService', 'VDFService', '$analytics', 'messageService', function ($rootScope, $filter, $mdDialog, messagesService, VDFService, $analytics, messageService) {
 
         var InvokeConfirm = function (ev, yes, message, callback) {
-            $mdDialog.show($mdDialog.confirm({skipHide: true})
+            $mdDialog.show($mdDialog.confirm({ skipHide: true })
                 .title($filter('translate')('modal.prompt.title'))
                 .textContent($filter('translate')('modal.prompt.body') + ' ' + message + '?')
                 .targetEvent(ev)
@@ -62,7 +62,7 @@
                 });
             },
             deleteCustomCommand: function ($event, message, list, dialog) {
-                InvokeConfirm($event, $filter('translate')('modal.prompt.delete'), $filter('translate')('modal.prompt.delcmd')+" "+message.text, function () {
+                InvokeConfirm($event, $filter('translate')('modal.prompt.delete'), $filter('translate')('modal.prompt.delcmd') + " " + message.text, function () {
                     messageService.deleteMessage(message.UID, list);
                     dialog.cancel();
                 });
@@ -128,21 +128,27 @@
                 });
             },
             output: function ($event, output) {
-                InvokeDialog($event, {
-                    template: 'output-dialog.html', locals: { extra: { output: output, helpD: this.help } }, controller: ['$scope', '$mdDialog', 'extra', function ($scope, $mdDialog, extra) {
-                        $scope.extra = extra;
+                if (output !== false) {
+                    InvokeDialog($event, {
+                        template: 'output-dialog.html', locals: { extra: { output: output, helpD: this.help } }, controller: ['$scope', '$mdDialog', 'extra', function ($scope, $mdDialog, extra) {
+                            $scope.extra = extra;
 
-                        $scope.hide = function () {
-                            $mdDialog.hide();
-                        };
-                        $scope.cancel = function () {
-                            $mdDialog.cancel();
-                        };
-                    }]
-                });
-                $analytics.eventTrack('Generated RadioPanel.txt', {
-                    category: 'radio_tool',
-                });
+                            $scope.hide = function () {
+                                $mdDialog.hide();
+                            };
+                            $scope.cancel = function () {
+                                $mdDialog.cancel();
+                            };
+                        }]
+                    });
+                    $analytics.eventTrack('Generated RadioPanel.txt', {
+                        category: 'radio_tool',
+                    });
+                } else {
+                    $analytics.eventTrack('Tried to Generate empty list', {
+                        category: 'radio_tool',
+                    });
+                }
             }
         };
 

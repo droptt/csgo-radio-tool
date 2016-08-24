@@ -4,7 +4,7 @@
     "date": "xx/08/2016",
     "type": "version",
     "changes": [
-      ""
+      "Added Remove color button",
       "Added Delete button in edit dialog",
       "Added command requirements in creation/edit",
       "Fix: Correctly tell commands from client variables",
