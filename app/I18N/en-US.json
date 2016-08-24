@@ -94,6 +94,8 @@
         "cheats": "Requires Cheats",
         "devonly": "Requires Development Mode",
         "sponly": "Single Player only",
+        "clientonly": "Only Client can execute",
+        "serveronly": "Only Server can execute",
         "nomatches": "No commands matching \"{{searchText}}\" were found."
       }
     },

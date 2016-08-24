@@ -13,6 +13,8 @@
                 if (typeof $scope.commands[command].cmd.ch !== 'undefined' && $scope.requirements.cheats === false) { $scope.requirements.cheats = true; }
                 if (typeof $scope.commands[command].cmd.do !== 'undefined' && $scope.requirements.dev === false) { $scope.requirements.dev = true; }
                 if (typeof $scope.commands[command].cmd.sp !== 'undefined' && $scope.requirements.sponly === false) { $scope.requirements.sponly = true; }
+                if (typeof $scope.commands[command].cmd.cd !== 'undefined' && $scope.requirements.client === false) { $scope.requirements.client = true; }
+                if (typeof $scope.commands[command].cmd.gl !== 'undefined' && $scope.requirements.server === false) { $scope.requirements.server = true; }
             }
         }
         $scope.dialog = { 'advanced': false };

@@ -4,13 +4,21 @@
     "date": "xx/08/2016",
     "type": "version",
     "changes": [
+      ""
+      "Added Delete button in edit dialog",
+      "Added command requirements in creation/edit",
+      "Fix: Correctly tell commands from client variables",
+      "Fix: Broken Button Group style",
       "Fix: Trying to translate messages before translations were loaded",
       "Fix: Footer position",
       "Fix: Verification in the import dialog",
       "Fix: Verification in the creation/edit dialog",
       "Fix: Autocomplete dropdown position",
       "Styles cleaning",
-      "Shared Menu icons"
+      "Shared Menu icons",
+      "Updated Portuguese translation",
+      "Fixed translation issues on Confirmation dialog",
+      "Added not found message in autocomplete dropdown"
     ]
   },
   {

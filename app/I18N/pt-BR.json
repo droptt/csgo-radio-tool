@@ -84,7 +84,7 @@
       "advanced_tooltip": "Linha de Comando",
       "cancel": "Cancel",
       "label": "Nome",
-       "add": "Add",
+      "add": "Add",
       "delete": "Delete",
       "label_hint": "Nome aparece no Menu",
       "label_required": "Name is required.",
@@ -94,6 +94,8 @@
         "cheats": "Requer Trapaça",
         "devonly": "Requer modo de desenvolvedor",
         "sponly": "Somente Single Player",
+        "clientonly": "Somente Cliente pode executar",
+        "serveronly": "Somente Servidor pode executar",
         "nomatches": "Nenhum comando correspondente a \"{{searchText}}\" foi encontrado."
       }
     },

@@ -471,6 +471,12 @@
                     <span class="item-metastat requirements" ng-show="item.sp">
                           <strong translate="modal.form.autocomplete.sponly"></strong>
                         </span>
+                        <span class="item-metastat requirements" ng-show="item.cd">
+                          <strong translate="modal.form.autocomplete.clientonly"></strong>
+                        </span>
+                        <span class="item-metastat requirements" ng-show="item.gl">
+                          <strong translate="modal.form.autocomplete.serveronly"></strong>
+                        </span>
                     </span>
                   </md-item-template>
                   <md-not-found>
@@ -506,6 +512,8 @@
                       developer 1;
                     </md-tooltip>
                   </div>
+                  <strong ng-show="requirements.client === true" translate="modal.form.autocomplete.clientonly"></strong>
+                  <strong ng-show="requirements.server === true" translate="modal.form.autocomplete.serveronly"></strong>
                   <strong ng-show="requirements.sp === true" translate="modal.form.autocomplete.sponly"></strong>
                 </div>
                 <md-button class="md-raised pull-right" ng-click="addField()" aria-label="Add" analytics-on analytics-category="radio_tool"
