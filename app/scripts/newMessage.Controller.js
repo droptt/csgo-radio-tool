@@ -32,6 +32,7 @@
                     'italic': (typeof $rootScope.model.custom[message.UID].italic == 'undefined') ? false : $rootScope.model.custom[message.UID].italic,
                     'bold': (typeof $rootScope.model.custom[message.UID].bold == 'undefined') ? false : $rootScope.model.custom[message.UID].bold,
                     'label': $rootScope.model.custom[message.UID].text,
+                    'color': $rootScope.model.custom[message.UID].color,
                     'UID': message.UID
                 };
 
@@ -42,7 +43,7 @@
                     'italic': (typeof message.italic == 'undefined') ? false : message.italic,
                     'bold': (typeof message.bold == 'undefined') ? false : message.bold,
                     'label': message.text,
-                    'color': (typeof message.bold == 'undefined') ? "#000000" : message.color
+                    'color': message.color
                 };
 
                 $scope.custom = false;
@@ -57,11 +58,12 @@
 
         $scope.dialog.colorpickeroptions = {
             label: 'Choose a color',
-            default: $scope.message.color,
+            default: '#000000',
             genericPalette: false,
             preview: false,
             history: true,
             rgb: false,
+            clearButton: true,
             hsl: false
         };
 
@@ -133,6 +135,7 @@
                 if (New === true) {
                     messageService.newMessage($scope.message, $scope.commands);
                 } else {
+                    console.log($scope.message)
                     messageService.saveEdit($scope.message, message, $scope.commands, list);
                 }
                 $mdDialog.hide();

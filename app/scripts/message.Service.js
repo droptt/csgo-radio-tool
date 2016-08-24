@@ -68,6 +68,7 @@
 
         var saveChanges = function (message, origMessage, commandArray, list) {
             if (origMessage.type === 'custom') {
+                console.log(message.color)
                 $rootScope.model.custom[origMessage.UID].cmd = this.renderCommand(commandArray);
                 $rootScope.model.custom[origMessage.UID].text = message.label;
                 $rootScope.model.custom[origMessage.UID].italic = message.italic;

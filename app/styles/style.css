@@ -116,6 +116,19 @@ li .pull-right .btn, .customSidebar .btn {
 	display: inline-block;
 }
 
+[md-color-picker] .md-color-picker-clear, md-color-picker .md-color-picker-clear {
+	position: relative;
+}
+
+md-color-picker .md-color-picker-preview, [md-color-picker] .md-color-picker-preview {
+	top: 2px;
+	border-radius: 0;
+}
+
+.button-group.right {
+	overflow: visible;
+}
+
 .customSidebar .message-name {
 	text-indent: 5px;
 }
