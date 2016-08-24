@@ -7,7 +7,7 @@
 
     var newMessageController = ['$scope', '$rootScope', '$mdDialog', 'list', 'message', 'index', 'messageService', 'uiService', function ($scope, $rootScope, $mdDialog, list, message, index, messageService, uiService) { //This is for creation and editing.
         function requirements() {
-            $scope.requirements = { "cheats": false, "dev": false, "sponly": false };
+            $scope.requirements = { 'cheats': false, 'dev': false, 'sponly': false };
             for (var command in $scope.commands) {
                 if ($scope.commands[command].cmd === null) { continue; }
                 if (typeof $scope.commands[command].cmd.ch !== 'undefined' && $scope.requirements.cheats === false) { $scope.requirements.cheats = true; }
@@ -23,7 +23,7 @@
 
             $scope.commands = [{ 'cmd': { 'Name': 'noclip' }, 'args': '', 'searchText': 'noclip' }];
 
-            $scope.requirements = { "cheats": true, "dev": false, "sponly": false };
+            $scope.requirements = { 'cheats': true, 'dev': false, 'sponly': false };
             var New = true;
             $scope.mode = 'new';
         } else {

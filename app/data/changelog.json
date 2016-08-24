@@ -1,12 +1,13 @@
 [
   {
     "name": 2.1,
-    "date": "xx/08/2016",
+    "date": "24/08/2016",
     "type": "version",
     "changes": [
       "Added Remove color button",
       "Added Delete button in edit dialog",
       "Added command requirements in creation/edit",
+      "Fix: Critical bug on RadioPanel.txt generation",
       "Fix: Correctly tell commands from client variables",
       "Fix: Broken Button Group style",
       "Fix: Trying to translate messages before translations were loaded",
@@ -16,9 +17,12 @@
       "Fix: Autocomplete dropdown position",
       "Styles cleaning",
       "Shared Menu icons",
+      "Message text color and font style are now shown again",
       "Updated Portuguese translation",
       "Fixed translation issues on Confirmation dialog",
-      "Added not found message in autocomplete dropdown"
+      "Fixed several colorpicker issues",
+      "Added not found message in autocomplete dropdown",
+      "Minor changes"
     ]
   },
   {

@@ -62,7 +62,7 @@
                 });
             },
             deleteCustomCommand: function ($event, message, list, dialog) {
-                InvokeConfirm($event, $filter('translate')('modal.prompt.delete'), $filter('translate')('modal.prompt.delcmd') + " " + message.text, function () {
+                InvokeConfirm($event, $filter('translate')('modal.prompt.delete'), $filter('translate')('modal.prompt.delcmd') + ' ' + message.text, function () {
                     messageService.deleteMessage(message.UID, list);
                     dialog.cancel();
                 });
