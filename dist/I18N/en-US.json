@@ -1,0 +1,175 @@
+{
+  "by": "Drop",
+  "version": 2.0,
+  "sidebar": {
+    "menu": {
+      "title": "Menu",
+      "submit": "Generate",
+      "submit_loading": "Working...",
+      "import": "Import",
+      "defaults": "Game Defaults",
+      "reset": "Reset",
+      "help": "Console?"
+    },
+    "messages_title": "Radio Messages",
+    "custom_title": "Console CMDs",
+    "shared": {
+      "title": "Shared Link Options",
+      "load": "Load Saved",
+      "copy": "Copy All To Custom List",
+      "override": "Override current save",
+      "save": "Save"
+    }
+  },
+  "boxes": {
+    "title_0": "Standard (Z)",
+    "title_1": "Group (X)",
+    "title_2": "Report (C)",
+    "desc": "Drop Here",
+    "tooltip_edit": "Edit"
+  },
+  "footer": {
+    "by": "Made by",
+    "Tby": "Language translation by: somebody",
+    "changelog": "Changelog",
+    "or": "or",
+    "tweet": "tweet",
+    "text": "me for bugs, suggestions, criticism, love letters, death threats."
+  },
+  "notification": {
+    "limit": "You cannot put more than 9 items on a menu.",
+    "customError": "Unable to load Custom list. Try refreshing the page, if this persists please contact me (see footer).",
+    "msgError": "Unable to load Message list. Try refreshing the page, if this persists please contact me (see footer).",
+    "emptyTextarea": "It seems the textarea is empty.",
+    "changelogError": "Something went wrong with the request.",
+    "warning": "Warning",
+    "danger": "Error",
+    "removed": "Removed"
+  },
+  "modal": {
+    "close": "Close",
+    "edit": {
+      "title": "Editing {{name}}",
+      "submit": "Save Changes",
+      "copy": "Copy to Commands List",
+      "popover_title": "Commands List",
+      "popover_content": "The Custom Commands list is saved in Localstorage.<br> That means you can come back here whenever you want and they will be here.<br><br> <b><p style=\"color:red;\">This Command is not in that list now.</b></p>"
+    },
+    "new": {
+      "title": "New Custom",
+      "submit": "Create"
+    },
+    "import": {
+      "title": "Import Radiopanel.txt",
+      "desc": "Import existing configuration",
+      "copy": "Place imported customs into the Custom List",
+      "required": "You need to input the file!",
+      "parse_error": "Something went wrong with parsing. Are you sure this is a valid VDF File?",
+      "help": "Help?",
+      "submit": "Import"
+    },
+    "success": {
+      "title": "Output",
+      "desc": "If you know where your game is installed, replace the contents of csgo/resource/ui/Radiopanel.txt.",
+      "help": "Lost?"
+    },
+    "form": {
+      "cmd": "Command",
+      "cmd_placeholder": "Command to be executed",
+      "cmd_help": "Use <code>;</code> to seperate commands.",
+      "arguments": "Arguments",
+      "default": "Default value: {{default_value}}",
+      "rawcmd": "Raw Commands",
+      "advanced": "Advanced",
+      "advanced_tooltip": "Raw CommandLine",
+      "cancel": "Cancel",
+      "label": "Name",
+      "add": "Add",
+      "delete": "Delete",
+      "label_hint": "Name appears on the Radio menu",
+      "label_required": "Name is required.",
+      "value": "Value",
+      "autocomplete": {
+        "cheats": "Requires Cheats",
+        "devonly": "Requires Development Mode",
+        "sponly": "Single Player only",
+        "clientonly": "Only Client can execute",
+        "serveronly": "Only Server can execute",
+        "nomatches": "No commands matching \"{{searchText}}\" were found."
+      }
+    },
+    "chelp": {
+      "title": "Custom Commands Help",
+      "p1": "Radio messages are console commands. Which means, by editing the UI file (radiopanel.txt) you can replace the radio messages with any console command.",
+      "p2": "I have noticed not a lot of people know about this, and as it can be a boring process don't even bother trying.",
+      "p3": "You go mad with the possibilities, buying presets (I recommend memorizing the buying numbers), changing your crosshair using 2 buttons, disabling voice."
+    },
+    "prompt": {
+      "title": "Confirmation Required",
+      "body": "Are you sure you want to",
+      "no": "No",
+      "reset": "delete everything",
+      "defaults": "revert to defaults (Will delete current)",
+      "delcmd": "delete",
+      "delete": "Delete",
+      "yes": "Yes",
+      "Reset": "Reset"
+    },
+    "about": {
+      "title": "About",
+      "name": "CS:GO Radio Tool"
+    },
+    "help": {
+      "title": "Help",
+      "p1": "The radiopanel.txt lies at the csgo/resource/ui directory. There are two ways of accesing it.",
+      "m1_1": "Go to Your Steam Library,",
+      "m1_2": "Right click Counter Strike: Global Offensive>Properties>Local Files (tab)>Browse Local Files.",
+      "m1_3": "Navigate to",
+      "m1_4": "replace the contents of",
+      "bkp": "Please, make a backup of any files you're going to modify.",
+      "m2_MSWIN": "Microsoft Windows:",
+      "m2_1": "In Explorer, go to",
+      "m2_2": "open",
+      "m2_3": "navigate to",
+      "m2_4": "Open",
+      "m2_42": "and replace the contents with the result.",
+      "lib": "If you haven't changed the library, the default is the Steam installation folder, which again, if is default should be in",
+      "m2_osx": "OS X:",
+      "m2o_1": "In Finder, go to",
+      "m2o_2": "open",
+      "m2o_csgo": "Counter Strike: Global Offensive",
+      "m2o_3": "navigate to",
+      "m2o_4": "Open",
+      "m2o_5": "(I hope it's the same path/name) and replace the contents with the result.",
+      "c_1": "Please",
+      "c_2": "drop",
+      "c_3": "me an",
+      "c_4": "if the OS X Methods are wrong.",
+      "useful": "Useful",
+      "notuseful": "Not useful"
+    }
+  },
+  "messages": {
+    "coverme": "Cover Me",
+    "takepoint": "You Take the Point",
+    "holdpos": "Hold This Position",
+    "regroup": "Regroup Team",
+    "followme": "Follow Me",
+    "takingfire": "Taking Fire, Need Assistance",
+    "go": "GO",
+    "fallback": "Fall Back",
+    "sticktog": "Stick Together Team",
+    "cheer": "Cheer!",
+    "thanks": "Thanks",
+    "compliment": "Compliment",
+    "report": "Report In",
+    "roger": "Affirmative/Roger",
+    "enemyspot": "Enemy Spotted",
+    "needbackup": "Need Backup",
+    "sectorclear": "Sector Clear",
+    "inposition": "I'm in Position",
+    "getout": "She's gonna Blow!",
+    "negative": "Negative",
+    "enemydown": "Enemy Down"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "by": "Drop",
+  "version": 2.0,
+  "sidebar": {
+    "menu": {
+      "title": "Menu",
+      "submit": "Gerar",
+      "submit_loading": "Trabalhando...",
+      "import": "Importar",
+      "defaults": "Padrão do Jogo",
+      "reset": "Resetar",
+      "help": "Console?"
+    },
+    "messages_title": "Mensagens",
+    "custom_title": "Meus Comandos",
+    "shared": {
+      "title": "Opções de Link Compartilhado",
+      "load": "Carregar Salvo",
+      "copy": "Copiar todos para lista",
+      "override": "Sobescrever Lista Salva",
+      "save": "Salvar"
+    }
+  },
+  "boxes": {
+    "title_0": "Padrão (Z)",
+    "title_1": "Grupo (X)",
+    "title_2": "Aviso (C)",
+    "desc": "Largue Aqui",
+    "tooltip_edit": "Editar"
+  },
+  "footer": {
+    "by": "Feito por:",
+    "Tby": "Tradução para Portugês por: Drop",
+    "changelog": "Alterações",
+    "or": "ou",
+    "tweet": "tweet",
+    "text": "me para bugs, sugestões, criticismo, cartas de amor, ameaças de morte."
+  },
+  "notification": {
+    "limit": "Você não pode colocar mais que 9 items em um menu.",
+    "customError": "Não é possível carregar lista de comandos sugeridos. Tente atualizar a página, se o problema persistir, por favor contacte-me (ver rodapé).",
+    "msgError": "Não é possível carregar lista de mensagens. Tente atualizar a página, se o problema persistir, por favor contacte-me (ver rodapé).",
+    "emptyTextarea": "Parece que a caixa de texto está vazia.",
+    "changelogError": "Não foi possível contactar o servidor.",
+    "warning": "Aviso",
+    "danger": "Erro",
+    "removed": "Removendo"
+  },
+  "modal": {
+    "close": "Fechar",
+    "edit": {
+      "title": "Editando {{name}}",
+      "submit": "Salvar Mudanças",
+      "copy": "Copiar para Meus Comandos",
+      "popover_title": "Meus Comandos",
+      "popover_content": "Sua lista de Comandos é salva no armazenamento local.<br>Isso significa que você pode voltar aqui sempre que quiser e elas estarão aqui.<br><br> <b><p style=\"color:red;\">Esse Comando não está na lista.</b></p>"
+    },
+    "new": {
+      "title": "Novo Comando",
+      "submit": "Criar"
+    },
+    "import": {
+      "title": "Importar Radiopanel.txt",
+      "desc": "Importar configuração existente",
+      "copy": "Copie Comandos Personalizados importados para Meus Comandos",
+      "required": "Você precisa inserir o arquivo!",
+      "parse_error": "Algo deu errado processando o arquivo. Você tem certeza que é um VDF válido?",
+      "help": "Ajuda?",
+      "submit": "Importar"
+    },
+    "success": {
+      "title": "Successo!",
+      "desc": "Se você sabe onde o seu jogo está instalado, troque o conteúdo csgo/resource/ui/Radiopanel.txt.",
+      "help": "Onde coloco isso?"
+    },
+    "form": {
+      "cmd": "Commando",
+      "cmd_placeholder": "Comando a ser executado",
+      "cmd_help": "Use <code>;</code> para separar comandos.",
+      "arguments": "Arguments",
+      "default": "Default value: {{default_value}}",
+      "rawcmd": "Raw Commands",
+      "advanced": "Advanced",
+      "advanced_tooltip": "Linha de Comando",
+      "cancel": "Cancel",
+      "label": "Nome",
+      "add": "Add",
+      "delete": "Delete",
+      "label_hint": "Nome aparece no Menu",
+      "label_required": "Name is required.",
+      "value": "Valor",
+      "autocomplete": {
+        "cheats": "Requer Trapaça",
+        "devonly": "Requer modo de desenvolvedor",
+        "sponly": "Somente Single Player",
+        "clientonly": "Somente Cliente pode executar",
+        "serveronly": "Somente Servidor pode executar",
+        "nomatches": "Nenhum comando correspondente a \"{{searchText}}\" foi encontrado."
+      }
+    },
+    "chelp": {
+      "title": "Ajuda de Comandos Personalizados",
+      "p1": "Mensagens de rádio são comandos do console. O que significa, editando o arquivo UI (radiopanel.txt) você pode substituir as mensagens de rádio com qualquer comando do console.",
+      "p2": "Notei que muitos não sabem sobre isso, e como isso pode ser um processo entediante nem incomodam em tentar.",
+      "p3": "Você ficar louco com as possibilidades, a presets de compra (eu recomendo memorizar os números de compra), mudar o estilo de sua mira com 2 botões, desligando voz."
+    },
+    "prompt": {
+      "title": "Confirmação necessária",
+      "body": "Você tem certeza que quer",
+      "no": "Não",
+      "reset": "apagar tudo",
+      "defaults": "reverter para padrão",
+      "delcmd": "apagar",
+      "delete": "Apagar",
+      "yes": "Sim",
+      "Reset": "Resetar"
+    },
+    "about": {
+      "title": "About",
+      "name": "CS:GO Radio Tool"
+    },
+    "help": {
+      "title": "Ajuda",
+      "p1": "radiopanel.txt fica em csgo/resource/ui directory. Há duas maneiras de acessá-lo.",
+      "m1_1": "Vá a Sua Bibilhoteca Steam",
+      "m1_2": "Clique com o Botão Direito em Counter Strike: Global Offensive>Propriedades>Arquivos Locais (aba)>Navegar pelos Arquivos Locais",
+      "m1_3": "Navegar para",
+      "m1_4": "troque o conteúdo de",
+      "bkp": "Por favor, faça um backup de todos os arquivos que você vai modificar.",
+      "m2_MSWIN": "Microsoft Windows:",
+      "m2_1": "No Explorer, vá para",
+      "m2_2": "abra",
+      "m2_3": "navegue para",
+      "m2_4": "Abra",
+      "m2_42": "E troque o conteúdo com o resultado.",
+      "m2_lib": "Se você não tiver alterado a biblioteca, o padrão é a pasta de instalação do Steam, o que, novamente, se é padrão deve estar em",
+      "m2_osx": "OS X:",
+      "m2o_1": "No Finder, vá para",
+      "m2o_2": "abra",
+      "m2o_csgo": "Counter Strike: Global Offensive",
+      "m2o_3": "navegue para",
+      "m2o_4": "Abra",
+      "m2o_5": "(Espero que seja o mesmo caminho/nome) e substitua o conteúdo com o resultado.",
+      "c_1": "Por favor",
+      "c_2": "mande-me",
+      "c_3": "um",
+      "c_4": "se os metodos para o OS X estiverem errados."
+    }
+  },
+  "messages": {
+    "coverme": "Dêem-me cobertura",
+    "takepoint": "Tomem a liderança",
+    "holdpos": "Mantenham esta posição",
+    "regroup": "Equipe, reagrupar",
+    "followme": "Sigam-me",
+    "takingfire": "Sob fogo inimigo, preciso de ajuda",
+    "go": "Avancem",
+    "fallback": "Recuem",
+    "sticktog": "Mantenham-se juntos",
+    "cheer": "Viva!",
+    "thanks": "Obrigado!",
+    "compliment": "Boa!",
+    "report": "Comuniquem a situação",
+    "roger": "Afirmativo/Entendido",
+    "enemyspot": "Inimigo localizado",
+    "needbackup": "Preciso de ajuda",
+    "sectorclear": "Sector limpo",
+    "inposition": "Estou em posição",
+    "getout": "Vai explodir!",
+    "negative": "Negativo",
+    "enemydown": "Inimigo Abatido"
+  }
+}

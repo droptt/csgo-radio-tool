@@ -1,0 +1,145 @@
+[
+   {
+    "name": "2.1.1",
+    "date": "15/10/2016",
+    "type": "patch",
+    "to": 2.1,
+    "changes": [
+      "Updated command list to 1.35.5.4"
+    ]
+  },
+  {
+    "name": 2.1,
+    "date": "24/08/2016",
+    "type": "version",
+    "changes": [
+      "Added Remove color button",
+      "Added Delete button in edit dialog",
+      "Added command requirements in creation/edit",
+      "Fix: Critical bug on RadioPanel.txt generation",
+      "Fix: Correctly tell commands from client variables",
+      "Fix: Broken Button Group style",
+      "Fix: Trying to translate messages before translations were loaded",
+      "Fix: Footer position",
+      "Fix: Verification in the import dialog",
+      "Fix: Verification in the creation/edit dialog",
+      "Fix: Autocomplete dropdown position",
+      "Styles cleaning",
+      "Shared Menu icons",
+      "Message text color and font style are now shown again",
+      "Updated Portuguese translation",
+      "Fixed translation issues on Confirmation dialog",
+      "Fixed several colorpicker issues",
+      "Added not found message in autocomplete dropdown",
+      "Minor changes"
+    ]
+  },
+  {
+    "name": 2.0,
+    "date": "16/08/2016",
+    "type": "version",
+    "changes": [
+      "Rebuilt on AngularJS and Material Design",
+      "Source is now on Github",
+      "Added List of commands on Message creation",
+      "Added autocomplete of commands on Message creation",
+      "Reversed 1.3.1 Confirmation change",
+      "Moved the 2 different Help modals into one dialog",
+      "Fixed a few bugs and created few others, help me hunt them!"
+    ]
+  },
+  {
+    "name": "1.3.1",
+    "date": "25/05/2016",
+    "type": "patch",
+    "to": 1.3,
+    "changes": [
+      "Added Portugese translation By Me",
+      "Changed Confirmation popup style",
+      "I18N Fix: Wrong strings in help modal",
+      "Added Message title translation",
+      "Fix: Wrong functions being called on link click"
+    ]
+  },
+  {
+    "name": 1.3,
+    "date": "25/05/2016",
+    "type": "version",
+    "changes": [
+      "Added Internationalization, <a href=\"http://dropt.top/csgo/radio/I18N/en-US.json\" target=\"_blank\">translators</a> needed!",
+      "Added Check if user used supported html tags on custom message title",
+      "Added Client-side VDF parsing/building with <a href=\"https://github.com/rossengeorgiev/vdf-parser\" target=\"_blank\">Rossen Georgiev's Javascript Library.</a>",
+      "Added Loading screen and loading errors handling",
+      "Major code refactor",
+      "Fix: Showing Wrong shared menu for users who don't have anything saved",
+      "Fix: When editing a title, if the ok button was clicked it would save the changes and turn editing on again",
+      "Fix: Not hiding shared menu if Game defaults is invoked",
+      "Fix: Trying to fetch Titles from wrong array.",
+      "Removed Cover :("
+    ]
+  },
+  {
+    "name": 1.2,
+    "date": "04/05/2016",
+    "type": "version",
+    "changes": [
+      "Added Sharing feature",
+      "Replaced Colorpicker plugin adding RGB sliders and favorite colors",
+      "Added Prompt for unsaved custom deletion",
+      "Added Check if user wants to copy imported into customs list",
+      "Better reporting of server communication",
+      "Added Alert with new version resume",
+      "Fix: Turn Customs into Imported if the Custom List is reset",
+      "Fix: Don't set CSS color on item if it's color is black",
+      "Fix: New Custom form colorpicker not being correctly reset"
+    ]
+  },
+  {
+    "name": 1.1,
+    "date": "27/04/2016",
+    "type": "version",
+    "changes": [
+      "Added Prompt for Reset confirmation",
+      "Added Bold and Italic label options for custom commands (and import support)",
+      "Added Localstorage saving",
+      "Added Colored labels for custom commands (and import support)",
+      "Added Reset Customs button",
+      "Added Check if imported custom already exists",
+      "Unified backend communication",
+      "Fix: Defaults being called before list loaded"
+    ]
+  },
+  {
+    "name": "1.01b",
+    "date": "10/04/2016",
+    "type": "path",
+    "to": 1.01,
+    "changes": [
+      "Fix: tooltip clonned into default messages",
+      "Fix: tooltip not destroyed on message deletion",
+      "Fix: Broken Game Defaults button"
+    ]
+  },
+  {
+    "name": "1.01a",
+    "date": "26/03/2016",
+    "type": "version",
+    "changes": [
+      "Added Group renaming and import support",
+      "Fix: tooltip not being clonned",
+      "Fix: tooltip title not updating after editing"
+    ]
+  },
+  {
+    "name": 1.0,
+    "date": "25/03/2016",
+    "type": "version",
+    "changes": [
+      "Ability to organize Radio Messages",
+      "Export Changes",
+      "Import Key Value files using <a href=\"https://github.com/devinwl/keyvalues-php\" target=\"_blank\">Devinwl's php Library.</a>",
+      "Custom Commands",
+      "UI"
+    ]
+  }
+]
