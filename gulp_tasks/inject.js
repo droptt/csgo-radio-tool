@@ -16,7 +16,7 @@ function inject() {
   .pipe(angularFilesort()).on('error', conf.errorHandler('AngularFilesort'));
 
   const injectOptions = {
-    ignorePath: [conf.paths.src, conf.paths.tmp,"/bower_components"],
+    ignorePath: [conf.paths.src, conf.paths.tmp,"bower_components"],
     addRootSlash: false
   };
 
