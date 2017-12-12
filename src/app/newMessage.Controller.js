@@ -6,6 +6,7 @@
     var app = angular.module('csgo-radio');
 
     var newMessageController = ['$scope', '$rootScope', '$mdDialog', 'list', 'message', 'index', 'messageService', 'uiService', function ($scope, $rootScope, $mdDialog, list, message, index, messageService, uiService) { //This is for creation and editing.
+        $scope.selected = 0;
         function requirements() {
             $scope.requirements = { 'cheats': false, 'dev': false, 'sponly': false };
             for (var command in $scope.commands) {
