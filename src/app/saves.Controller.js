@@ -5,9 +5,12 @@
 (function () {
   var app = angular.module('csgo-radio');
 
-  var savesController = ['$scope', '$rootScope', '$mdDialog', 'messageService', 'uiService', function ($scope, $rootScope, $mdDialog, messageService, uiService) {
+  var savesController = ['$scope', '$rootScope', '$mdDialog', 'messagesService', 'uiService', function ($scope, $rootScope, $mdDialog, messagesService, uiService) {
     $scope.saves = $rootScope.saves;
-    
+    $scope.load = function ($event, UID) {
+      messagesService.importMessages($rootScope.saves[UID].save,false,false);
+      $mdDialog.hide();
+    };
   }];
 
   app.controller('savesController', savesController);
