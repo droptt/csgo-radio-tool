@@ -29,11 +29,11 @@
             $rootScope.settings.versionNotification = true;
             $mdDialog.show(
               $mdDialog.alert()
-                .clickOutsideToClose(true)
-                .title('New on this version')
-                .textContent('Creating Custom messages is now way easier with Commands Autocomplete.')
-                .ariaLabel('New Version Dialog')
-                .ok('Got it!')
+              .clickOutsideToClose(true)
+              .title('New on this version')
+              .textContent('Creating Custom messages is now way easier with Commands Autocomplete.')
+              .ariaLabel('New Version Dialog')
+              .ok('Got it!')
             );
             $analytics.eventTrack('New Version Dialog', {
               category: 'radio_tool',
@@ -74,28 +74,37 @@
           }
         }
         if (localStorageService.get('saved') !== null && loaded === false) {
+          if (localStorageService.get("multi_save") == true) {
+            console.log("hi")
+            $rootScope.saves = angular.fromJson(localStorageService.get('saves'));
+            $mdDialog.show({
+              controller: "savesController",
+              templateUrl: "saves-dialog.html",
+              parent: angular.element(document.body),
+              clickOutsideToClose: false,
+          });
+          } else {
           var saved = angular.fromJson(localStorageService.get('saved'));
           messagesService.importMessages(saved, false, false);
-          loaded = true;
+          loaded = true;}
         } else {
           if (shared === false && loaded === false) {
             messagesService.default();
             loaded = true;
           }
         }
-      }
-      else {
+      } else {
         $mdDialog.show(
-              $mdDialog.alert()
-                .clickOutsideToClose(true)
-                .title('Warning')
-                .textContent('Your browser doesn\'t support Local Storage. Saving functionality is disabled.')
-                .ariaLabel('Localstorage Warning')
-                .ok('Got it!')
-            );
-            $analytics.eventTrack('Localstorage Warning Dialog', {
-              category: 'radio_tool',
-            });
+          $mdDialog.alert()
+          .clickOutsideToClose(true)
+          .title('Warning')
+          .textContent('Your browser doesn\'t support Local Storage. Saving functionality is disabled.')
+          .ariaLabel('Localstorage Warning')
+          .ok('Got it!')
+        );
+        $analytics.eventTrack('Localstorage Warning Dialog', {
+          category: 'radio_tool',
+        });
       }
     };
     var messagesLoaded = false;
@@ -124,9 +133,9 @@
     var onFail = function (reason) {
       $mdToast.show(
         $mdToast.simple()
-          .textContent(reason.data + ': ' + reason.statusText + '. Please Reload the page or contact me.')
-          .position('top right')
-          .hideDelay(10000)
+        .textContent(reason.data + ': ' + reason.statusText + '. Please Reload the page or contact me.')
+        .position('top right')
+        .hideDelay(10000)
       );
       $analytics.eventTrack('Error: ' + reason.data, {
         category: 'radio_tool',
@@ -138,9 +147,9 @@
     var onCmdFail = function (reason) {
       $mdToast.show(
         $mdToast.simple()
-          .textContent('Unable to fetch commands list. Autocomplete is disabled.')
-          .position('top right')
-          .hideDelay(10000)
+        .textContent('Unable to fetch commands list. Autocomplete is disabled.')
+        .position('top right')
+        .hideDelay(10000)
       );
       $analytics.eventTrack('Error: ' + reason.data, {
         category: 'radio_tool',
@@ -154,4 +163,4 @@
     messagesService.getCommand().then(onCommandLoad, onCmdFail);
   }];
   app.controller('loadingController', loadingController);
-} ());
+}());

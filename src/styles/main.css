@@ -88,7 +88,8 @@ li .pull-right .btn, .customSidebar .btn {
 	color: rgba(44, 65, 164, 0.96);
 	transition: 0.3s;
 }
-
+.secondary-button-padding p {
+    padding-right: 100px; }
 .button-group {
 	height: 36px;
 }

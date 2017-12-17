@@ -83,7 +83,7 @@
                 });
             },
             newMessage: function ($event) {
-                InvokeDialog($event, { controller: 'newMessageController', template: 'new-message-dialog.html', locals: { list: undefined, message: undefined, index: undefined } });
+                InvokeDialog($event, { controller: 'savesController', template: 'saves-dialog.html'});
             },
             editMessage: function ($event, locals) {
                 InvokeDialog($event, { controller: 'newMessageController', template: 'new-message-dialog.html', locals: locals, skipHide: true });
@@ -102,6 +102,18 @@
                 } else {
                     messagesService.getChangelog().then(onChangelog, onFail)
                 }
+            },
+            saves: function($event) {
+                
+            },
+            saveAs: function($event) {
+                $mdDialog.show($mdDialog.prompt()
+                    .title('Save as...')
+                    .placeholder('Save name')
+                    .targetEvent($event)
+                    .ok('Save')
+                    .cancel('Cancel'))
+                .then(messagesService.saveAs, function () {});
             },
             import: function ($event) {
                 InvokeDialog($event, {

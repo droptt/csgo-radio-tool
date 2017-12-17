@@ -119,6 +119,7 @@
         <div class="sidebar-header" style="padding-left: 0;">
           <span class="sidebar-header" translate="sidebar.menu.title"></span>
         </div>
+        <li><a ng-click="saveAs($event)"><span class="g-stack pull-left"><md-icon>save</md-icon></span> <div>save as</div></a></li>
         <li><a ng-click="generate($event)"><span class="g-stack pull-left"><md-icon>save</md-icon></span> <div translate="sidebar.menu.submit"></div></a></li>
         <li><a ng-click="importFile($event)"><span class="g-stack pull-left"><md-icon>unarchive</md-icon></span> <div translate="sidebar.menu.import"></div></a></li>
         <li><a ng-click="defaults($event)"><span class="g-stack pull-left"><md-icon>assignment</md-icon></span> <div translate="sidebar.menu.defaults"></div></a></li>
@@ -278,7 +279,7 @@
             <br><span id="translation" translate="footer.Tby" class="hidden"></span>
           </div>
           <div class="pull-left text-inverse-light">
-            <a href="mailto:rafael@dropt.top" analytics-on analytics-category="radio_tool" analytics-event="Clicked on Email">Email</a>
+            <a href="mailto:driopt@icloud.com" analytics-on analytics-category="radio_tool" analytics-event="Clicked on Email">Email</a>
             <span translate="footer.or"></span>
             <a href="https://twitter.com/rafacavalm" target="_blank" analytics-on analytics-category="radio_tool" analytics-event="Clicked on Twitter"
               translate="footer.tweet"></a> <span translate="footer.text"></span>
@@ -547,7 +548,46 @@
       </md-dialog-actions>
     </md-dialog>
   </script>
-
+  <script type="text/ng-template" id="saves-dialog.html">
+    <md-dialog aria-label="Mango (Fruit)"  ng-cloak>
+      <form>
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>Mango (Fruit)</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <md-list>
+            <md-subheader class="md-no-sticky">Secondary Buttons</md-subheader>
+            <md-list-item class="secondary-button-padding" ng-repeat="item in saves">
+              <div class="md-list-item-text" layout="column">
+                <h3>{{item.name}}</h3>
+                <h4>{{item.created}}</h4>
+                <p>{{item.modified}}</p>
+              </div>
+              <md-button class="md-secondary" ng-click="doSecondaryAction($event)">More Info</md-button>
+            </md-list-item>
+          </md-list>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+          <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>
+            More on Wikipedia
+          </md-button>
+          <span flex></span>
+          <md-button ng-click="answer('not useful')">
+           Not Useful
+          </md-button>
+          <md-button ng-click="answer('useful')" style="margin-right:20px;">
+            Useful
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
+  </script>
 
   <script type="text/ng-template" id="help-dialog.html">
     <md-dialog aria-label="Help">
@@ -638,25 +678,25 @@
   </script>
 
   <!-- bower:js -->
-  <script src="/bower_components/angular/angular.js"></script>
-  <script src="/bower_components/angular-translate/angular-translate.js"></script>
-  <script src="/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
-  <script src="/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
-  <script src="/bower_components/ng-inline-edit/dist/ng-inline-edit.js"></script>
-  <script src="/bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
-  <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
-  <script src="/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
-  <script src="/bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
-  <script src="/bower_components/SHA-1/sha1.js"></script>
-  <script src="/bower_components/angulartics/src/angulartics.js"></script>
-  <script src="/bower_components/angulartics-google-analytics/lib/angulartics-ga.js"></script>
-  <script src="/bower_components/angular-animate/angular-animate.js"></script>
-  <script src="/bower_components/angular-aria/angular-aria.js"></script>
-  <script src="/bower_components/angular-messages/angular-messages.js"></script>
-  <script src="/bower_components/angular-material/angular-material.js"></script>
-  <script src="/bower_components/tinycolor/tinycolor.js"></script>
-  <script src="/bower_components/md-color-picker/dist/mdColorPicker.min.js"></script>
-  <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.js"></script>
+  <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+  <script src="bower_components/ng-inline-edit/dist/ng-inline-edit.js"></script>
+  <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+  <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+  <script src="bower_components/SHA-1/sha1.js"></script>
+  <script src="bower_components/angulartics/src/angulartics.js"></script>
+  <script src="bower_components/angulartics-google-analytics/lib/angulartics-ga.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.js"></script>
+  <script src="bower_components/angular-material/angular-material.js"></script>
+  <script src="bower_components/tinycolor/tinycolor.js"></script>
+  <script src="bower_components/md-color-picker/dist/mdColorPicker.min.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
   <!-- endbower -->
 
   <!-- build:js scripts/plugins.js -->

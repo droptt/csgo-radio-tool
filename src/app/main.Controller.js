@@ -8,11 +8,15 @@
         $scope.generate = function (ev) {
            uiService.Dialog.output(ev, messagesService.GenerateRP(ev));
         };
-
+        $scope.saves = function(ev) {
+            uiService.Dialog.saves(ev);
+        };
         $scope.openChangelog = function(ev) {
             uiService.Dialog.changelog(ev);
+        };
+        $scope.saveAs = function(ev) {
+            uiService.Dialog.saveAs(ev);
         }
-
         $scope.showHelp = function (ev, index) {
             uiService.Dialog.help(ev, index);
         };

@@ -105,6 +105,27 @@
             }
             saveHash(save);
         };
+        
+        var saveAs = function(name){
+            if (localStorageService.isSupported) {
+                var save = {
+                    'StandardRadio': convertList($rootScope.model.standard), 'GroupRadio': convertList($rootScope.model.group), 'ReportRadio': convertList($rootScope.model.report), 'Titles': [
+                        ($rootScope.model.Titles[0] === $filter('translate')('boxes.title_0')) ? null : $rootScope.model.Titles[0],
+                        ($rootScope.model.Titles[1] === $filter('translate')('boxes.title_1')) ? null : $rootScope.model.Titles[1],
+                        ($rootScope.model.Titles[2] === $filter('translate')('boxes.title_2')) ? null : $rootScope.model.Titles[2],
+                    ]
+                };
+                if (localStorageService.get("multi_save") == true) {
+                    $rootScope.saves[name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)] = {"name": name, "created":Date.now(), "save":save, "modified":Date.now()};
+                    localStorageService.set("saves",$rootScope.saves);
+                } else {
+                    localStorageService.set("multi_save", true);
+                    var saves = {};
+                    saves[name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)] = {"name": name, "created":Date.now(), "save":save, "modified":Date.now()};
+                    localStorageService.set("saves", saves);
+                }
+            }
+        };
 
         var htmlTags = function (msg, imported) { //actually, imported should be false
             var label = msg.text || msg.label;
@@ -321,7 +342,8 @@
             customSave: customSave,
             ImportRP: ImportRP,
             GenerateRP: generateRP,
-            importOldCustom: importOldCustom
+            importOldCustom: importOldCustom,
+            saveAs: saveAs
         };
 
     }]);
