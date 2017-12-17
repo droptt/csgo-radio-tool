@@ -116,12 +116,14 @@
                     ]
                 };
                 if (localStorageService.get("multi_save") == true) {
-                    $rootScope.saves[name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)] = {"name": name, "created":Date.now(), "save":save, "modified":Date.now()};
+                    var uid = name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)
+                    $rootScope.saves[uid] = {"UID":uid, "name": name, "created":Date.now(), "save":save, "modified":Date.now()};
                     localStorageService.set("saves",$rootScope.saves);
                 } else {
                     localStorageService.set("multi_save", true);
                     var saves = {};
-                    saves[name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)] = {"name": name, "created":Date.now(), "save":save, "modified":Date.now()};
+                    var uid = name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)
+                    saves[uid] = {"UID":uid, "name": name, "created":Date.now(), "save":save, "modified":Date.now()};
                     localStorageService.set("saves", saves);
                 }
             }
