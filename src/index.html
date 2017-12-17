@@ -549,42 +549,24 @@
     </md-dialog>
   </script>
   <script type="text/ng-template" id="saves-dialog.html">
-    <md-dialog aria-label="Mango (Fruit)"  ng-cloak>
+    <md-dialog  ng-cloak flex="30">
       <form>
         <md-toolbar>
           <div class="md-toolbar-tools">
-            <h2>Mango (Fruit)</h2>
-            <span flex></span>
-            <md-button class="md-icon-button" ng-click="cancel()">
-              <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
-            </md-button>
+            <h2>Choose Save to load</h2>
           </div>
         </md-toolbar>
         <md-dialog-content>
-          <md-list>
-            <md-subheader class="md-no-sticky">Secondary Buttons</md-subheader>
-            <md-list-item class="secondary-button-padding" ng-repeat="item in saves">
+          <md-list class="md-padding">
+            <md-list-item class="md-2-line secondary-button-padding" ng-repeat="item in saves">
               <div class="md-list-item-text" layout="column">
-                <h3>{{item.name}}</h3>
-                <h4>{{item.created}}</h4>
-                <p>{{item.modified}}</p>
+                <h3><b>{{item.name}}</h3></b>
+                <h4>{{item.modified}}</h4>
               </div>
-              <md-button class="md-secondary" ng-click="doSecondaryAction($event)">More Info</md-button>
+              <md-button class="md-secondary" ng-click="detail($event, item.UID)">Details</md-button>
             </md-list-item>
           </md-list>
         </md-dialog-content>
-        <md-dialog-actions layout="row">
-          <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>
-            More on Wikipedia
-          </md-button>
-          <span flex></span>
-          <md-button ng-click="answer('not useful')">
-           Not Useful
-          </md-button>
-          <md-button ng-click="answer('useful')" style="margin-right:20px;">
-            Useful
-          </md-button>
-        </md-dialog-actions>
       </form>
     </md-dialog>
   </script>
