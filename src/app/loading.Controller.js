@@ -74,19 +74,24 @@
           }
         }
         if (localStorageService.get('saved') !== null && loaded === false) {
-          if (localStorageService.get("multi_save") == true) {
-            console.log("hi")
-            $rootScope.saves = angular.fromJson(localStorageService.get('saves'));
-            $mdDialog.show({
-              controller: "savesController",
-              templateUrl: "saves-dialog.html",
-              parent: angular.element(document.body),
-              clickOutsideToClose: false,
+          var save = angular.fromJson(localStorageService.get('saved'));
+          localStorageService.remove("saved")
+          localStorageService.set("multi_save", true);
+          var saves = {};
+          var uid = "Default".toLowerCase().replace(/[^a-zA-Z0-9]/g, '') + '-' + Math.floor((Math.random() * 100) + 1)
+          saves[uid] = {"UID":uid, "name": "Imported Save", "created":Date.now(), "save":save,"imported":true, "modified":Date.now()};
+          localStorageService.set("saves", saves);
+        }
+        if (localStorageService.get("multi_save") == true) {
+          console.log("hi")
+          $rootScope.saves = angular.fromJson(localStorageService.get('saves'));
+          $mdDialog.show({
+            controller: "savesController",
+            templateUrl: "saves-dialog.html",
+            parent: angular.element(document.body),
+            clickOutsideToClose: false,
           });
-          } else {
-          var saved = angular.fromJson(localStorageService.get('saved'));
-          messagesService.importMessages(saved, false, false);
-          loaded = true;}
+          loaded = true;
         } else {
           if (shared === false && loaded === false) {
             messagesService.default();
